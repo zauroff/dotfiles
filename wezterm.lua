@@ -8,10 +8,10 @@ local act = wezterm.action
 
 config.keys = {
 	-- Split pane vertically (creates a pane to the right)
-	{ key = "v", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
+	{ key = "h", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
 
 	-- Split pane horizontally (creates a pane below)
-	{ key = "h", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
+	{ key = "v", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
 
 	-- Close current pane
 	{ key = "w", mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = true }) },
