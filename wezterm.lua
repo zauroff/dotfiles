@@ -4,16 +4,31 @@ local wezterm = require("wezterm")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- This is where you actually apply your config choices.
+local act = wezterm.action
 
--- For example, changing the initial geometry for new windows:
+config.keys = {
+	-- Split pane vertically (creates a pane to the right)
+	{ key = "v", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
+
+	-- Split pane horizontally (creates a pane below)
+	{ key = "h", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
+
+	-- Close current pane
+	{ key = "w", mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = true }) },
+
+	-- Navigate between panes
+	{ key = "LeftArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Left") },
+	{ key = "RightArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Right") },
+	{ key = "UpArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Up") },
+	{ key = "DownArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Down") },
+}
+
 config.initial_cols = 120
 config.initial_rows = 28
-config.font = wezterm.font 'Jetbrains Mono'
+config.font = wezterm.font("Jetbrains Mono")
 config.launch_menu = launch_menu
--- or, changing the font size and color scheme.
 config.font_size = 19
-config.color_scheme = 'Gruvbox Dark (Gogh)'
+config.color_scheme = "Gruvbox Dark (Gogh)"
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.window_background_opacity = 0.9
