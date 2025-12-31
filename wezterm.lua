@@ -7,20 +7,20 @@ local config = wezterm.config_builder()
 local act = wezterm.action
 
 config.keys = {
-	-- Split pane vertically (creates a pane to the right)
-	{ key = "h", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
+  -- Split pane vertically (creates a pane to the right)
+  { key = "s",          mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
 
-	-- Split pane horizontally (creates a pane below)
-	{ key = "v", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
+  -- Split pane horizontally (creates a pane below)
+  { key = "v",          mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
 
-	-- Close current pane
-	{ key = "w", mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = true }) },
+  -- Close current pane
+  { key = "w",          mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = true }) },
 
-	-- Navigate between panes
-	{ key = "LeftArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Left") },
-	{ key = "RightArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Right") },
-	{ key = "UpArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Up") },
-	{ key = "DownArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Down") },
+  -- Navigate between panes
+  { key = "LeftArrow",  mods = "CTRL|ALT", action = act.ActivatePaneDirection("Left") },
+  { key = "RightArrow", mods = "CTRL|ALT", action = act.ActivatePaneDirection("Right") },
+  { key = "UpArrow",    mods = "CTRL|ALT", action = act.ActivatePaneDirection("Up") },
+  { key = "DownArrow",  mods = "CTRL|ALT", action = act.ActivatePaneDirection("Down") },
 }
 
 config.initial_cols = 120
