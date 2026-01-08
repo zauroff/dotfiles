@@ -14,7 +14,8 @@ config.keys = {
   { key = "v",          mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
 
   -- Close current pane
-  { key = "w",          mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = true }) },
+  { key = "w",          mods = "CTRL|ALT", action = act.CloseCurrentPane({ confirm = false }) },
+
 
   -- Navigate between panes
   { key = "LeftArrow",  mods = "CTRL|ALT", action = act.ActivatePaneDirection("Left") },
@@ -33,5 +34,9 @@ config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.window_background_opacity = 0.9
 config.macos_window_background_blur = 10
+
+-- disabling the annoying close confirmation
+window_close_confirmation = 'NeverPrompt'
+
 -- Finally, return the configuration to wezterm:
 return config
