@@ -36,7 +36,7 @@ config.window_background_opacity = 0.9
 config.macos_window_background_blur = 10
 
 -- disabling the annoying close confirmation
-window_close_confirmation = 'NeverPrompt'
+config.window_close_confirmation = 'NeverPrompt'
 
 -- Finally, return the configuration to wezterm:
 return config
