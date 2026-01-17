@@ -6,9 +6,9 @@ local config = wezterm.config_builder()
 
 local act = wezterm.action
 
-config.keys = {
-  -- Split pane vertically (creates a pane to the right)
+config.keys = {-- Split pane vertically (creates a pane to the right)
   { key = "s",          mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
+  { key = "Enter",      mods = "SHIFT",    action = wezterm.action.SendString("\x1b\r") },
 
   -- Split pane horizontally (creates a pane below)
   { key = "v",          mods = "CTRL|ALT", action = act.SplitPane({ direction = "Down" }) },
