@@ -8,7 +8,14 @@ local act = wezterm.action
 
 -- tab bar plugin
 local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
-bar.apply_to_config(config)
+bar.apply_to_config(config, {
+	padding = {
+		left = 0,
+		right = 0,
+		tabs = { left = 1, right = 1 },
+	},
+	separator = { space = 1 },
+})
 
 config.keys = { -- Split pane vertically (creates a pane to the right)
 	{ key = "s", mods = "CTRL|ALT", action = act.SplitPane({ direction = "Right" }) },
@@ -36,11 +43,22 @@ config.initial_rows = 28
 config.font = wezterm.font("Jetbrains Mono")
 config.launch_menu = launch_menu
 config.font_size = 19
-config.color_scheme = "Gruvbox Dark (Gogh)"
+config.color_scheme = "Monokai Pro Ristretto (Gogh)"
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
-config.window_background_opacity = 0.95
-config.macos_window_background_blur = 10
+config.window_background_opacity = 0.99
+config.window_padding = { left = 4, right = 4, top = 4, bottom = 0 }
+config.colors = {
+
+	tab_bar = {
+		background = "#000000",
+		inactive_tab_edge = "#575757",
+		active_tab = {
+			bg_color = "#FF9400",
+			fg_color = "#000000",
+		},
+	},
+}
 
 -- disabling the annoying close confirmation
 config.window_close_confirmation = "NeverPrompt"
