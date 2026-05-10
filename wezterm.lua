@@ -33,7 +33,61 @@ config.initial_rows = 2
 config.font = wezterm.font("Jetbrains Mono")
 config.launch_menu = launch_menu
 config.font_size = 20
-config.color_scheme = "nordfox"
+config.colors = {
+	foreground = "#f5f4ef",
+	background = "#2f2f2d",
+	cursor_bg = "#d97757",
+	cursor_fg = "#2f2f2d",
+	cursor_border = "#d97757",
+	selection_bg = "#524e48",
+	selection_fg = "#f5f4ef",
+	split = "#4a4a47",
+
+	ansi = {
+		"#242422", -- black
+		"#d97757", -- red (clay)
+		"#65bb30", -- green
+		"#c1a855", -- yellow (gold)
+		"#74abe2", -- blue
+		"#9b86f4", -- magenta (purple)
+		"#7ab89a", -- cyan (mint)
+		"#eadbbb", -- white (manilla)
+	},
+	brights = {
+		"#4a4a47", -- bright black
+		"#e89070", -- bright red
+		"#7dd04a", -- bright green
+		"#d4be6e", -- bright yellow
+		"#92c0ec", -- bright blue
+		"#b5a2f7", -- bright magenta
+		"#96cdb2", -- bright cyan
+		"#f5f4ef", -- bright white
+	},
+
+	tab_bar = {
+		background = "#242422",
+		active_tab = {
+			bg_color = "#2f2f2d",
+			fg_color = "#f5f4ef",
+		},
+		inactive_tab = {
+			bg_color = "#242422",
+			fg_color = "#7a7a75",
+		},
+		inactive_tab_hover = {
+			bg_color = "#3a3a37",
+			fg_color = "#eadbbb",
+		},
+		new_tab = {
+			bg_color = "#242422",
+			fg_color = "#7a7a75",
+		},
+		new_tab_hover = {
+			bg_color = "#3a3a37",
+			fg_color = "#eadbbb",
+		},
+	},
+}
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
