@@ -28,7 +28,7 @@ config.keys = { -- Split pane vertically (creates a pane to the right)
 }
 
 config.initial_cols = 120
-config.initial_rows = 2
+config.initial_rows = 120
 
 config.font = wezterm.font("Jetbrains Mono")
 config.launch_menu = launch_menu
@@ -93,7 +93,9 @@ config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+config.use_resize_increments = true
 config.macos_window_background_blur = 10
+config.window_background_opacity = 0.80
 -- disabling the annoying close confirmation
 config.window_close_confirmation = "NeverPrompt"
 
