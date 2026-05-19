@@ -1,5 +1,6 @@
 # Tab bar — blocky and minimal
-window-theme = ghostty
+window-theme = ghostty 
+theme = IC Orange PPL
 macos-option-as-alt = true
 
 # Split keybindings (ctrl+opt)
