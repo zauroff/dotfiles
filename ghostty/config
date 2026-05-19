@@ -1,0 +1,21 @@
+# Tab bar — blocky and minimal
+window-theme = ghostty
+macos-option-as-alt = true
+
+# Split keybindings (ctrl+opt)
+keybind = ctrl+opt+s=new_split:right
+keybind = ctrl+opt+v=new_split:down
+keybind = ctrl+opt+w=close_surface
+
+# Pane navigation (ctrl+opt+arrows)
+keybind = ctrl+opt+left=goto_split:left
+keybind = ctrl+opt+right=goto_split:right
+keybind = ctrl+opt+up=goto_split:top
+keybind = ctrl+opt+down=goto_split:bottom
+
+# Tab navigation (cmd+opt+arrows)
+keybind = cmd+opt+left=previous_tab
+keybind = cmd+opt+right=next_tab
+
+# New tab
+keybind = cmd+t=new_tab

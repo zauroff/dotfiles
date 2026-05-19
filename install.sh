@@ -16,6 +16,11 @@ echo "Linked nvim -> ~/.config/nvim"
 ln -sf "$DOTFILES/.ideavimrc" "$HOME/.ideavimrc"
 echo "Linked .ideavimrc -> ~/.ideavimrc"
 
+# Link ghostty config
+mkdir -p "$HOME/.config/ghostty"
+ln -sfn "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
+echo "Linked ghostty/config -> ~/.config/ghostty/config"
+
 # Link zdev to ~/.local/bin so it's on PATH
 mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES/zdev.sh" "$HOME/.local/bin/zdev"
