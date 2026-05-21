@@ -21,6 +21,18 @@ mkdir -p "$HOME/.config/ghostty"
 ln -sfn "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
 echo "Linked ghostty/config -> ~/.config/ghostty/config"
 
+# Link Claude config
+mkdir -p "$HOME/.claude/skills"
+ln -sf "$DOTFILES/claude/.claude/settings.json" "$HOME/.claude/settings.json"
+for skill in "$DOTFILES/claude/.claude/skills"/*/; do
+  [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
+done
+echo "Linked claude/.claude -> ~/.claude (settings + skills)"
+
+# Link CLAUDE.md to home directory
+ln -sf "$DOTFILES/claude/.config/CLAUDE.md" "$HOME/CLAUDE.md"
+echo "Linked claude/.config/CLAUDE.md -> ~/CLAUDE.md"
+
 # Link zdev to ~/.local/bin so it's on PATH
 mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES/zdev.sh" "$HOME/.local/bin/zdev"
