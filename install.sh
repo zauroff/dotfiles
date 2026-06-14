@@ -33,6 +33,10 @@ echo "Linked claude/.claude -> ~/.claude (settings + skills)"
 ln -sf "$DOTFILES/claude/.config/CLAUDE.md" "$HOME/CLAUDE.md"
 echo "Linked claude/.config/CLAUDE.md -> ~/CLAUDE.md"
 
+# Link aerospace.toml
+ln -sf "$DOTFILES/aerospace.toml" "$HOME/.aerospace.toml"
+echo "Linked aerospace.toml -> ~/.aerospace.toml"
+
 # Link zdev to ~/.local/bin so it's on PATH
 mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES/zdev.sh" "$HOME/.local/bin/zdev"
