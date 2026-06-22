@@ -1,9 +1,8 @@
 {
-  "model": "opus",
-  "enabledPlugins": {
-  },
-  "theme": "auto",
   "env": {
     "DISABLE_INSTALLATION_CHECKS": "1"
-  }
+  },
+  "enabledPlugins": {
+  },
+  "theme": "auto"
 }

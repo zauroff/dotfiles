@@ -30,9 +30,14 @@ config.keys = { -- Split pane vertically (creates a pane to the right)
 config.initial_cols = 120
 config.initial_rows = 120
 
-config.font = wezterm.font("Jetbrains Mono")
+config.font = wezterm.font("JetBrains Mono", { weight = "Medium" })
 config.launch_menu = launch_menu
 config.font_size = 20
+
+-- Sharp & crispy text rendering
+config.freetype_load_target = "Light"
+config.freetype_render_target = "HorizontalLcd"
+config.freetype_load_flags = "NO_AUTOHINT"
 config.colors = {
 	foreground = "#f5f4ef",
 	background = "#2f2f2d",

@@ -3,3 +3,7 @@
 -- Add any additional options here
 vim.opt.relativenumber = false
 vim.opt.number = true
+
+-- Square/sharp borders on floating windows (LSP hover, completion, pickers, etc.)
+-- "single" = thin sharp box, "none" = no border at all. (VSCode-ish: "single")
+vim.opt.winborder = "single"
