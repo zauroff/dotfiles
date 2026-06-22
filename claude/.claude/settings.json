@@ -1,10 +1,9 @@
 {
-  "model": "opus",
+  "env": {
+    "DISABLE_INSTALLATION_CHECKS": "1"
+  },
   "enabledPlugins": {
     "gopls-lsp@cc-plugins-bb-mirror": true
   },
-  "theme": "auto",
-  "env": {
-    "DISABLE_INSTALLATION_CHECKS": "1"
-  }
+  "theme": "auto"
 }

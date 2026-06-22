@@ -19,7 +19,9 @@ echo "Linked .ideavimrc -> ~/.ideavimrc"
 # Link ghostty config
 mkdir -p "$HOME/.config/ghostty"
 ln -sfn "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
+ln -sfn "$DOTFILES/ghostty/crt.glsl" "$HOME/.config/ghostty/crt.glsl"
 echo "Linked ghostty/config -> ~/.config/ghostty/config"
+echo "Linked ghostty/crt.glsl -> ~/.config/ghostty/crt.glsl"
 
 # Link Claude config
 mkdir -p "$HOME/.claude/skills"
