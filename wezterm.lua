@@ -38,7 +38,19 @@ config.font_size = 20
 config.freetype_load_target = "Light"
 config.freetype_render_target = "HorizontalLcd"
 config.freetype_load_flags = "NO_AUTOHINT"
-config.colors = {
+
+-- Read theme mode from state file
+local function read_theme_mode()
+	local f = io.open(wezterm.home_dir .. "/.config/wezterm/.theme-mode", "r")
+	if f then
+		local mode = f:read("*l")
+		f:close()
+		return mode
+	end
+	return "dark"
+end
+
+local dark_colors = {
 	foreground = "#f5f4ef",
 	background = "#2f2f2d",
 	cursor_bg = "#d97757",
@@ -93,6 +105,66 @@ config.colors = {
 		},
 	},
 }
+
+local light_colors = {
+	foreground = "#000000",
+	background = "#f9f9f9",
+	cursor_bg = "#007878",
+	cursor_fg = "#f9f9f9",
+	cursor_border = "#007878",
+	selection_bg = "#c0c0bf",
+	selection_fg = "#000000",
+	split = "#d1d1d1",
+
+	ansi = {
+		"#000000", -- black
+		"#c41a15", -- red
+		"#007400", -- green
+		"#826b28", -- yellow
+		"#0000d6", -- blue
+		"#a90d91", -- magenta
+		"#007878", -- cyan
+		"#d1d1d1", -- white
+	},
+	brights = {
+		"#666666", -- bright black
+		"#e45649", -- bright red
+		"#50a14f", -- bright green
+		"#c18401", -- bright yellow
+		"#4078f2", -- bright blue
+		"#a626a4", -- bright magenta
+		"#0184bc", -- bright cyan
+		"#f0f0f0", -- bright white
+	},
+
+	tab_bar = {
+		background = "#d1d1d1",
+		active_tab = {
+			bg_color = "#f0f0f0",
+			fg_color = "#000000",
+		},
+		inactive_tab = {
+			bg_color = "#d1d1d1",
+			fg_color = "#666666",
+		},
+		inactive_tab_hover = {
+			bg_color = "#e0e0e0",
+			fg_color = "#000000",
+		},
+		new_tab = {
+			bg_color = "#d1d1d1",
+			fg_color = "#666666",
+		},
+		new_tab_hover = {
+			bg_color = "#e0e0e0",
+			fg_color = "#000000",
+		},
+	},
+}
+
+local theme_mode = read_theme_mode()
+config.colors = theme_mode == "light" and light_colors or dark_colors
+
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
