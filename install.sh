@@ -20,8 +20,17 @@ echo "Linked .ideavimrc -> ~/.ideavimrc"
 mkdir -p "$HOME/.config/ghostty"
 ln -sfn "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
 ln -sfn "$DOTFILES/ghostty/crt.glsl" "$HOME/.config/ghostty/crt.glsl"
+ln -sfn "$DOTFILES/ghostty/crt-light.glsl" "$HOME/.config/ghostty/crt-light.glsl"
 echo "Linked ghostty/config -> ~/.config/ghostty/config"
 echo "Linked ghostty/crt.glsl -> ~/.config/ghostty/crt.glsl"
+echo "Linked ghostty/crt-light.glsl -> ~/.config/ghostty/crt-light.glsl"
+
+# Initialize theme state files (default to dark)
+[ -f "$HOME/.config/.current-theme" ] || echo "dark" > "$HOME/.config/.current-theme"
+mkdir -p "$HOME/.config/wezterm"
+[ -f "$HOME/.config/wezterm/.theme-mode" ] || echo "dark" > "$HOME/.config/wezterm/.theme-mode"
+[ -f "$HOME/.config/nvim/.theme-mode" ] || echo "dark" > "$HOME/.config/nvim/.theme-mode"
+echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
 mkdir -p "$HOME/.claude/skills"
