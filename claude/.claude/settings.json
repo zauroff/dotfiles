@@ -2,8 +2,37 @@
   "env": {
     "DISABLE_INSTALLATION_CHECKS": "1"
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case \"$CLAUDE_FILE_PATH\" in *.go) command -v gofmt >/dev/null 2>&1 && gofmt -w \"$CLAUDE_FILE_PATH\" ;; *.ts|*.tsx|*.js|*.jsx) command -v prettier >/dev/null 2>&1 && npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null; command -v eslint >/dev/null 2>&1 && npx eslint --fix \"$CLAUDE_FILE_PATH\" 2>/dev/null ;; *.py) command -v ruff >/dev/null 2>&1 && ruff format --quiet \"$CLAUDE_FILE_PATH\" ;; esac || true",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'BLOCK: Do not call MCP tools directly in the main conversation. Spawn a subagent (model: haiku) to run this MCP call and return a concise summary. This preserves context window tokens.' && exit 2"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "gopls-lsp@cc-plugins-bb-mirror": true
   },
-  "theme": "auto"
+  "theme": "auto",
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  }
 }

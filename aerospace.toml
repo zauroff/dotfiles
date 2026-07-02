@@ -75,12 +75,14 @@ on-mode-changed = []
 
 # Assign workspaces to monitors
 # See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-[workspace-to-monitor-force-assignment]
-5 = 'secondary'
 
 #[[on-window-detected]]
 #if.app-id = 'com.github.wez.wezterm'
 #run = ['layout tiling']
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = ['layout floating']
 
 [[on-window-detected]]
 run = ['layout floating']
@@ -184,4 +186,4 @@ run = ['layout floating']
     alt-shift-h = ['join-with left', 'mode main']
     alt-shift-j = ['join-with down', 'mode main']
     alt-shift-k = ['join-with up', 'mode main']
- 
+

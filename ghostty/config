@@ -23,10 +23,10 @@ keybind = ctrl+opt+v=new_split:down
 keybind = ctrl+opt+w=close_surface
 
 # Pane navigation (ctrl+opt+arrows)
-keybind = ctrl+opt+left=goto_split:left
-keybind = ctrl+opt+right=goto_split:right
-keybind = ctrl+opt+up=goto_split:top
-keybind = ctrl+opt+down=goto_split:bottom
+keybind = ctrl+shift+left=goto_split:left
+keybind = ctrl+shift+right=goto_split:right
+keybind = ctrl+shift+up=goto_split:top
+keybind = ctrl+shift+down=goto_split:bottom
 
 # Tab navigation (cmd+opt+arrows, matches Chrome/Arc)
 keybind = cmd+opt+left=previous_tab

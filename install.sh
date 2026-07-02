@@ -3,6 +3,11 @@ set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
 
+# Run work-specific setup if present (gitignored)
+if [ -f "$DOTFILES/work.sh" ]; then
+  bash "$DOTFILES/work.sh"
+fi
+
 # Link wezterm.lua
 ln -sf "$DOTFILES/wezterm.lua" "$HOME/.wezterm.lua"
 echo "Linked wezterm.lua -> ~/.wezterm.lua"
@@ -35,6 +40,7 @@ echo "Initialized theme state files (dark mode)"
 # Link Claude config
 mkdir -p "$HOME/.claude/skills"
 ln -sf "$DOTFILES/claude/.claude/settings.json" "$HOME/.claude/settings.json"
+ln -sf "$DOTFILES/claude/.claude/statusline.sh" "$HOME/.claude/statusline.sh"
 for skill in "$DOTFILES/claude/.claude/skills"/*/; do
   [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
 done
