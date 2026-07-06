@@ -52,10 +52,18 @@ return {
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
-        config = function()
-            require("tokyonight").setup({ style = "day" })
-            apply_theme()
-            watch_theme_file()
-        end,
+        opts = { style = "day" },
+    },
+    -- Let LazyVim apply our theme as its final colorscheme step, otherwise
+    -- LazyVim re-applies its default (tokyonight) after our plugins load and
+    -- clobbers whatever apply_theme() set.
+    {
+        "LazyVim/LazyVim",
+        opts = {
+            colorscheme = function()
+                apply_theme()
+                watch_theme_file()
+            end,
+        },
     },
 }
