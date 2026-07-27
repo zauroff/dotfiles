@@ -14,11 +14,10 @@ local function apply_theme()
     local mode = read_theme_mode()
     if mode == "light" then
         vim.o.background = "light"
-        pcall(vim.cmd.colorscheme, "tokyonight-day")
     else
         vim.o.background = "dark"
-        pcall(vim.cmd.colorscheme, "gruvbox")
     end
+    pcall(vim.cmd.colorscheme, "gruvbox")
 end
 
 local function watch_theme_file()
@@ -47,12 +46,6 @@ return {
         config = function()
             require("gruvbox").setup({})
         end,
-    },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = { style = "day" },
     },
     -- Let LazyVim apply our theme as its final colorscheme step, otherwise
     -- LazyVim re-applies its default (tokyonight) after our plugins load and
