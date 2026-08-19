@@ -58,3 +58,8 @@ echo "Linked aerospace.toml -> ~/.aerospace.toml"
 mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES/zdev.sh" "$HOME/.local/bin/zdev"
 echo "Linked zdev.sh -> ~/.local/bin/zdev"
+
+# Link opencode config
+mkdir -p "$HOME/.config"
+ln -sfn "$DOTFILES/opencode" "$HOME/.config/opencode"
+echo "Linked opencode -> ~/.config/opencode"
