@@ -1,3 +1,11 @@
+---
+name: go_coding_conventions
+description:
+  Go coding conventions for intuitive, readable code. Naming, functions,
+  logging, comments, and error handling. Auto-invoke when writing or reviewing
+  Go code. TRIGGER on .go files or Go code review. SKIP for non-Go languages.
+---
+
 # Coding Conventions Skill
 
 When reviewing or writing code, enforce the following coding conventions. The primary goal is to make code **intuitive** — a reader's first impression of what a variable, function, or component does should be correct.
