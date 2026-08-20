@@ -31,20 +31,20 @@ echo "Linked ghostty/crt.glsl -> ~/.config/ghostty/crt.glsl"
 echo "Linked ghostty/crt-light.glsl -> ~/.config/ghostty/crt-light.glsl"
 
 # Initialize theme state files (default to dark)
-[ -f "$HOME/.config/.current-theme" ] || echo "dark" > "$HOME/.config/.current-theme"
+[ -f "$HOME/.config/.current-theme" ] || echo "dark" >"$HOME/.config/.current-theme"
 mkdir -p "$HOME/.config/wezterm"
-[ -f "$HOME/.config/wezterm/.theme-mode" ] || echo "dark" > "$HOME/.config/wezterm/.theme-mode"
-[ -f "$HOME/.config/nvim/.theme-mode" ] || echo "dark" > "$HOME/.config/nvim/.theme-mode"
+[ -f "$HOME/.config/wezterm/.theme-mode" ] || echo "dark" >"$HOME/.config/wezterm/.theme-mode"
+[ -f "$HOME/.config/nvim/.theme-mode" ] || echo "dark" >"$HOME/.config/nvim/.theme-mode"
 echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
 mkdir -p "$HOME/.claude/skills"
-ln -sf "$DOTFILES/claude/.claude/settings.json" "$HOME/.claude/settings.json"
-ln -sf "$DOTFILES/claude/.claude/statusline.sh" "$HOME/.claude/statusline.sh"
-for skill in "$DOTFILES/claude/.claude/skills"/*/; do
+ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
+ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
+for skill in "$DOTFILES/claude/skills"/*/; do
   [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
 done
-echo "Linked claude/.claude -> ~/.claude (settings + skills)"
+echo "Linked claude/ -> ~/.claude (settings + skills)"
 
 # Link CLAUDE.md to home directory
 ln -sf "$DOTFILES/claude/.config/CLAUDE.md" "$HOME/CLAUDE.md"
