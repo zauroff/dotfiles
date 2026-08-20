@@ -2,7 +2,36 @@
   "env": {
     "DISABLE_INSTALLATION_CHECKS": "1"
   },
+  "model": "sonnet",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-slop-default.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/rubber-duck-default.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/stop-slop-default.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
@@ -17,6 +46,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/go-conventions.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "mcp__",
         "hooks": [
           {
@@ -27,12 +66,13 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "gopls-lsp@cc-plugins-bb-mirror": true
-  },
-  "theme": "auto",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
-  }
+  },
+  "enabledPlugins": {
+    "gopls-lsp@cc-plugins-bb-mirror": true
+  },
+  "effortLevel": "xhigh",
+  "theme": "auto"
 }
