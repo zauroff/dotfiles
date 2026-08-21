@@ -11,8 +11,11 @@ return {
                 documentation = {
                     auto_show = false,
                 },
+                accept = {
+                    auto_brackets = { enabled = false },
+                },
             },
-            signature = { enabled = true },
+            signature = { enabled = false },
         },
     },
 }
