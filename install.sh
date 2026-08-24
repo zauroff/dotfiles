@@ -38,17 +38,20 @@ mkdir -p "$HOME/.config/wezterm"
 echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
-mkdir -p "$HOME/.claude/skills"
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
 for skill in "$DOTFILES/claude/skills"/*/; do
   [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
 done
-echo "Linked claude/ -> ~/.claude (settings + skills)"
+for hook in "$DOTFILES/claude/hooks"/*; do
+  [ -f "$hook" ] && ln -sf "$hook" "$HOME/.claude/hooks/$(basename "$hook")"
+done
+echo "Linked claude/ -> ~/.claude (settings + skills + hooks)"
 
 # Link CLAUDE.md to home directory
-ln -sf "$DOTFILES/claude/.config/CLAUDE.md" "$HOME/CLAUDE.md"
-echo "Linked claude/.config/CLAUDE.md -> ~/CLAUDE.md"
+ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"
+echo "Linked claude/CLAUDE.md -> ~/CLAUDE.md"
 
 # Link aerospace.toml
 ln -sf "$DOTFILES/aerospace.toml" "$HOME/.aerospace.toml"

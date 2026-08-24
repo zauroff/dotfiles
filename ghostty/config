@@ -42,7 +42,6 @@ keybind = global:super+grave_accent=toggle_quick_terminal
 quick-terminal-animation-duration = 0
 keybind = global:super+grave_accent=toggle_quick_terminal
 cursor-style = block
-shell-integration-features = no-cursor
 cursor-style-blink = false
 link-url = true
 window-inherit-working-directory = true
@@ -51,5 +50,6 @@ clipboard-trim-trailing-spaces = true
 mouse-hide-while-typing = true
 macos-titlebar-proxy-icon = hidden
 unfocused-split-opacity = 0.9
+shell-integration-features = no-cursor,ssh-terminfo
 
 
