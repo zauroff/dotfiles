@@ -39,9 +39,13 @@ config.freetype_load_target = "Light"
 config.freetype_render_target = "HorizontalLcd"
 config.freetype_load_flags = "NO_AUTOHINT"
 
--- Read theme mode from state file
+-- Read theme mode from state file. Palettes below are byte-for-byte the same
+-- values Ghostty ships in its "Gruvbox Dark"/"Gruvbox Light" themes, which
+-- toggle-theme.sh selects at the same time it writes this file.
+local theme_file = wezterm.home_dir .. "/.config/wezterm/.theme-mode"
+
 local function read_theme_mode()
-	local f = io.open(wezterm.home_dir .. "/.config/wezterm/.theme-mode", "r")
+	local f = io.open(theme_file, "r")
 	if f then
 		local mode = f:read("*l")
 		f:close()
@@ -50,114 +54,116 @@ local function read_theme_mode()
 	return "dark"
 end
 
+wezterm.add_to_config_reload_watch_list(theme_file)
+
 local dark_colors = {
-	foreground = "#f5f4ef",
-	background = "#2f2f2d",
-	cursor_bg = "#d97757",
-	cursor_fg = "#2f2f2d",
-	cursor_border = "#d97757",
-	selection_bg = "#524e48",
-	selection_fg = "#f5f4ef",
-	split = "#4a4a47",
+	foreground = "#ebdbb2",
+	background = "#1f1f1f",
+	cursor_bg = "#ebdbb2",
+	cursor_fg = "#282828",
+	cursor_border = "#ebdbb2",
+	selection_bg = "#665c54",
+	selection_fg = "#ebdbb2",
+	split = "#504945",
 
 	ansi = {
-		"#242422", -- black
-		"#d97757", -- red (clay)
-		"#65bb30", -- green
-		"#c1a855", -- yellow (gold)
-		"#74abe2", -- blue
-		"#9b86f4", -- magenta (purple)
-		"#7ab89a", -- cyan (mint)
-		"#eadbbb", -- white (manilla)
+		"#282828", -- black (bg0)
+		"#cc241d", -- red
+		"#98971a", -- green
+		"#d79921", -- yellow
+		"#458588", -- blue
+		"#b16286", -- magenta (purple)
+		"#689d6a", -- cyan (aqua)
+		"#a89984", -- white (fg4)
 	},
 	brights = {
-		"#4a4a47", -- bright black
-		"#e89070", -- bright red
-		"#7dd04a", -- bright green
-		"#d4be6e", -- bright yellow
-		"#92c0ec", -- bright blue
-		"#b5a2f7", -- bright magenta
-		"#96cdb2", -- bright cyan
-		"#f5f4ef", -- bright white
+		"#928374", -- bright black (gray)
+		"#fb4934", -- bright red
+		"#b8bb26", -- bright green
+		"#fabd2f", -- bright yellow
+		"#83a598", -- bright blue
+		"#d3869b", -- bright magenta
+		"#8ec07c", -- bright cyan
+		"#ebdbb2", -- bright white (fg1)
 	},
 
 	tab_bar = {
-		background = "#242422",
+		background = "#1d2021",
 		active_tab = {
-			bg_color = "#2f2f2d",
-			fg_color = "#f5f4ef",
+			bg_color = "#282828",
+			fg_color = "#ebdbb2",
 		},
 		inactive_tab = {
-			bg_color = "#242422",
-			fg_color = "#7a7a75",
+			bg_color = "#1d2021",
+			fg_color = "#928374",
 		},
 		inactive_tab_hover = {
-			bg_color = "#3a3a37",
-			fg_color = "#eadbbb",
+			bg_color = "#3c3836",
+			fg_color = "#ebdbb2",
 		},
 		new_tab = {
-			bg_color = "#242422",
-			fg_color = "#7a7a75",
+			bg_color = "#1d2021",
+			fg_color = "#928374",
 		},
 		new_tab_hover = {
-			bg_color = "#3a3a37",
-			fg_color = "#eadbbb",
+			bg_color = "#3c3836",
+			fg_color = "#ebdbb2",
 		},
 	},
 }
 
 local light_colors = {
-	foreground = "#000000",
-	background = "#f9f9f9",
-	cursor_bg = "#007878",
-	cursor_fg = "#f9f9f9",
-	cursor_border = "#007878",
-	selection_bg = "#c0c0bf",
-	selection_fg = "#000000",
-	split = "#d1d1d1",
+	foreground = "#3c3836",
+	background = "#fbf1c7",
+	cursor_bg = "#3c3836",
+	cursor_fg = "#fbf1c7",
+	cursor_border = "#3c3836",
+	selection_bg = "#3c3836",
+	selection_fg = "#fbf1c7",
+	split = "#bdae93",
 
 	ansi = {
-		"#000000", -- black
-		"#c41a15", -- red
-		"#007400", -- green
-		"#826b28", -- yellow
-		"#0000d6", -- blue
-		"#a90d91", -- magenta
-		"#007878", -- cyan
-		"#d1d1d1", -- white
+		"#fbf1c7", -- black (bg0)
+		"#cc241d", -- red
+		"#98971a", -- green
+		"#d79921", -- yellow
+		"#458588", -- blue
+		"#b16286", -- magenta (purple)
+		"#689d6a", -- cyan (aqua)
+		"#7c6f64", -- white (fg4)
 	},
 	brights = {
-		"#666666", -- bright black
-		"#e45649", -- bright red
-		"#50a14f", -- bright green
-		"#c18401", -- bright yellow
-		"#4078f2", -- bright blue
-		"#a626a4", -- bright magenta
-		"#0184bc", -- bright cyan
-		"#f0f0f0", -- bright white
+		"#928374", -- bright black (gray)
+		"#9d0006", -- bright red
+		"#79740e", -- bright green
+		"#b57614", -- bright yellow
+		"#076678", -- bright blue
+		"#8f3f71", -- bright magenta
+		"#427b58", -- bright cyan
+		"#3c3836", -- bright white (fg1)
 	},
 
 	tab_bar = {
-		background = "#d1d1d1",
+		background = "#f9f5d7",
 		active_tab = {
-			bg_color = "#f0f0f0",
-			fg_color = "#000000",
+			bg_color = "#fbf1c7",
+			fg_color = "#3c3836",
 		},
 		inactive_tab = {
-			bg_color = "#d1d1d1",
-			fg_color = "#666666",
+			bg_color = "#f9f5d7",
+			fg_color = "#928374",
 		},
 		inactive_tab_hover = {
-			bg_color = "#e0e0e0",
-			fg_color = "#000000",
+			bg_color = "#ebdbb2",
+			fg_color = "#3c3836",
 		},
 		new_tab = {
-			bg_color = "#d1d1d1",
-			fg_color = "#666666",
+			bg_color = "#f9f5d7",
+			fg_color = "#928374",
 		},
 		new_tab_hover = {
-			bg_color = "#e0e0e0",
-			fg_color = "#000000",
+			bg_color = "#ebdbb2",
+			fg_color = "#3c3836",
 		},
 	},
 }
@@ -169,8 +175,8 @@ config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
-config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
-config.use_resize_increments = true
+config.window_padding = { left = 2, right = 2, top = 0, bottom = 0 }
+config.use_resize_increments = false
 config.macos_window_background_blur = 10
 -- disabling the annoying close confirmation
 config.window_close_confirmation = "NeverPrompt"

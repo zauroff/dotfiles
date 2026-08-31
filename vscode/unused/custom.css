@@ -1,5 +1,5 @@
-* {
-    font-family: 'Jetbrains Mono', Dank Mono, monospace;
+:root {
+    --vscode-font-family: 'JetBrains Mono', 'Dank Mono', monospace;
 }
 
 .actions-container.highlight-toggled {
@@ -177,4 +177,69 @@
 
 .decorationsOverviewRuler {
     display: none !important;
+}
+
+/* --- which-key strip, painted by whichkey.js ---
+   Sits above the status bar, spans the window, and never takes focus. Colors
+   come from theme variables so it follows toggle-theme.sh. */
+.whichkey-strip {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 22px;
+    /* status bar height */
+    z-index: 900;
+    display: none;
+    padding: 8px 14px 10px;
+    background: var(--vscode-editorWidget-background, #1e1e1e);
+    border-top: 1px solid var(--vscode-editorWidget-border, #454545);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, .35);
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 12.5px;
+    line-height: 1.7;
+    pointer-events: none;
+    max-height: 42vh;
+    overflow: hidden;
+}
+
+.whichkey-strip.visible {
+    display: block;
+}
+
+.whichkey-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    column-gap: 20px;
+}
+
+.whichkey-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.whichkey-key {
+    color: var(--vscode-textLink-foreground, #4ec9b0);
+    font-weight: 600;
+}
+
+.whichkey-arrow {
+    opacity: .35;
+    margin: 0 6px;
+}
+
+/* +group entries read as branches, plain mappings as leaves */
+.whichkey-group {
+    color: var(--vscode-textPreformat-foreground, #d7ba7d);
+}
+
+.whichkey-desc {
+    color: var(--vscode-foreground, #ccc);
+    opacity: .85;
+}
+
+.whichkey-prefix {
+    margin-top: 6px;
+    opacity: .5;
+    font-size: 11.5px;
 }
