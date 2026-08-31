@@ -38,7 +38,7 @@ mkdir -p "$HOME/.config/wezterm"
 echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
-mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks"
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
 for skill in "$DOTFILES/claude/skills"/*/; do
@@ -47,7 +47,13 @@ done
 for hook in "$DOTFILES/claude/hooks"/*; do
   [ -f "$hook" ] && ln -sf "$hook" "$HOME/.claude/hooks/$(basename "$hook")"
 done
-echo "Linked claude/ -> ~/.claude (settings + skills + hooks)"
+for style in "$DOTFILES/claude/output-styles"/*.md; do
+  [ -f "$style" ] && ln -sf "$style" "$HOME/.claude/output-styles/$(basename "$style")"
+done
+# Drop symlinks whose source left the repo (e.g. a renamed hook).
+find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" \
+  -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+echo "Linked claude/ -> ~/.claude (settings + skills + hooks + output styles)"
 
 # Link CLAUDE.md to home directory
 ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"
@@ -66,3 +72,36 @@ echo "Linked zdev.sh -> ~/.local/bin/zdev"
 mkdir -p "$HOME/.config"
 ln -sfn "$DOTFILES/opencode" "$HOME/.config/opencode"
 echo "Linked opencode -> ~/.config/opencode"
+
+# Link VSCode config
+VSCODE_USER="$HOME/Library/Application Support/Code/User"
+if [ -d "$(dirname "$VSCODE_USER")" ]; then
+  mkdir -p "$VSCODE_USER"
+
+  ln -sf "$DOTFILES/vscode/settings.json" "$VSCODE_USER/settings.json"
+  ln -sf "$DOTFILES/vscode/keybindings.json" "$VSCODE_USER/keybindings.json"
+  echo "Linked vscode/settings.json    -> $VSCODE_USER/settings.json"
+  echo "Linked vscode/keybindings.json -> $VSCODE_USER/keybindings.json"
+
+  # Install missing extensions. Skipped when the `code` CLI is not on PATH
+  # (Command Palette > "Shell Command: Install 'code' command in PATH").
+  if command -v code >/dev/null 2>&1 && [ -f "$DOTFILES/vscode/extensions.txt" ]; then
+    installed="$(code --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]')"
+    missing=0
+    while IFS= read -r ext; do
+      [ -z "$ext" ] && continue
+      if ! printf '%s\n' "$installed" | grep -qxF "$(printf '%s' "$ext" | tr '[:upper:]' '[:lower:]')"; then
+        echo "  installing $ext"
+        code --install-extension "$ext" --force >/dev/null 2>&1 || echo "  failed: $ext"
+        missing=$((missing + 1))
+      fi
+    done <"$DOTFILES/vscode/extensions.txt"
+    echo "VSCode extensions: $missing installed, $(wc -l <"$DOTFILES/vscode/extensions.txt" | tr -d ' ') tracked"
+  else
+    echo "Skipped VSCode extensions (no \`code\` CLI on PATH)"
+  fi
+
+  echo "NOTE: run \"Enable Custom CSS and JS\" from the Command Palette, then restart"
+else
+  echo "Skipped VSCode (not installed)"
+fi

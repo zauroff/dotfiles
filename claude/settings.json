@@ -2,17 +2,12 @@
   "env": {
     "DISABLE_INSTALLATION_CHECKS": "1"
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
         "matcher": "startup|resume|clear|compact",
         "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/stop-slop-default.sh",
-            "timeout": 10
-          },
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/rubber-duck-default.sh",
@@ -26,8 +21,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/stop-slop-default.sh",
-            "timeout": 10
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"holy fuck, you talk a lot, more concise please\"}}'",
+            "timeout": 5
           }
         ]
       }
@@ -50,7 +45,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/go-conventions.sh",
+            "command": "bash ~/.claude/hooks/coding-conventions.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/no-comments.sh",
             "timeout": 10
           }
         ]
@@ -73,6 +73,7 @@
   "enabledPlugins": {
     "gopls-lsp@cc-plugins-bb-mirror": true
   },
+  "outputStyle": "Concise",
   "effortLevel": "xhigh",
   "theme": "auto"
 }
