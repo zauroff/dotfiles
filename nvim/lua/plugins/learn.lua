@@ -1,4 +1,4 @@
--- Local pseudo-plugin: keeps lesson notes live-reloading while the Stop hook writes to them.
+-- Local pseudo-plugin: lesson-note-specific tweaks; global autoreload lives in config/autocmds.lua.
 return {
   dir = vim.fn.stdpath("config"),
   name = "learn",
@@ -10,17 +10,10 @@ return {
     vim.api.nvim_create_autocmd("BufEnter", {
       group = group,
       pattern = pattern,
-      callback = function(args)
-        vim.bo[args.buf].autoread = true
+      callback = function()
         vim.wo.wrap = true
         vim.wo.linebreak = true
       end,
-    })
-
-    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "FocusGained", "BufEnter" }, {
-      group = group,
-      pattern = pattern,
-      command = "checktime",
     })
 
     vim.api.nvim_create_autocmd("FileChangedShellPost", {
