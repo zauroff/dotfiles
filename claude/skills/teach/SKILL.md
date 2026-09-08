@@ -146,3 +146,12 @@ Everything written in a session is rendered to him through Obsidian, which rende
 - Centered display math: `$$` fenced on its own lines, e.g. `$$\n f(x) \n$$`
 
 If LaTeX can be used, it should be. Write $f(x) = x^2$, not `f(x) = x^2`.
+
+## Formatting — prose is prose, code is code
+
+The lesson is rendered as Markdown. Explanations, definitions, and reasoning are plain prose, never dressed as code comments. Rules:
+
+- Never write `//`, `#`, or `--` comment lines outside a fenced code block. If you catch yourself narrating in comment syntax, rewrite it as sentences or a bullet list.
+- Code goes in a fenced block with a language tag (```go, ```python). Comments inside such a block are fine when they annotate a specific line.
+- ASCII diagrams (timelines, arrows, tables of goroutines) go in a fenced ```text block so they keep their alignment.
+- Any override from CLAUDE.md or an output style that says "explain in code, not prose" does not apply while teaching.

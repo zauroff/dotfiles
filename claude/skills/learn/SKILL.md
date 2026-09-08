@@ -29,10 +29,11 @@ EOF
 
 Quote every path — the vault name has spaces.
 
-**3. Mark the lesson active** so the Stop hook (`claude/hooks/learn-log.sh`) knows to mirror the session into it:
+**3. Mark the lesson active for this session only.** The marker is scoped by working directory (`$PWD`) so other Claude sessions' Stop hooks don't append to it — run this with the shell's real `$PWD` (the Bash tool's cwd), not a stored or guessed path:
 
 ```bash
-echo "$LESSON_FILE" > ~/.claude/learn-active
+mkdir -p "$HOME/.claude/learn-active"
+echo "$LESSON_FILE" > "$HOME/.claude/learn-active/$(printf %s "$PWD" | shasum | cut -c1-16)"
 ```
 
 **4. Open the lesson file in a split**, trying each in order:
@@ -52,11 +53,12 @@ fi
 
 ## Stopping: `/learn stop`
 
+Remove only this session's marker, again keyed by the real `$PWD`:
+
 ```bash
-rm -f ~/.claude/learn-active
+rm -f "$HOME/.claude/learn-active/$(printf %s "$PWD" | shasum | cut -c1-16)"
 ```
 
 ## Rules while a lesson is active
 
 - **The lesson file is written by the Stop hook, never by you.** `claude/hooks/learn-log.sh` mirrors each assistant turn's text (and any `AskUserQuestion` it asked) into the lesson file after you reply. Put all teaching content in your normal chat replies — editing the lesson file directly races the hook and duplicates content.
-- **Rubber duck is suspended.** The rubber-duck rules in `claude/CLAUDE.md` (terse, never write code, ask rarely) do not apply while a lesson is active — `teach` governs instead.

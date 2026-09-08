@@ -2,12 +2,14 @@
 # Stop hook: mirror the just-finished assistant turn into the active lesson file.
 set -euo pipefail
 
-ACTIVE="$HOME/.claude/learn-active"
+INPUT="$(cat)"
+CWD="$(jq -r '.cwd // empty' <<<"$INPUT")"
+[ -n "$CWD" ] || exit 0
+ACTIVE="$HOME/.claude/learn-active/$(printf %s "$CWD" | shasum | cut -c1-16)"
 [ -f "$ACTIVE" ] || exit 0
 LESSON="$(cat "$ACTIVE")"
 [ -f "$LESSON" ] || exit 0
 
-INPUT="$(cat)"
 TRANSCRIPT="$(jq -r '.transcript_path // empty' <<<"$INPUT")"
 [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ] || exit 0
 
