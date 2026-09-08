@@ -2,20 +2,16 @@
   "env": {
     "DISABLE_INSTALLATION_CHECKS": "1"
   },
+  "permissions": {
+    "allow": [
+      "Bash(mmdc:*)",
+      "Bash(rsvg-convert:*)",
+      "Bash(magick:*)",
+      "Bash(wezterm cli:*)"
+    ]
+  },
   "model": "opus",
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume|clear|compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/rubber-duck-default.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -64,6 +60,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/learn-log.sh",
+            "timeout": 15
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -75,5 +82,10 @@
   },
   "outputStyle": "Concise",
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  },
   "theme": "auto"
 }
