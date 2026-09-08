@@ -38,7 +38,7 @@ mkdir -p "$HOME/.config/wezterm"
 echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
-mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles"
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles" "$HOME/.claude/agents"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
 for skill in "$DOTFILES/claude/skills"/*/; do
@@ -50,14 +50,22 @@ done
 for style in "$DOTFILES/claude/output-styles"/*.md; do
   [ -f "$style" ] && ln -sf "$style" "$HOME/.claude/output-styles/$(basename "$style")"
 done
+for agent in "$DOTFILES/claude/agents"/*.md; do
+  [ -f "$agent" ] && ln -sf "$agent" "$HOME/.claude/agents/$(basename "$agent")"
+done
 # Drop symlinks whose source left the repo (e.g. a renamed hook).
-find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" \
+find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" "$HOME/.claude/agents" \
   -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
-echo "Linked claude/ -> ~/.claude (settings + skills + hooks + output styles)"
+echo "Linked claude/ -> ~/.claude (settings + skills + hooks + agents + output styles)"
 
 # Link CLAUDE.md to home directory
 ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"
 echo "Linked claude/CLAUDE.md -> ~/CLAUDE.md"
+
+# Install diagram tools used by the visualize skill's maker agents
+command -v rsvg-convert >/dev/null 2>&1 || brew install librsvg
+command -v mmdc >/dev/null 2>&1 || npm i -g @mermaid-js/mermaid-cli
+echo "Checked diagram tools (rsvg-convert, mmdc)"
 
 # Link aerospace.toml
 ln -sf "$DOTFILES/aerospace.toml" "$HOME/.aerospace.toml"

@@ -30,13 +30,17 @@ config.keys = { -- Split pane vertically (creates a pane to the right)
 config.initial_cols = 120
 config.initial_rows = 120
 
-config.font = wezterm.font("JetBrains Mono", { weight = "Medium" })
+config.font = wezterm.font("JetBrains Mono", { weight = "Bold" })
 config.launch_menu = launch_menu
 config.font_size = 20
 
+-- readability fixes?
+config.line_height = 1.2
+config.cell_width = 1.0
+config.front_end = "WebGpu"
+
 -- Sharp & crispy text rendering
 config.freetype_load_target = "Light"
-config.freetype_render_target = "HorizontalLcd"
 config.freetype_load_flags = "NO_AUTOHINT"
 
 -- Read theme mode from state file. Palettes below are byte-for-byte the same
