@@ -85,7 +85,15 @@
   "modelSettings": {
     "claude-fable-5-1": {
       "effortLevel": "high"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5": {
+      "effortLevel": "high"
     }
   },
-  "theme": "auto"
+  "tui": "fullscreen",
+  "theme": "custom:vscode-2026-dark",
+  "editorMode": "vim"
 }

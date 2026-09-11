@@ -1,54 +1,62 @@
-# Tab bar — blocky and minimal
-window-theme = system
-macos-option-as-alt = true
-
-
-# Font Shtuff
+# Font
 font-family = "JetBrainsMono Nerd Font"
-font-size = 19
+font-style = Bold
+font-size = 20
 font-thicken = true
-adjust-cell-height = 12%
+adjust-cell-height = 20%
+alpha-blending = linear-corrected
 
-window-padding-x = 16
-window-padding-y = 12
+# Window
+window-width = 120
+window-height = 120
+window-padding-x = 2
+window-padding-y = 0
 window-padding-balance = true
 window-padding-color = background
-window-colorspace = display-p3
+window-colorspace = srgb
+window-theme = system
+macos-titlebar-style = tabs
 background-opacity = 0.97
-background-blur = 24
+background-blur = 10
+confirm-close-surface = false
+# Ghostty counts bytes here, not lines. ~100MB covers wezterm's 90k lines.
+scrollback-limit = 100000000
 
-# Theme (toggle-theme.sh rewrites this line)
-theme = Gruvbox Dark
+# Theme (toggle-theme.sh rewrites both of these lines together)
+theme = vscode-2026-dark
+background = #121314
 
-# Shaders 
-custom-shader = crt.glsl
-custom-shader-animation = false
+# Shaders
+# custom-shader = crt.glsl
+# custom-shader-animation = false
 
-# Split keybindings (ctrl+opt)
+# Keybindings
+macos-option-as-alt = true
+
+# Splits (ctrl+opt)
 keybind = ctrl+opt+s=new_split:right
 keybind = ctrl+opt+v=new_split:down
 keybind = ctrl+opt+w=close_surface
 
 # Pane navigation (ctrl+opt+arrows)
-keybind = ctrl+shift+left=goto_split:left
-keybind = ctrl+shift+right=goto_split:right
-keybind = ctrl+shift+up=goto_split:top
-keybind = ctrl+shift+down=goto_split:bottom
-
+keybind = ctrl+opt+left=goto_split:left
+keybind = ctrl+opt+right=goto_split:right
+keybind = ctrl+opt+up=goto_split:up
+keybind = ctrl+opt+down=goto_split:down
 
 # Tab navigation (cmd+opt+arrows, matches Chrome/Arc)
 keybind = cmd+opt+left=previous_tab
 keybind = cmd+opt+right=next_tab
-
-# New tab
 keybind = cmd+t=new_tab
+
+# Newline instead of submit in Claude Code
+keybind = shift+enter=text:\x1b\r
 
 # Quick Terminal
 keybind = global:super+grave_accent=toggle_quick_terminal
+quick-terminal-animation-duration = 0
 
 # Misc stuff that I stole from GitHub
-quick-terminal-animation-duration = 0
-keybind = global:super+grave_accent=toggle_quick_terminal
 cursor-style = block
 cursor-style-blink = false
 link-url = true
@@ -59,5 +67,3 @@ mouse-hide-while-typing = true
 macos-titlebar-proxy-icon = hidden
 unfocused-split-opacity = 0.9
 shell-integration-features = no-cursor,ssh-terminfo
-
-

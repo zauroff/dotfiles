@@ -184,6 +184,7 @@ config.use_resize_increments = false
 config.macos_window_background_blur = 10
 -- disabling the annoying close confirmation
 config.window_close_confirmation = "NeverPrompt"
-
+-- How many lines of scrollback you want to retain per tab
+config.scrollback_lines = 90000
 -- Finally, return the configuration to wezterm:
 return config

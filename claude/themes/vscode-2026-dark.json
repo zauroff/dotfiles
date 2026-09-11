@@ -1,0 +1,70 @@
+{
+  "name": "vscode-2026-dark",
+  "base": "dark",
+  "overrides": {
+    "text": "#BBBEBF",
+    "inverseText": "#121314",
+    "inactive": "#8C8C8C",
+    "inactiveShimmer": "#BBBEBF",
+    "subtle": "#2A2B2C",
+    "promptBorder": "#858889",
+    "promptBorderShimmer": "#BBBEBF",
+
+    "claude": "#ffa657",
+    "claudeShimmer": "#ffc38f",
+    "claudeBlue_FOR_SYSTEM_SPINNER": "#79c0ff",
+    "claudeBlueShimmer_FOR_SYSTEM_SPINNER": "#a5d6ff",
+
+    "permission": "#79c0ff",
+    "permissionShimmer": "#a5d6ff",
+    "suggestion": "#79c0ff",
+    "remember": "#79c0ff",
+    "background": "#3994BC",
+    "ide": "#3994BC",
+
+    "autoAccept": "#d2a8ff",
+    "autoAcceptShimmer": "#e2c8ff",
+    "skill": "#d2a8ff",
+    "merged": "#d2a8ff",
+    "effortUltra": "#d2a8ff",
+    "planMode": "#297AA0",
+    "bashBorder": "#d670d6",
+
+    "success": "#73c991",
+    "error": "#f48771",
+    "warning": "#e5ba7d",
+    "warningShimmer": "#f5d5a8",
+
+    "diffAdded": "#172319",
+    "diffRemoved": "#2D1919",
+    "diffAddedDimmed": "#1B2C22",
+    "diffRemovedDimmed": "#2A1F20",
+    "diffAddedWord": "#274129",
+    "diffRemovedWord": "#562F2D",
+
+    "selectionBg": "#276782",
+    "userMessageBackground": "#242526",
+    "userMessageBackgroundHover": "#2C2D2E",
+    "composerSidebarBackground": "#191A1B",
+    "bashMessageBackgroundColor": "#202122",
+    "memoryBackgroundColor": "#1E3A47",
+
+    "rate_limit_fill": "#3994BC",
+    "rate_limit_empty": "#1E3A47",
+    "fastMode": "#ffa657",
+    "fastModeShimmer": "#ffc38f",
+    "briefLabelYou": "#79c0ff",
+    "briefLabelClaude": "#ffa657",
+    "professionalBlue": "#3994BC",
+    "chromeYellow": "#e5ba7d",
+
+    "red_FOR_SUBAGENTS_ONLY": "#f14c4c",
+    "blue_FOR_SUBAGENTS_ONLY": "#3b8eea",
+    "green_FOR_SUBAGENTS_ONLY": "#23d18b",
+    "yellow_FOR_SUBAGENTS_ONLY": "#f5f543",
+    "purple_FOR_SUBAGENTS_ONLY": "#d2a8ff",
+    "orange_FOR_SUBAGENTS_ONLY": "#ffa657",
+    "pink_FOR_SUBAGENTS_ONLY": "#d670d6",
+    "cyan_FOR_SUBAGENTS_ONLY": "#29b8db"
+  }
+}
