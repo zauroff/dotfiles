@@ -2,6 +2,8 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-context",
         event = "BufReadPost",
-        opts = {},
+        opts = {
+            max_lines = 2,
+        },
     },
 }
