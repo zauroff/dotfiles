@@ -26,9 +26,11 @@ mkdir -p "$HOME/.config/ghostty"
 ln -sfn "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
 ln -sfn "$DOTFILES/ghostty/crt.glsl" "$HOME/.config/ghostty/crt.glsl"
 ln -sfn "$DOTFILES/ghostty/crt-light.glsl" "$HOME/.config/ghostty/crt-light.glsl"
+ln -sfn "$DOTFILES/ghostty/themes" "$HOME/.config/ghostty/themes"
 echo "Linked ghostty/config -> ~/.config/ghostty/config"
 echo "Linked ghostty/crt.glsl -> ~/.config/ghostty/crt.glsl"
 echo "Linked ghostty/crt-light.glsl -> ~/.config/ghostty/crt-light.glsl"
+echo "Linked ghostty/themes -> ~/.config/ghostty/themes"
 
 # Initialize theme state files (default to dark)
 [ -f "$HOME/.config/.current-theme" ] || echo "dark" >"$HOME/.config/.current-theme"
@@ -38,7 +40,7 @@ mkdir -p "$HOME/.config/wezterm"
 echo "Initialized theme state files (dark mode)"
 
 # Link Claude config
-mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles" "$HOME/.claude/agents"
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles" "$HOME/.claude/agents" "$HOME/.claude/themes"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
 for skill in "$DOTFILES/claude/skills"/*/; do
@@ -53,10 +55,13 @@ done
 for agent in "$DOTFILES/claude/agents"/*.md; do
   [ -f "$agent" ] && ln -sf "$agent" "$HOME/.claude/agents/$(basename "$agent")"
 done
+for theme in "$DOTFILES/claude/themes"/*.json; do
+  [ -f "$theme" ] && ln -sf "$theme" "$HOME/.claude/themes/$(basename "$theme")"
+done
 # Drop symlinks whose source left the repo (e.g. a renamed hook).
-find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" "$HOME/.claude/agents" \
+find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" "$HOME/.claude/agents" "$HOME/.claude/themes" \
   -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
-echo "Linked claude/ -> ~/.claude (settings + skills + hooks + agents + output styles)"
+echo "Linked claude/ -> ~/.claude (settings + skills + hooks + agents + output styles + themes)"
 
 # Link CLAUDE.md to home directory
 ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"

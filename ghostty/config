@@ -16,7 +16,7 @@ window-padding-color = background
 window-colorspace = srgb
 window-theme = system
 macos-titlebar-style = tabs
-background-opacity = 0.97
+background-opacity = 1
 background-blur = 10
 confirm-close-surface = false
 # Ghostty counts bytes here, not lines. ~100MB covers wezterm's 90k lines.
