@@ -1,78 +1,79 @@
--- VS Code "2026 Dark", ported from microsoft/vscode
--- extensions/theme-defaults/themes/2026-dark.json (UI chrome) plus its
--- tokenColors block (syntax, which is the GitHub Dark palette).
+-- VS Code "2026 Light" counterpart to vscode2026.lua.
 --
--- VS Code colors carry an alpha channel; Neovim highlight groups do not. Where
--- the source value was translucent, the hex below is that color pre-blended
--- over the editor background.
+-- UI chrome follows VS Code Light+ defaults. Syntax token colors use the
+-- GitHub Light palette (the light counterpart of GitHub Dark, which
+-- vscode2026.lua's tokenColors are ported from) rather than reusing the dark
+-- file's token hexes verbatim: those are pastel colors tuned for a dark
+-- background and are close to unreadable on white.
 
 vim.cmd("highlight clear")
 if vim.fn.exists("syntax_on") == 1 then
     vim.cmd("syntax reset")
 end
-vim.o.background = "dark"
+vim.o.background = "light"
 vim.o.termguicolors = true
-vim.g.colors_name = "vscode2026"
+vim.g.colors_name = "vscode2026-light"
 
 local c = {
     -- editor chrome
-    bg = "#121314", -- editor.background
-    bg_alt = "#191A1B", -- sideBar / panel / statusBar.background
-    bg_widget = "#202122", -- editorWidget.background
-    bg_hl = "#242526", -- editor.lineHighlightBackground
-    bg_sel_list = "#2C2D2E", -- list.inactiveSelectionBackground
-    border = "#2A2B2C", -- *.border
-    fg = "#BBBEBF", -- editor.foreground
-    fg_ui = "#bfbfbf", -- foreground
-    fg_dim = "#8C8C8C", -- descriptionForeground
-    fg_faint = "#555555", -- disabledForeground
-    line_nr = "#858889", -- editorLineNumber.foreground
-    indent = "#343536", -- editorIndentGuide.background1 over bg
-    indent_on = "#838485", -- editorIndentGuide.activeBackground1
-    accent = "#3994BC", -- focusBorder / panelTitle.activeBorder
-    link = "#48A0C7", -- textLink.foreground
-    sel = "#245C73", -- editor.selectionBackground over bg
-    sel_dim = "#1E4252", -- editor.findMatchBackground over bg
-    match = "#1F3E4C", -- editorBracketMatch.background over bg
+    bg = "#FFFFFF", -- editor.background
+    bg_alt = "#F3F3F3", -- sideBar / panel / statusBar.background
+    bg_widget = "#F3F3F3", -- editorWidget.background
+    bg_hl = "#F0F0F0", -- editor.lineHighlightBackground
+    bg_sel_list = "#E4E6F1", -- list.inactiveSelectionBackground
+    border = "#D4D4D4", -- *.border
+    fg = "#000000", -- editor.foreground
+    fg_ui = "#3B3B3B", -- foreground
+    fg_dim = "#6C6C6C", -- descriptionForeground
+    fg_faint = "#A5A5A5", -- disabledForeground
+    line_nr = "#237893", -- editorLineNumber.foreground
+    indent = "#D3D3D3", -- editorIndentGuide.background1 over bg
+    indent_on = "#939393", -- editorIndentGuide.activeBackground1
+    accent = "#005FB8", -- focusBorder / panelTitle.activeBorder
+    link = "#006AB1", -- textLink.foreground
+    sel = "#ADD6FF", -- editor.selectionBackground
+    sel_dim = "#D6ECFF", -- editor.findMatchBackground
+    match = "#B4D8FD", -- editorBracketMatch.background
 
-    -- syntax (2026-dark tokenColors)
-    comment = "#8b949e",
-    keyword = "#ff7b72",
-    constant = "#79c0ff",
-    string = "#a5d6ff",
-    func = "#d2a8ff",
-    tag = "#7ee787",
-    variable = "#ffa657",
-    text = "#c9d1d9",
-    invalid = "#ffa198",
+    -- syntax (GitHub Light tokenColors)
+    comment = "#6e7781",
+    keyword = "#cf222e",
+    constant = "#0550ae",
+    string = "#0a3069",
+    func = "#8250df",
+    tag = "#116329",
+    variable = "#953800",
+    text = "#1f2328",
+    invalid = "#82071e",
 
     -- diagnostics / git
-    error = "#f48771",
-    warn = "#e5ba7d",
-    info = "#3a94bc",
-    hint = "#8C8C8C",
-    added = "#73c991",
-    modified = "#e5ba7d",
-    deleted = "#f48771",
-    gutter_add = "#72C892",
-    gutter_del = "#F28772",
+    error = "#cd3131",
+    warn = "#bf8803",
+    info = "#1a85ff",
+    hint = "#6c6c6c",
+    added = "#587c0c",
+    modified = "#895503",
+    deleted = "#ad0707",
+    gutter_add = "#2E7D32",
+    gutter_del = "#C62828",
     gutter_mod = "#0078D4",
 
-    -- diff backgrounds, pre-blended over bg
-    diff_add = "#172319",
-    diff_del = "#2D1919",
-    diff_add_text = "#274129",
-    diff_del_text = "#562F2D",
-    diff_change = "#1E4252",
-    diff_change_text = "#2A5A70",
+    -- diff backgrounds
+    diff_add = "#e6ffec",
+    diff_del = "#ffebe9",
+    diff_add_text = "#abf2bc",
+    diff_del_text = "#ffc0c0",
+    diff_change = "#ddf4ff",
+    diff_change_text = "#b6e3ff",
 }
 
--- VS Code's built-in dark ANSI defaults; 2026 Dark does not override them.
+-- VS Code Light+'s built-in terminal defaults; matches
+-- ghostty/themes/vscode-2026-light and wezterm.lua's light_colors.
 local ansi = {
-    "#000000", "#cd3131", "#0dbc79", "#e5e510",
-    "#2472c8", "#bc3fbc", "#11a8cd", "#e5e5e5",
-    "#666666", "#f14c4c", "#23d18b", "#f5f543",
-    "#3b8eea", "#d670d6", "#29b8db", "#e5e5e5",
+    "#000000", "#cd3131", "#00bc00", "#949800",
+    "#0451a5", "#bc05bc", "#0598bc", "#555555",
+    "#666666", "#cd3131", "#14ce14", "#b5ba00",
+    "#0451a5", "#bc05bc", "#0598bc", "#a5a5a5",
 }
 for i, hex in ipairs(ansi) do
     vim.g["terminal_color_" .. (i - 1)] = hex
@@ -110,7 +111,7 @@ local groups = {
     Visual = { bg = c.sel },
     VisualNOS = { bg = c.sel },
     Search = { bg = c.sel_dim },
-    IncSearch = { bg = "#276782", fg = "#FFFFFF" },
+    IncSearch = { bg = "#ADD6FF", fg = "#000000" },
     CurSearch = { link = "IncSearch" },
     Substitute = { link = "IncSearch" },
     Title = { fg = c.constant, bold = true },
@@ -134,11 +135,11 @@ local groups = {
     TabLineSel = { fg = c.fg_ui, bg = c.bg },
 
     Pmenu = { fg = c.fg_ui, bg = c.bg_widget },
-    PmenuSel = { bg = "#33353A" }, -- editorSuggestWidget.selectedBackground over widget bg
+    PmenuSel = { bg = "#D6EBFF" }, -- editorSuggestWidget.selectedBackground
     PmenuSbar = { bg = c.bg_widget },
-    PmenuThumb = { bg = "#5A5B5C" },
+    PmenuThumb = { bg = "#C2C2C2" },
     PmenuMatch = { fg = c.link, bold = true },
-    PmenuMatchSel = { fg = c.link, bg = "#33353A", bold = true },
+    PmenuMatchSel = { fg = c.link, bg = "#D6EBFF", bold = true },
     WildMenu = { link = "PmenuSel" },
 
     -- legacy syntax groups
@@ -200,17 +201,17 @@ local groups = {
     DiagnosticUnderlineInfo = { sp = c.info, undercurl = true },
     DiagnosticUnderlineHint = { sp = c.hint, undercurl = true },
     DiagnosticUnderlineOk = { sp = c.added, undercurl = true },
-    DiagnosticVirtualTextError = { fg = c.error, bg = "#241819" },
-    DiagnosticVirtualTextWarn = { fg = c.warn, bg = "#23211C" },
-    DiagnosticVirtualTextInfo = { fg = c.info, bg = "#17202A" },
-    DiagnosticVirtualTextHint = { fg = c.hint, bg = "#1D1E1F" },
+    DiagnosticVirtualTextError = { fg = c.error, bg = "#FDE7E9" },
+    DiagnosticVirtualTextWarn = { fg = c.warn, bg = "#FFF3CD" },
+    DiagnosticVirtualTextInfo = { fg = c.info, bg = "#DCEEFF" },
+    DiagnosticVirtualTextHint = { fg = c.hint, bg = "#F0F0F0" },
     DiagnosticUnnecessary = { fg = c.fg_faint },
     DiagnosticDeprecated = { fg = c.fg_faint, strikethrough = true },
 
     -- LSP
-    LspReferenceText = { bg = "#1B3B49" }, -- editor.wordHighlightBackground over bg
-    LspReferenceRead = { bg = "#1B3B49" },
-    LspReferenceWrite = { bg = "#1E4252" },
+    LspReferenceText = { bg = "#E4F0FA" }, -- editor.wordHighlightBackground
+    LspReferenceRead = { bg = "#E4F0FA" },
+    LspReferenceWrite = { bg = "#CDE6FA" },
     LspSignatureActiveParameter = { fg = c.variable, bold = true },
     LspInlayHint = { fg = c.fg_dim, bg = c.bg_hl },
     LspCodeLens = { fg = c.fg_dim },
@@ -346,7 +347,7 @@ local groups = {
     TelescopePromptNormal = { fg = c.fg_ui, bg = c.bg_widget },
     TelescopePromptBorder = { fg = c.border, bg = c.bg_widget },
     TelescopePromptPrefix = { fg = c.accent },
-    TelescopeSelection = { bg = c.bg_sel_list, fg = "#ededed" },
+    TelescopeSelection = { bg = c.bg_sel_list, fg = "#111111" },
     TelescopeMatching = { fg = c.link, bold = true },
 
     -- snacks / lazy / mason / which-key
@@ -373,10 +374,10 @@ local groups = {
     -- treesitter-context, illuminate, rainbow-delimiters
     TreesitterContext = { bg = c.bg_hl },
     TreesitterContextLineNumber = { fg = c.line_nr, bg = c.bg_hl },
-    IlluminatedWordText = { bg = "#1B3B49" },
-    IlluminatedWordRead = { bg = "#1B3B49" },
-    IlluminatedWordWrite = { bg = "#1E4252" },
-    RainbowDelimiterYellow = { fg = "#e5ba7d" },
+    IlluminatedWordText = { bg = "#E4F0FA" },
+    IlluminatedWordRead = { bg = "#E4F0FA" },
+    IlluminatedWordWrite = { bg = "#CDE6FA" },
+    RainbowDelimiterYellow = { fg = c.warn },
     RainbowDelimiterViolet = { fg = c.func },
     RainbowDelimiterBlue = { fg = c.constant },
     RainbowDelimiterOrange = { fg = c.variable },

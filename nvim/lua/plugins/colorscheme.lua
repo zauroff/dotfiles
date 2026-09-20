@@ -11,11 +11,11 @@ local function read_theme_mode()
 end
 
 -- Dark mode uses the VS Code "2026 Dark" port in nvim/colors/vscode2026.lua.
--- Light mode stays on gruvbox, which has no matching 2026 counterpart here.
+-- Light mode uses its counterpart in nvim/colors/vscode2026-light.lua.
 local function apply_theme()
     if read_theme_mode() == "light" then
         vim.o.background = "light"
-        pcall(vim.cmd.colorscheme, "gruvbox")
+        pcall(vim.cmd.colorscheme, "vscode2026-light")
     else
         vim.o.background = "dark"
         pcall(vim.cmd.colorscheme, "vscode2026")

@@ -39,6 +39,33 @@ mkdir -p "$HOME/.config/wezterm"
 [ -f "$HOME/.config/nvim/.theme-mode" ] || echo "dark" >"$HOME/.config/nvim/.theme-mode"
 echo "Initialized theme state files (dark mode)"
 
+# Generate the iTerm2 dynamic profile. Not a symlink: toggle-theme.sh rewrites
+# the file on every theme switch, and iTerm2 reloads it into open sessions.
+if [ -d "/Applications/iTerm.app" ]; then
+  # gen-profile.sh merges iterm2/profile.json with the theme colors using jq.
+  command -v jq >/dev/null 2>&1 || brew install jq
+  ITERM_PROFILES="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+  mkdir -p "$ITERM_PROFILES"
+  # Stage outside DynamicProfiles: iTerm2 parses every file in that directory,
+  # so a half-written temp file inside it raises an "invalid JSON" alert.
+  ITERM_TMP="$(mktemp -t iterm-dotfiles)"
+  bash "$DOTFILES/iterm2/gen-profile.sh" "$(cat "$HOME/.config/.current-theme")" >"$ITERM_TMP"
+  mv "$ITERM_TMP" "$ITERM_PROFILES/dotfiles.json"
+  echo "Wrote iterm2/gen-profile.sh output -> $ITERM_PROFILES/dotfiles.json"
+
+  # Which profile is the default is app-level state, not part of the dynamic
+  # profile. iTerm2 overwrites its plist on quit, so only set it while closed.
+  if pgrep -x iTerm2 >/dev/null 2>&1; then
+    echo "NOTE: iTerm2 is running; set the \"dotfiles\" profile as default yourself (Settings > Profiles > Other Actions)"
+  else
+    defaults write com.googlecode.iterm2 "Default Bookmark Guid" \
+      -string "$(jq -r .Guid "$DOTFILES/iterm2/profile.json")"
+    echo "Set iTerm2 default profile to dotfiles"
+  fi
+else
+  echo "Skipped iTerm2 (not installed)"
+fi
+
 # Link Claude config
 mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles" "$HOME/.claude/agents" "$HOME/.claude/themes"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
@@ -85,6 +112,13 @@ echo "Linked zdev.sh -> ~/.local/bin/zdev"
 mkdir -p "$HOME/.config"
 ln -sfn "$DOTFILES/opencode" "$HOME/.config/opencode"
 echo "Linked opencode -> ~/.config/opencode"
+
+# Link JetBrains keymap into every installed GoLand version
+for kmdir in "$HOME/Library/Application Support/JetBrains"/GoLand*/keymaps; do
+  [ -d "$kmdir" ] || continue
+  ln -sf "$DOTFILES/jetbrains/keymaps/zauroff's.xml" "$kmdir/zauroff's.xml"
+  echo "Linked jetbrains/keymaps/zauroff's.xml -> $kmdir/zauroff's.xml"
+done
 
 # Link VSCode config
 VSCODE_USER="$HOME/Library/Application Support/Code/User"
