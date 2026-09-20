@@ -1,16 +1,39 @@
 <keymap version="1" name="zauroff's" parent="VSCode OSX">
+  <action id="ActivateCommitToolWindow" />
+  <action id="ActivateProjectToolWindow">
+    <keyboard-shortcut first-keystroke="meta b" />
+  </action>
+  <action id="ActivatePullRequestsToolWindow">
+    <keyboard-shortcut first-keystroke="shift meta g" />
+  </action>
   <action id="ActivateTerminalToolWindow">
     <keyboard-shortcut first-keystroke="ctrl slash" />
     <keyboard-shortcut first-keystroke="ctrl back_quote" />
   </action>
   <action id="EditorDecreaseFontSize" />
   <action id="EditorIncreaseFontSize" />
+  <action id="FindNext">
+    <keyboard-shortcut first-keystroke="f3" />
+    <keyboard-shortcut first-keystroke="meta k" second-keystroke="meta d" />
+  </action>
+  <action id="FindPrevious">
+    <keyboard-shortcut first-keystroke="shift f3" />
+    <keyboard-shortcut first-keystroke="shift meta f5" />
+  </action>
+  <action id="GotoSymbol" />
+  <action id="HideSideWindows" />
+  <action id="Lazygit.Toggle">
+    <keyboard-shortcut first-keystroke="meta alt g" />
+    <keyboard-shortcut first-keystroke="meta g" />
+  </action>
   <action id="Terminal.NewTab">
+    <keyboard-shortcut first-keystroke="meta t" />
     <keyboard-shortcut first-keystroke="shift ctrl slash" />
     <keyboard-shortcut first-keystroke="shift ctrl back_quote" />
   </action>
   <action id="Terminal.SwitchFocusToEditor">
     <keyboard-shortcut first-keystroke="ctrl slash" />
+    <keyboard-shortcut first-keystroke="ctrl back_quote" />
   </action>
   <action id="ZoomInIdeAction">
     <keyboard-shortcut first-keystroke="meta equals" />
@@ -21,4 +44,5 @@
     <keyboard-shortcut first-keystroke="meta minus" />
     <keyboard-shortcut first-keystroke="ctrl alt minus" />
   </action>
+  <action id="org.intellij.plugins.markdown.ui.actions.styling.ToggleBoldAction" />
 </keymap>
