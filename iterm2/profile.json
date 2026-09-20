@@ -1,0 +1,46 @@
+{
+  "Name": "dotfiles",
+  "Guid": "0D07F11E-1111-4111-8111-000000000001",
+
+  "Use Separate Colors for Light and Dark Mode": false,
+  "Use Bright Bold": false,
+
+  "Normal Font": "JetBrainsMonoNF-Bold 20",
+  "Use Bold Font": true,
+  "Use Italic Font": true,
+  "Use Non-ASCII Font": false,
+  "ASCII Anti Aliased": true,
+  "Horizontal Spacing": 1.0,
+  "Vertical Spacing": 1.2,
+
+  "Columns": 120,
+  "Rows": 120,
+  "Window Type": 0,
+  "Transparency": 0.0,
+  "Blur": false,
+
+  "Cursor Type": 2,
+  "Blinking Cursor": false,
+
+  "Scrollback Lines": 100000,
+  "Unlimited Scrollback": false,
+  "Prompt Before Closing 2": false,
+  "Mouse Reporting": true,
+  "Terminal Type": "xterm-256color",
+  "Custom Directory": "Recycle",
+  "Option Key Sends": 2,
+  "Right Option Key Sends": 2,
+
+  "Keyboard Map": {
+    "0x73-0xc0000": { "Action": 29, "Text": "0D07F11E-1111-4111-8111-000000000001" },
+    "0x76-0xc0000": { "Action": 28, "Text": "0D07F11E-1111-4111-8111-000000000001" },
+    "0x77-0xc0000": { "Action": 25, "Text": "Close" },
+    "0xf702-0x2c0000": { "Action": 18 },
+    "0xf703-0x2c0000": { "Action": 19 },
+    "0xf700-0x2c0000": { "Action": 20 },
+    "0xf701-0x2c0000": { "Action": 21 },
+    "0xf702-0x380000": { "Action": 2 },
+    "0xf703-0x380000": { "Action": 0 },
+    "0xd-0x20000": { "Action": 11, "Text": "0x1b 0xd" }
+  }
+}
