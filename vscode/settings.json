@@ -128,14 +128,13 @@
   "chat.agent.enabled": false,
   "chat.viewSessions.orientation": "stacked",
   "workbench.secondarySideBar.defaultVisibility": "hidden",
-  "chat.disableAIFeatures": true,
   "git.blame.editorDecoration.enabled": true,
   "git.blame.ignoreWhitespace": true,
   "github.showAvatar": false,
   "git.blame.editorDecoration.disableHover": false,
   "chat.plugins.enabled": true,
   "chat.plugins.marketplace": [],
-  "workbench.colorTheme": "Dimmed",
+  "workbench.colorTheme": "Mac 90's Theme",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "gitlens.showWhatsNewAfterUpgrades": false,
   "gitlens.plusFeatures.enabled": false,
@@ -170,5 +169,6 @@
   "workbench.browser.showInTitleBar": false,
   "window.customTitleBarVisibility": "never",
   "git.blame.statusBarItem.enabled": false,
-  "chat.fontSize": 18, // trouble.nvim
+  "chat.fontSize": 18,
+  "chat.disableAIFeatures": true, // trouble.nvim
 }
