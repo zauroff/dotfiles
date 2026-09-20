@@ -2,6 +2,15 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- Terminal: real show/hide toggle. LazyVim binds <C-/> to Snacks.terminal.focus,
+-- which only bounces the cursor between windows and leaves the terminal open.
+-- <C-_> is what most terminals actually send for ctrl+/ (0x1f).
+for _, key in ipairs({ "<D-/>", "<C-/>", "<C-_>" }) do
+    vim.keymap.set({ "n", "t" }, key, function()
+        Snacks.terminal.toggle(nil, { cwd = LazyVim.root() })
+    end, { desc = "Terminal (Root Dir)" })
+end
+
 if vim.g.vscode then
     local vscode = require("vscode")
     vim.keymap.set("n", "<leader>e", function()

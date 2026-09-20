@@ -64,6 +64,7 @@ local c = {
     diff_add_text = "#274129",
     diff_del_text = "#562F2D",
     diff_change = "#1E4252",
+    diff_change_text = "#2A5A70",
 }
 
 -- VS Code's built-in dark ANSI defaults; 2026 Dark does not override them.
@@ -316,6 +317,27 @@ local groups = {
     GitSignsChangeLn = { bg = c.diff_change },
     GitSignsDeleteLn = { bg = c.diff_del },
     GitSignsCurrentLineBlame = { fg = c.fg_faint },
+
+    -- athena (PR review). Sits above gitsigns in the signcolumn, so both the
+    -- PR diff and your uncommitted changes are visible at once.
+    AthenaAdd = { fg = c.gutter_add },
+    AthenaChange = { fg = c.gutter_mod },
+    AthenaDelete = { fg = c.gutter_del },
+    AthenaAddLn = { bg = c.diff_add },
+    AthenaChangeLn = { bg = c.diff_change },
+    -- the cursor line needs to stay visible on top of a tinted line
+    AthenaAddCul = { bg = c.diff_add_text },
+    AthenaChangeCul = { bg = c.diff_change_text },
+    AthenaThread = { fg = c.info },
+    AthenaThreadResolved = { fg = c.fg_faint },
+    AthenaThreadHeader = { fg = c.fg_ui, bold = true },
+    AthenaThreadBody = { fg = c.fg },
+    AthenaThreadPending = { fg = c.warn },
+    AthenaSidebarDir = { fg = c.fg_faint },
+    AthenaSidebarAdd = { fg = c.added },
+    AthenaSidebarDel = { fg = c.deleted },
+    AthenaSidebarViewed = { fg = c.fg_faint },
+    AthenaSidebarUnviewed = { fg = c.accent },
 
     -- telescope
     TelescopeNormal = { fg = c.fg_ui, bg = c.bg_widget },

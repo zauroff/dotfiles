@@ -20,14 +20,27 @@ if [ -f "$GHOSTTY_CONFIG" ]; then
     # alongside it or light mode inherits the dark #1f1f1f. The shader patterns are
     # deliberately unanchored so they keep matching while those lines are commented out.
     if [ "$target" = "light" ]; then
-        sed -i '' 's/^theme = vscode-2026-dark$/theme = Gruvbox Light/' "$GHOSTTY_CONFIG"
-        sed -i '' 's/^background = #121314$/background = #fbf1c7/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^theme = vscode-2026-dark$/theme = vscode-2026-light/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^background = #121314$/background = #FFFFFF/' "$GHOSTTY_CONFIG"
         sed -i '' 's/custom-shader = crt\.glsl/custom-shader = crt-light.glsl/' "$GHOSTTY_CONFIG"
     else
-        sed -i '' 's/^theme = Gruvbox Light$/theme = vscode-2026-dark/' "$GHOSTTY_CONFIG"
-        sed -i '' 's/^background = #fbf1c7$/background = #121314/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^theme = vscode-2026-light$/theme = vscode-2026-dark/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^background = #FFFFFF$/background = #121314/' "$GHOSTTY_CONFIG"
         sed -i '' 's/custom-shader = crt-light\.glsl/custom-shader = crt.glsl/' "$GHOSTTY_CONFIG"
     fi
+fi
+
+# --- iTerm2 ---
+# iTerm2 watches DynamicProfiles and pushes reloaded colors into open sessions,
+# so rewriting the file is the whole switch. Stage the file outside that
+# directory: iTerm2 parses every file it finds there, so a half-written temp
+# file inside it raises an "invalid JSON" alert.
+DOTFILES="$(cd "$(dirname "$(readlink -f "$0" 2>/dev/null || echo "$0")")" && pwd)"
+ITERM_PROFILES="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+if [ -d "$ITERM_PROFILES" ]; then
+    tmp="$(mktemp -t iterm-dotfiles)"
+    bash "$DOTFILES/iterm2/gen-profile.sh" "$target" >"$tmp"
+    mv "$tmp" "$ITERM_PROFILES/dotfiles.json"
 fi
 
 # --- WezTerm ---
