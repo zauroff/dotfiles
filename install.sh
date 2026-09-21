@@ -41,7 +41,7 @@ echo "Initialized theme state files (dark mode)"
 
 # Generate the iTerm2 dynamic profile. Not a symlink: toggle-theme.sh rewrites
 # the file on every theme switch, and iTerm2 reloads it into open sessions.
-if [ -d "/Applications/iTerm.app" ]; then
+if [ -d "/Applications/iTerm.app" ] || [ -d "$HOME/Applications/iTerm.app" ]; then
   # gen-profile.sh merges iterm2/profile.json with the theme colors using jq.
   command -v jq >/dev/null 2>&1 || brew install jq
   ITERM_PROFILES="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
