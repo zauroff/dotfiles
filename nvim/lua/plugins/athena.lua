@@ -1,8 +1,8 @@
 return {
     {
         "zauroff/athena.nvim",
-        dir = vim.fn.expand("~/repos/personal/athena.nvim"),
         dev = true,
+        enabled = vim.uv.fs_stat(vim.fn.expand("~/repos/personal/athena.nvim")) ~= nil,
         dependencies = { "folke/snacks.nvim" },
         cmd = {
             "Athena",
