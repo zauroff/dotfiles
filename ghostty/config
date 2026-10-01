@@ -23,11 +23,11 @@ confirm-close-surface = false
 scrollback-limit = 100000000
 
 # Theme (toggle-theme.sh rewrites both of these lines together)
-theme = vscode-2026-dark
-background = #121314
+theme = vscode-2026-light
+background = #FFFFFF
 
 # Shaders
-# custom-shader = crt.glsl
+# custom-shader = crt-light.glsl
 # custom-shader-animation = false
 
 # Keybindings

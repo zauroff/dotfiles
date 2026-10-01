@@ -1,0 +1,29 @@
+# Asiimov dark. Dark counterpart to asiimov-light, from the dark column of
+# skills/primer/references/design.md. Same slot choices: muted warm
+# red/blue/magenta/cyan, ember orange in the yellow slots.
+
+background = #24231f
+foreground = #f2efe8
+
+cursor-color = #fc6603
+cursor-text = #24231f
+
+selection-background = #442d1a
+selection-foreground = #f2efe8
+
+palette = 0=#44423c
+palette = 1=#e5736a
+palette = 2=#8fc48a
+palette = 3=#ff9a4d
+palette = 4=#7fa7d4
+palette = 5=#c29ad0
+palette = 6=#7fbfbf
+palette = 7=#d8d4ca
+palette = 8=#7d7a71
+palette = 9=#f08c84
+palette = 10=#a8d6a3
+palette = 11=#ffb070
+palette = 12=#9dbde3
+palette = 13=#d4b3df
+palette = 14=#9dd3d3
+palette = 15=#f2efe8

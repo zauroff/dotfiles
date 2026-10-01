@@ -5,13 +5,13 @@
   "Use Separate Colors for Light and Dark Mode": false,
   "Use Bright Bold": false,
 
-  "Normal Font": "JetBrainsMonoNF-Bold 20",
+  "Normal Font": "BlexMonoNF-Medium 16",
   "Use Bold Font": true,
   "Use Italic Font": true,
   "Use Non-ASCII Font": false,
   "ASCII Anti Aliased": true,
   "Horizontal Spacing": 1.0,
-  "Vertical Spacing": 1.2,
+  "Vertical Spacing": 1.0,
 
   "Columns": 120,
   "Rows": 120,
@@ -22,7 +22,7 @@
   "Cursor Type": 2,
   "Blinking Cursor": false,
 
-  "Scrollback Lines": 100000,
+  "Scrollback Lines": 8000,
   "Unlimited Scrollback": false,
   "Prompt Before Closing 2": false,
   "Mouse Reporting": true,
