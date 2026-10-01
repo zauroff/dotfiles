@@ -1,0 +1,337 @@
+/* Asiimov: Obsidian port of skills/primer/references/design.md.
+   Soft cream paper, neutral ink, one orange accent. Newsreader headings,
+   IBM Plex Sans body, IBM Plex Mono code. Borders, not shadows. */
+
+/* ---------- Tokens ---------- */
+
+.theme-light {
+  --paper: #f8f6f1;
+  --paper-raised: #fdfcfa;
+  --paper-sunken: #efece4;
+  --line: #e2ddd2;
+  --ink: #1c1b18;
+  --ink-muted: #66635c;
+  --ink-faint: #9a968d;
+  --ember: #fc6603;
+  --ember-text: #b54600;
+  --ember-soft: #ffe6d4;
+  --moss: #3d6b3a;
+  --ink-hover: rgba(28, 27, 24, 0.05);
+  --ink-active: rgba(28, 27, 24, 0.08);
+  --ember-select: rgba(252, 102, 3, 0.18);
+}
+
+.theme-dark {
+  --paper: #24231f;
+  --paper-raised: #2d2c28;
+  --paper-sunken: #1c1b18;
+  --line: #44423c;
+  --ink: #f2efe8;
+  --ink-muted: #aaa69c;
+  --ink-faint: #7d7a71;
+  --ember: #fc6603;
+  --ember-text: #ff9a4d;
+  --ember-soft: #442d1a;
+  --moss: #8fc48a;
+  --ink-hover: rgba(242, 239, 232, 0.05);
+  --ink-active: rgba(242, 239, 232, 0.09);
+  --ember-select: rgba(252, 102, 3, 0.28);
+}
+
+/* ---------- Map tokens onto Obsidian variables ---------- */
+
+.theme-light,
+.theme-dark {
+  /* Accent: #fc6603 */
+  --accent-h: 24;
+  --accent-s: 98%;
+  --accent-l: 50%;
+
+  /* Surfaces */
+  --background-primary: var(--paper);
+  --background-primary-alt: var(--paper-raised);
+  --background-secondary: var(--paper-sunken);
+  --background-secondary-alt: var(--paper-sunken);
+  --background-modifier-border: var(--line);
+  --background-modifier-border-hover: var(--ink-faint);
+  --background-modifier-border-focus: var(--ember-text);
+  --background-modifier-hover: var(--ink-hover);
+  --background-modifier-active-hover: var(--ink-active);
+  --background-modifier-form-field: var(--paper-raised);
+  --background-modifier-form-field-highlighted: var(--paper-raised);
+  --titlebar-background: var(--paper-sunken);
+  --titlebar-background-focused: var(--paper-sunken);
+  --divider-color: var(--line);
+  --tab-outline-color: var(--line);
+  --modal-border-color: var(--line);
+  --prompt-border-color: var(--line);
+
+  /* Text */
+  --text-normal: var(--ink);
+  --text-muted: var(--ink-muted);
+  --text-faint: var(--ink-faint);
+  --text-accent: var(--ember-text);
+  --text-accent-hover: var(--ember-text);
+  --text-on-accent: var(--paper);
+  --text-selection: var(--ember-select);
+  --text-highlight-bg: var(--ember-soft);
+  --bold-color: var(--ink);
+  --italic-color: var(--ink);
+
+  /* Interactive */
+  --interactive-normal: var(--paper-raised);
+  --interactive-hover: var(--paper-sunken);
+  --interactive-accent: var(--ember);
+  --interactive-accent-hover: var(--ember);
+  --nav-item-color-active: var(--ink);
+  --nav-item-background-active: var(--ink-active);
+  --nav-item-background-hover: var(--ink-hover);
+  --checkbox-color: var(--ember);
+  --checkbox-color-hover: var(--ember);
+  --checkbox-border-color: var(--ink-muted);
+  --checkbox-marker-color: var(--paper);
+
+  /* Named colors used by plugins and syntax */
+  --color-orange: var(--ember);
+  --color-green: var(--moss);
+
+  /* No shadows */
+  --shadow-s: none;
+  --shadow-l: none;
+  --input-shadow: none;
+  --input-shadow-hover: none;
+
+  /* Radius */
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 16px;
+
+  /* Type */
+  --font-text-theme: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-interface-theme: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-monospace-theme: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --line-height-normal: 1.6;
+  --file-line-width: 640px;
+  --bold-weight: 600;
+
+  /* Headings: serif, weight 400, sentence case */
+  --inline-title-font: var(--serif);
+  --inline-title-size: 3em;
+  --inline-title-weight: 400;
+  --inline-title-line-height: 1.08;
+  --inline-title-color: var(--ink);
+  --h1-font: var(--serif);
+  --h2-font: var(--serif);
+  --h3-font: var(--serif);
+  --h4-font: var(--serif);
+  --h5-font: var(--serif);
+  --h6-font: var(--serif);
+  --h1-size: 3em;
+  --h2-size: 2em;
+  --h3-size: 1.375em;
+  --h4-size: 1.125em;
+  --h5-size: 1em;
+  --h6-size: 1em;
+  --h1-weight: 400;
+  --h2-weight: 400;
+  --h3-weight: 400;
+  --h4-weight: 400;
+  --h5-weight: 400;
+  --h6-weight: 400;
+  --h1-line-height: 1.08;
+  --h2-line-height: 1.19;
+  --h3-line-height: 1.36;
+  --h4-line-height: 1.4;
+  --h5-line-height: 1.5;
+  --h6-line-height: 1.5;
+  --h1-color: var(--ink);
+  --h2-color: var(--ink);
+  --h3-color: var(--ink);
+  --h4-color: var(--ink);
+  --h5-color: var(--ink);
+  --h6-color: var(--ink);
+  --h1-style: normal;
+  --h2-style: normal;
+  --h3-style: italic;
+  --h4-style: italic;
+  --h5-style: normal;
+  --h6-style: normal;
+
+  /* Links: ember-text, underline in line color */
+  --link-color: var(--ember-text);
+  --link-color-hover: var(--ember-text);
+  --link-decoration: underline;
+  --link-decoration-hover: underline;
+  --link-external-color: var(--ember-text);
+  --link-external-color-hover: var(--ember-text);
+  --link-external-decoration: underline;
+  --link-external-decoration-hover: underline;
+  --link-unresolved-color: var(--ink-muted);
+  --link-unresolved-opacity: 1;
+  --link-unresolved-decoration-color: var(--line);
+
+  /* Code: keyword ember-text, literal moss, comment muted, rest ink */
+  --code-background: var(--paper-raised);
+  --code-normal: var(--ink);
+  --code-size: 0.875em;
+  --code-radius: 12px;
+  --code-keyword: var(--ember-text);
+  --code-important: var(--ember-text);
+  --code-string: var(--moss);
+  --code-value: var(--moss);
+  --code-comment: var(--ink-muted);
+  --code-function: var(--ink);
+  --code-property: var(--ink);
+  --code-tag: var(--ink);
+  --code-operator: var(--ink-muted);
+  --code-punctuation: var(--ink-muted);
+
+  /* Rules, quotes, tables */
+  --hr-color: var(--line);
+  --hr-thickness: 1px;
+  --blockquote-border-color: var(--line);
+  --blockquote-border-thickness: 2px;
+  --blockquote-color: var(--ink-muted);
+  --table-border-color: var(--line);
+  --table-header-background: transparent;
+  --table-header-background-hover: transparent;
+  --table-row-background-hover: transparent;
+  --table-row-alt-background: transparent;
+  --table-row-alt-background-hover: transparent;
+  --table-header-color: var(--ink-muted);
+  --table-header-size: 12px;
+  --table-header-weight: 500;
+  --table-header-font: var(--font-monospace);
+
+  /* Tags: ember-text on ember-soft */
+  --tag-color: var(--ember-text);
+  --tag-color-hover: var(--ember-text);
+  --tag-background: var(--ember-soft);
+  --tag-background-hover: var(--ember-soft);
+  --tag-border-width: 0;
+
+  /* Graph */
+  --graph-line: var(--line);
+  --graph-node: var(--ink-muted);
+  --graph-node-unresolved: var(--ink-faint);
+  --graph-node-focused: var(--ember);
+  --graph-node-tag: var(--moss);
+  --graph-node-attachment: var(--ink-faint);
+  --graph-text: var(--ink);
+}
+
+/* ---------- Headings ---------- */
+
+.inline-title,
+.markdown-rendered h1,
+.HyperMD-header-1 {
+  letter-spacing: -0.015em;
+}
+
+.markdown-rendered h2,
+.HyperMD-header-2 {
+  letter-spacing: -0.01em;
+}
+
+/* 1px rule above each h2 */
+.markdown-rendered h2 {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+  margin-top: 48px;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-header-2 {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+/* Never bold the serif */
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6) :is(strong, b),
+.cm-header.cm-strong {
+  font-weight: 400;
+}
+
+/* ---------- Links ---------- */
+
+.markdown-rendered a,
+.cm-s-obsidian span.cm-hmd-internal-link,
+.cm-s-obsidian span.cm-url,
+.cm-s-obsidian span.cm-link {
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms;
+}
+
+.markdown-rendered a:hover,
+.cm-s-obsidian span.cm-hmd-internal-link:hover,
+.cm-s-obsidian span.cm-url:hover,
+.cm-s-obsidian span.cm-link:hover {
+  text-decoration-color: var(--ember);
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Code ---------- */
+
+.markdown-rendered pre {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.markdown-rendered :not(pre) > code,
+.cm-s-obsidian span.cm-inline-code {
+  border-radius: 6px;
+}
+
+/* ---------- Tables: eyebrow headers, rules only ---------- */
+
+.markdown-rendered th,
+.cm-table-widget th {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.markdown-rendered :is(th, td),
+.cm-table-widget :is(th, td) {
+  border-left: none;
+  border-right: none;
+}
+
+/* ---------- Callouts: ember-soft ground, mono eyebrow label, no icon ---------- */
+
+.callout {
+  --callout-color: 181, 70, 0;
+  --callout-radius: 12px;
+  --callout-border-width: 0;
+  background-color: var(--ember-soft);
+}
+
+.theme-dark .callout {
+  --callout-color: 255, 154, 77;
+}
+
+.callout-icon {
+  display: none;
+}
+
+.callout-title {
+  color: var(--ember-text);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Borders instead of shadows ---------- */
+
+.menu,
+.popover,
+.suggestion-container,
+.prompt,
+.modal {
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
