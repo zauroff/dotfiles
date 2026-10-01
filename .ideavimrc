@@ -261,6 +261,13 @@ nmap K <Action>(QuickJavaDoc)
 nmap gI <Action>(GotoImplementation)
 " Goto Type Definition
 nmap gy <Action>(GotoTypeDeclaration)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Incoming Calls.  Hierarchy tool window, Callers view.  Matches gc in nvim
+" (Trouble lsp_incoming_calls).  For outgoing calls there is no editor-scoped
+" action; use the Callee toggle in the Hierarchy toolbar.
+nmap gc <Action>(CallHierarchy)
+nmap gC <Action>(CallHierarchy)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Goto Declaration
 nmap gD <Action>(GotoDeclaration)
 " Signature Help
