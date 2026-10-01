@@ -1,0 +1,31 @@
+# Asiimov light. Colors from skills/primer/references/design.md:
+# cream paper, neutral ink, one orange accent (ember), moss green.
+# The design has no red, blue, magenta or cyan, so those ANSI slots are muted,
+# warm picks that read at 5:1 or better on the paper. The yellow slots carry the
+# ember orange, so programs that highlight in yellow show the accent instead.
+
+background = #f8f6f1
+foreground = #1c1b18
+
+cursor-color = #fc6603
+cursor-text = #f8f6f1
+
+selection-background = #ffe6d4
+selection-foreground = #1c1b18
+
+palette = 0=#1c1b18
+palette = 1=#a8322a
+palette = 2=#3d6b3a
+palette = 3=#b54600
+palette = 4=#2f5d8a
+palette = 5=#7d4a8a
+palette = 6=#2e6f73
+palette = 7=#66635c
+palette = 8=#8a867d
+palette = 9=#c4372c
+palette = 10=#4f8a4a
+palette = 11=#fc6603
+palette = 12=#3a72a8
+palette = 13=#955aa3
+palette = 14=#358589
+palette = 15=#b8b3a8

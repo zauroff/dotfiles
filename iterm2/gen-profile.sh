@@ -2,7 +2,7 @@
 # Prints an iTerm2 dynamic profile (JSON) on stdout for the given theme mode.
 #
 # profile.json holds everything that does not change between light and dark.
-# This script only adds the colors, read from ghostty/themes/vscode-2026-<mode>
+# This script only adds the colors, read from ghostty/themes/asiimov-<mode>
 # so the palette stays single-sourced, and wraps the result in the {"Profiles":
 # [...]} envelope iTerm2 expects.
 #
@@ -28,7 +28,7 @@ set -euo pipefail
 
 MODE="${1:-dark}"
 DOTFILES="$(cd "$(dirname "$0")/.." && pwd)"
-THEME="$DOTFILES/ghostty/themes/vscode-2026-$MODE"
+THEME="$DOTFILES/ghostty/themes/asiimov-$MODE"
 PROFILE="$DOTFILES/iterm2/profile.json"
 
 for f in "$THEME" "$PROFILE"; do

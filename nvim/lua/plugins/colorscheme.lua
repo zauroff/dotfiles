@@ -10,16 +10,12 @@ local function read_theme_mode()
     return "dark"
 end
 
--- Dark mode uses the VS Code "2026 Dark" port in nvim/colors/vscode2026.lua.
--- Light mode uses its counterpart in nvim/colors/vscode2026-light.lua.
+-- Both modes use nvim/colors/asiimov.lua, which picks its palette from
+-- 'background'. The previous VS Code 2026 ports stay in nvim/colors as
+-- vscode2026 and vscode2026-light.
 local function apply_theme()
-    if read_theme_mode() == "light" then
-        vim.o.background = "light"
-        pcall(vim.cmd.colorscheme, "vscode2026-light")
-    else
-        vim.o.background = "dark"
-        pcall(vim.cmd.colorscheme, "vscode2026")
-    end
+    vim.o.background = read_theme_mode() == "light" and "light" or "dark"
+    pcall(vim.cmd.colorscheme, "asiimov")
 end
 
 local function watch_theme_file()
