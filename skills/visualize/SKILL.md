@@ -1,0 +1,98 @@
+---
+name: visualize
+description: "Add a correct, minimal visual to an Obsidian lesson note. Use when a dependency graph, flow, sequence, state machine, tree, comparison, geometry, number line, vector, plot, or physical layout is clearer as a picture. Render and inspect the image before embedding it."
+---
+
+# Visualize
+
+A picture earns its place only when it shows something words can't — shape, structure, direction, relationship, geometry. This skill produces ONE such picture, guarantees it is **correct** (the maker renders it and looks at it before returning), and drops it into the lesson so it renders inline in the Obsidian lesson file.
+
+You are the **creative director**. You decide the exact idea and distill it to
+its fewest carrying elements. A **maker** does the authoring, rendering, visual
+verification, and saving, then returns a filename. Prefer a maker subagent; if
+the host cannot delegate, perform the same render-and-inspect loop directly.
+You embed the verified filename in your reply.
+
+## When to visualize (and when not to)
+
+This teaching system builds a **dependency graph in the learner's head** — axioms at the root, derived facts hanging off them. A visual is powerful exactly when it makes that structure (or a geometry) visible. Reach for one when:
+
+- The idea is a **structure or relationship**: dependencies, a system with parts and arrows, a flow/pipeline, a sequence of exchanges, a state machine, a tree/hierarchy, a comparison, a containment (what's inside vs outside).
+- The idea is **spatial or geometric**: coordinate geometry, a number line, vectors, a function's shape, a physical arrangement.
+
+Do NOT visualize when prose or a single equation already carries it. A decorative diagram that just restates the sentence next to it adds noise and a chance to be wrong. When in doubt, don't — a missing visual is cheaper than a false one.
+
+## Choose the maker
+
+Two maker roles:
+
+- **`mermaid-maker`** — structural/relational visuals: dependency graphs, flowcharts, sequence/state/ER/class diagrams, trees, mindmaps, timelines. This is the default and fits the dependency-graph pedagogy directly.
+- **`svg-maker`** — spatial/geometric visuals Mermaid can't lay out: exact coordinates, geometry figures, number lines, vectors, plots, custom shapes.
+
+Rule of thumb: if it's *nodes-and-edges / relationships*, use mermaid-maker. If it's *positions-and-shapes / geometry*, use svg-maker.
+
+## Brief the maker well: one idea, fewest elements
+
+The most common failure is **cramming** — every extra label makes the picture harder to read AND harder to lay out correctly. Before briefing, prune to the fewest elements that carry the idea, and for each ask: *"if I delete this, is the idea still clear?"* If yes, delete it.
+
+Give the maker the concept AND the concrete elements you want — not a vague topic, and not a long checklist.
+
+- BAD: "make a diagram about how TCP works"
+- GOOD: "graph TD: a node 'packet' at the top; arrows down to 'ordering' and 'retransmit on loss'; both arrows down into 'reliable stream'. No title. Show that reliability is built FROM packets, not alongside them."
+
+Keep the idea intact but trust the maker to compose; if your brief lists more than ~5–7 elements, cut it first.
+
+## Invoke
+
+Dispatch the maker using the host's subagent mechanism. In Claude Code, use the
+named `mermaid-maker` or `svg-maker` agent. In Codex, spawn a general subagent
+with the corresponding role name and include the render-and-inspect contract
+below. If delegation is unavailable, execute that contract directly.
+
+The task MUST include the absolute lesson directory (`<lessondir>`, e.g.
+`$HOME/Documents/DANIEL ZAUROFF/learning/<slug>`) so the maker knows where to
+publish. It may only touch files under `<lessondir>/viz/`:
+
+```
+Agent(subagent_type="mermaid-maker", prompt="Lesson directory: <absolute lessondir>. <your minimal, concrete brief>")
+```
+```
+Agent(subagent_type="svg-maker", prompt="Lesson directory: <absolute lessondir>. <your minimal, concrete brief>")
+```
+
+The maker owns the render-and-inspect loop with the host's shell, file-editing,
+and image-viewing tools: author the source, render it to a PNG, **look at the PNG
+and iterate until it is correct and clean**, publish it into `<lessondir>/viz/`
+with a unique filename, and return:
+
+```
+RESULT:
+filename: viz-<slug>-<timestamp>.png
+path: <lessondir>/viz/viz-<slug>-<timestamp>.png
+```
+
+If it returns `RESULT: NONE`, it couldn't make a correct picture of the brief —
+simplify or rethink, or decide the visual isn't worth it. Never publish an
+uninspected diagram; correctness depends on the render-and-inspect loop.
+
+## Embed it in the lesson
+
+Put the embed directly in your teaching reply, using a standard Markdown image with a path **relative to the lesson file** (not a wikilink — a relative path renders in both Obsidian and image.nvim):
+
+```
+![](viz/viz-<slug>-<timestamp>.png)
+```
+
+In Claude Code, the learn-log Stop hook mirrors the reply into the lesson file.
+In Codex or another host without that hook, also add the embed to the active
+lesson file using the host's file-editing mechanism. The lesson file lives at
+`<lessondir>/<date> <topic>.md` with the image at `<lessondir>/viz/...`, so the
+relative path resolves from the lesson file's directory. Introduce the visual
+in a sentence, then let it carry the idea; do not narrate every element back in
+prose.
+
+## Why this is reliable
+
+- The maker never returns a picture it hasn't **looked at**, so "renders fine but says something false" is caught before it reaches the learner.
+- PNG embed means **what the maker verified is pixel-identical to what the learner sees** — no re-render drift.
+- Unique filenames keep multiple diagrams in the same lesson from colliding.

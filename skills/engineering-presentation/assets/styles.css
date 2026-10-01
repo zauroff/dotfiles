@@ -1,0 +1,579 @@
+/* ============================================================
+   Presentation shell and visual language.
+
+   Aesthetic: engineering instrument. Hairline grid, registration
+   marks, monospace readouts, editorial serif for scene titles.
+
+   Retheme by editing the tokens in :root. Nothing below :root
+   hard-codes a palette colour: the literals that remain are
+   neutral greys or are derived with color-mix from a token.
+   ============================================================ */
+
+:root {
+  /* field */
+  --bg: #07080c;
+  --bg-lift: #0c0e14;
+  --ink: #e8ecf4;
+  --ink-dim: #8b93a7;
+  --ink-faint: #4d5468;
+  --hair: rgba(255, 255, 255, 0.09);
+
+  /* roles */
+  --primary: #45c9e8; /* NODE: the main participants */
+  --secondary: #f0a830; /* HUB: coordinators and control traffic */
+  --neutral: #9aa4bb; /* STORE, and anything uncategorised */
+
+  /* accents, for LEAF categories. Three is the ceiling. */
+  --accent-1: #5ee6a8;
+  --accent-2: #b99cff;
+  --accent-3: #ff8a7a;
+
+  /* meter severity: a meter reads as a meter, so an amber/red scale is safe */
+  --warn: #f2c14e;
+  --crit: #ff7a6b;
+
+  --ff-display: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --ff-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ff-mono);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* film-grain overlay: texture, not noise you can name */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+}
+
+.frame {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* ---------- registration marks ---------- */
+.reg {
+  position: fixed;
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  z-index: 20;
+}
+.reg--tl {
+  top: 20px;
+  left: 20px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.reg--tr {
+  top: 20px;
+  right: 20px;
+  border-left: 0;
+  border-bottom: 0;
+}
+.reg--bl {
+  bottom: 20px;
+  left: 20px;
+  border-right: 0;
+  border-top: 0;
+}
+.reg--br {
+  bottom: 20px;
+  right: 20px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  position: fixed;
+  top: 40px;
+  left: 44px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mark {
+  font-family: var(--ff-mono);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.rule {
+  width: 52px;
+  height: 1px;
+  background: var(--hair);
+}
+
+.act {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------- stage ---------- */
+#stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* node typography: set here so the SVG stays structural */
+.n-label {
+  font-family: var(--ff-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-anchor: middle;
+}
+.n-sub {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-anchor: middle;
+  fill: var(--ink-faint);
+}
+.n-chip {
+  font-family: var(--ff-mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+}
+.n-badge {
+  font-family: var(--ff-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.note-text {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  fill: var(--ink-dim);
+}
+.note-text tspan.accent {
+  fill: var(--ink);
+}
+
+.n-box {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+}
+
+/* the detail line under a BOX, hidden in a scene marked `compact` */
+.is-compact .n-box-sub {
+  opacity: 0;
+}
+.n-box-sub {
+  transition: opacity 320ms ease;
+}
+
+/* the primary hub is marked by light, not by a word */
+@keyframes beacon {
+  0% {
+    r: 30;
+    opacity: 0.5;
+  }
+  70% {
+    r: 56;
+    opacity: 0;
+  }
+  100% {
+    r: 56;
+    opacity: 0;
+  }
+}
+.primary-beacon {
+  animation: beacon 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  fill: none;
+  stroke-width: 1.2;
+}
+
+/* spawn pulse */
+@keyframes ping {
+  from {
+    r: 10;
+    opacity: 0.55;
+  }
+  to {
+    r: 62;
+    opacity: 0;
+  }
+}
+.ping {
+  animation: ping 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  fill: none;
+  stroke-width: 1;
+}
+
+/* ---------- narration ---------- */
+.narration {
+  position: fixed;
+  left: 44px;
+  bottom: 52px;
+  z-index: 20;
+  display: flex;
+  gap: 20px;
+  max-width: 470px;
+  align-items: flex-start;
+}
+
+.narration__index {
+  font-family: var(--ff-display);
+  font-size: 68px;
+  line-height: 0.74;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--ink) 22%, transparent);
+  user-select: none;
+  flex: none;
+}
+
+.narration__title {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 33px;
+  line-height: 1.08;
+  margin: -4px 0 12px;
+  letter-spacing: -0.005em;
+}
+
+.narration__text {
+  font-size: 12.5px;
+  line-height: 1.72;
+  color: var(--ink-dim);
+  max-width: 41ch;
+}
+
+.narration__text strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.narration__text code {
+  font-size: 11.5px;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 16%, transparent);
+  border-radius: 3px;
+  padding: 0.5px 4px;
+}
+
+/* staggered reveal on scene change */
+.narration.is-entering .narration__index {
+  animation: rise 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.narration.is-entering .narration__title {
+  animation: rise 520ms 60ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.narration.is-entering .narration__text {
+  animation: rise 520ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- transport ---------- */
+.transport {
+  position: fixed;
+  right: 44px;
+  bottom: 52px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tbtn {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--ink-dim);
+  border: 1px solid var(--hair);
+  border-radius: 2px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    color 160ms,
+    border-color 160ms,
+    background 160ms;
+}
+.tbtn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
+.tbtn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.tbtn--play {
+  font-size: 9px;
+}
+
+.transport__count {
+  margin-left: 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+}
+.transport__count i {
+  font-style: normal;
+  margin: 0 4px;
+  opacity: 0.5;
+}
+#count-now {
+  color: var(--ink);
+}
+
+/* ---------- scene rail ---------- */
+.rail {
+  position: fixed;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+.rail__act {
+  justify-content: flex-end;
+  font-family: var(--ff-display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  padding: 10px 0 3px !important;
+  cursor: default !important;
+  pointer-events: none;
+}
+.rail__act:first-child {
+  padding-top: 0 !important;
+}
+
+.rail li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 11px;
+  padding: 5px 0;
+  cursor: pointer;
+  color: var(--ink-faint);
+  transition: color 180ms;
+}
+.rail li:hover {
+  color: var(--ink-dim);
+}
+.rail li.is-active {
+  color: var(--ink);
+}
+
+.rail__name {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 200ms,
+    transform 200ms;
+  white-space: nowrap;
+}
+.rail li:hover .rail__name,
+.rail li.is-active .rail__name {
+  opacity: 1;
+  transform: none;
+}
+
+.rail__tick {
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+  transition: width 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rail li.is-active .rail__tick {
+  width: 30px;
+  background: var(--primary);
+}
+
+/* ---------- hint ---------- */
+.hint {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-faint) 75%, transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .rail,
+  .hint {
+    display: none;
+  }
+  .narration {
+    max-width: 360px;
+  }
+}
+
+/* ---------- closing figures ---------- */
+.stat-value {
+  font-family: var(--ff-display);
+  font-size: 58px;
+  letter-spacing: -0.01em;
+  text-anchor: middle;
+}
+.stat-label {
+  font-family: var(--ff-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-anchor: middle;
+}
+
+/* the closing field breathes; delays are staggered so it is never in unison */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.swarm-node {
+  animation: twinkle 4.2s ease-in-out infinite;
+}
+
+/* ---------- title card ---------- */
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 0 48px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.cover[hidden] {
+  display: none;
+}
+
+.cover__mark {
+  font-family: var(--ff-mono);
+  font-weight: 600;
+  font-size: clamp(56px, 11vw, 148px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  /* the tracking is all trailing, so the word sits left of centre without this */
+  margin: 0 0 0 0.3em;
+  color: var(--ink);
+  animation: rise 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cover__rule {
+  width: 96px;
+  height: 1px;
+  background: var(--primary);
+  opacity: 0.6;
+  animation: rise 700ms 140ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cover__lead {
+  margin: 0;
+  max-width: 58ch;
+  /* keeps the last line off a single word as the viewport changes */
+  text-wrap: balance;
+  font-family: var(--ff-display);
+  font-size: clamp(17px, 1.7vw, 23px);
+  line-height: 1.5;
+  color: var(--ink-dim);
+  animation: rise 700ms 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cover__lead strong {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+/* the giant mark makes the masthead's small one redundant */
+.is-cover .masthead,
+.is-cover .narration {
+  display: none;
+}
+
+/* ---------- static capture ----------
+   `?static` and reduce-motion set .is-static on <body>. Entrance animations
+   are delayed and fade in, so a headless capture lands mid-fade and drops
+   whatever had the longest delay. Switch them all off. */
+.is-static .cover__mark,
+.is-static .cover__rule,
+.is-static .cover__lead,
+.is-static .narration__index,
+.is-static .narration__title,
+.is-static .narration__text {
+  animation: none !important;
+}
