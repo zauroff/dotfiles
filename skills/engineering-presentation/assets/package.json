@@ -1,0 +1,9 @@
+{
+  "name": "presentation",
+  "private": true,
+  "type": "module",
+  "description": "No dependencies and no build step. \"type\": \"module\" exists only so `node check.js` can import the browser modules directly.",
+  "scripts": {
+    "check": "node check.js"
+  }
+}

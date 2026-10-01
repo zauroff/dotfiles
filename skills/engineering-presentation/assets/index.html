@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Replaced at load with DECK.title from js/scenes/index.js. -->
+    <title>Presentation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="frame">
+      <!-- registration marks, as on a technical drawing -->
+      <span class="reg reg--tl"></span>
+      <span class="reg reg--tr"></span>
+      <span class="reg reg--bl"></span>
+      <span class="reg reg--br"></span>
+
+      <header class="masthead">
+        <!-- filled from DECK.mark -->
+        <div class="mark" id="deck-mark"></div>
+        <div class="rule"></div>
+        <div class="act" id="act-label"></div>
+      </header>
+
+      <svg
+        id="stage"
+        viewBox="0 0 1280 780"
+        preserveAspectRatio="xMidYMid meet"
+        aria-label="Animated diagram"
+      >
+        <defs>
+          <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path d="M32 0H0V32" fill="none" stroke="rgba(255,255,255,.028)" stroke-width="1" />
+          </pattern>
+
+          <!-- stop-color tracks --primary in styles.css; keep the two in step -->
+          <radialGradient id="vignette" cx="50%" cy="42%" r="72%">
+            <stop offset="0%" stop-color="rgba(69,201,232,.055)" />
+            <stop offset="60%" stop-color="rgba(0,0,0,0)" />
+          </radialGradient>
+
+          <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="5" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <rect width="1280" height="780" fill="url(#grid)" />
+        <rect width="1280" height="780" fill="url(#vignette)" />
+
+        <g id="layer-swarm"></g>
+        <g id="layer-ghosts"></g>
+        <g id="layer-links"></g>
+        <g id="layer-notes"></g>
+        <g id="layer-nodes"></g>
+        <g id="layer-stats"></g>
+      </svg>
+
+      <!-- title card, shown only for scenes that declare `cover` -->
+      <section class="cover" id="cover" hidden>
+        <h1 class="cover__mark" id="cover-mark"></h1>
+        <div class="cover__rule"></div>
+        <p class="cover__lead" id="cover-lead"></p>
+      </section>
+
+      <!-- narration -->
+      <section class="narration" id="narration">
+        <div class="narration__index" id="scene-index">01</div>
+        <div class="narration__body">
+          <h1 class="narration__title" id="scene-title"></h1>
+          <div class="narration__text" id="scene-text"></div>
+        </div>
+      </section>
+
+      <!-- transport controls -->
+      <nav class="transport">
+        <button id="btn-prev" class="tbtn" aria-label="Previous scene">&#8592;</button>
+        <button id="btn-play" class="tbtn tbtn--play" aria-label="Toggle autoplay">
+          <span id="play-glyph">&#9654;</span>
+        </button>
+        <button id="btn-next" class="tbtn" aria-label="Next scene">&#8594;</button>
+        <div class="transport__count"><span id="count-now">1</span><i>/</i><span id="count-all">1</span></div>
+      </nav>
+
+      <!-- scene rail -->
+      <ol class="rail" id="rail"></ol>
+
+      <div class="hint">&#8592; &#8594; or space to step &middot; click the rail to jump</div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
