@@ -1,7 +1,6 @@
 alisterpublisher.pastel-peach-theme
 anthropic.claude-code
 asvetliakov.vscode-neovim
-bloomberg.rover
 bodil.file-browser
 chaitanyashahare.lazygit
 eamodio.gitlens
