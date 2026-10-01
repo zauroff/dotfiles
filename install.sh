@@ -70,7 +70,7 @@ fi
 mkdir -p "$HOME/.claude/skills" "$HOME/.claude/hooks" "$HOME/.claude/output-styles" "$HOME/.claude/agents" "$HOME/.claude/themes"
 ln -sf "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES/claude/statusline.sh" "$HOME/.claude/statusline.sh"
-for skill in "$DOTFILES/claude/skills"/*/; do
+for skill in "$DOTFILES/skills"/*/; do
   [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
 done
 for hook in "$DOTFILES/claude/hooks"/*; do
@@ -90,6 +90,16 @@ find "$HOME/.claude/hooks" "$HOME/.claude/skills" "$HOME/.claude/output-styles" 
   -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
 echo "Linked claude/ -> ~/.claude (settings + skills + hooks + agents + output styles + themes)"
 
+# Link Codex config and the shared skills.
+mkdir -p "$HOME/.codex/skills"
+ln -sf "$DOTFILES/codex/config.toml" "$HOME/.codex/config.toml"
+for skill in "$DOTFILES/skills"/*/; do
+  [ -d "$skill" ] && ln -sfn "$skill" "$HOME/.codex/skills/$(basename "$skill")"
+done
+find "$HOME/.codex/skills" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+echo "Linked codex/config.toml -> ~/.codex/config.toml"
+echo "Linked skills/ -> ~/.claude/skills and ~/.codex/skills"
+
 # Link CLAUDE.md to home directory
 ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"
 echo "Linked claude/CLAUDE.md -> ~/CLAUDE.md"
@@ -98,6 +108,29 @@ echo "Linked claude/CLAUDE.md -> ~/CLAUDE.md"
 command -v rsvg-convert >/dev/null 2>&1 || brew install librsvg
 command -v mmdc >/dev/null 2>&1 || npm i -g @mermaid-js/mermaid-cli
 echo "Checked diagram tools (rsvg-convert, mmdc)"
+
+# Link Obsidian theme into the vault
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Documents/DANIEL ZAUROFF}"
+if [ -d "$OBSIDIAN_VAULT/.obsidian" ]; then
+  mkdir -p "$OBSIDIAN_VAULT/.obsidian/themes"
+  ln -sfn "$DOTFILES/obsidian/themes/Asiimov" "$OBSIDIAN_VAULT/.obsidian/themes/Asiimov"
+  # Fonts the theme uses. IBM Plex Sans is assumed present.
+  ls "$HOME/Library/Fonts" | grep -qi newsreader || brew install --cask font-newsreader
+  ls "$HOME/Library/Fonts" | grep -qi ibmplexmono || brew install --cask font-ibm-plex-mono
+  echo "Linked obsidian/themes/Asiimov -> $OBSIDIAN_VAULT/.obsidian/themes/Asiimov"
+else
+  echo "Skipped Obsidian (no vault at $OBSIDIAN_VAULT)"
+fi
+
+# Link the oh-my-zsh prompt theme. ~/.zshrc selects it with ZSH_THEME="asiimov".
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  ZSH_THEMES="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
+  mkdir -p "$ZSH_THEMES"
+  ln -sf "$DOTFILES/zsh/asiimov.zsh-theme" "$ZSH_THEMES/asiimov.zsh-theme"
+  echo "Linked zsh/asiimov.zsh-theme -> $ZSH_THEMES/asiimov.zsh-theme"
+else
+  echo "Skipped oh-my-zsh theme (no ~/.oh-my-zsh)"
+fi
 
 # Link aerospace.toml
 ln -sf "$DOTFILES/aerospace.toml" "$HOME/.aerospace.toml"
