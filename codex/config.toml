@@ -1,0 +1,16 @@
+suppress_unstable_features_warning = true
+model_reasoning_effort = "xhigh"
+model = "gpt-5.6-sol"
+
+[projects."/Users/dzauroff1"]
+trust_level = "trusted"
+
+[projects."/opt/homebrew"]
+trust_level = "trusted"
+
+[projects."/Users/dzauroff1/dotfiles"]
+trust_level = "trusted"
+
+[tui]
+screen_reader_detection_done = true
+status_line = ["current-dir", "git-branch", "branch-changes", "context-used", "used-tokens"]
