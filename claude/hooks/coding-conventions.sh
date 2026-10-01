@@ -3,7 +3,7 @@
 # whatever language is being written. Go is the primary one and the only skill
 # that exists today; other languages get a short fallback pointing at it.
 #
-# Add a new language by dropping ~/.claude/skills/<lang>_coding_conventions/
+# Add a new language by dropping ~/.claude/skills/<lang>-coding-conventions/
 # and adding its extensions to the case below.
 #
 # No-ops on non-code files so it stays silent on docs, configs, and data.
@@ -24,7 +24,7 @@ case "$CLAUDE_FILE_PATH" in
   *) exit 0 ;; # not code, nothing to say
 esac
 
-skill="$HOME/.claude/skills/${lang}_coding_conventions/SKILL.md"
+skill="$HOME/.claude/skills/${lang}-coding-conventions/SKILL.md"
 
 if [ -f "$skill" ]; then
   echo "Follow the $lang coding conventions below for this edit."
@@ -36,7 +36,7 @@ fi
 
 # No skill for this language: fall back to the Go conventions' principles, which
 # are language-agnostic enough to carry (naming, error handling, comments).
-go_skill="$HOME/.claude/skills/go_coding_conventions/SKILL.md"
+go_skill="$HOME/.claude/skills/go-coding-conventions/SKILL.md"
 [ -f "$go_skill" ] || exit 0
 
 echo "No dedicated $lang convention skill exists. Apply the Go coding conventions"

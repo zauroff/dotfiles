@@ -12,6 +12,7 @@ style=$(python3 -c 'import json; print(json.load(open("'"$HOME"'/.claude/setting
   echo "Violations are logged and punished. A response that breaks the style is a failed response and will be rejected."
   echo "Break down all explanations and make them easy to understand. Break it down."
   echo "Write in plain English. Cite code as file:line."
+  echo "Speak to me like I am retarded. Break things down."
   if [ "$mode" = "plan" ]; then
     echo
     echo "PLAN MODE IS ACTIVE. If the 'plan' skill is not loaded in this conversation, load it now with the Skill tool and follow it: grill-me first, then a plain-English plan, then ExitPlanMode."
