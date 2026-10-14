@@ -27,6 +27,15 @@ local function act(cmd, args)
     end
 end
 
+-- The direction commands only flip the call tree's mode and re-query whatever location it last showed. That
+-- stale query can resolve after the new one and win, so clear the tree first.
+---@param direction_cmd string references-view.showIncomingCalls or references-view.showOutgoingCalls
+local function calls(direction_cmd)
+    return act("runCommands", {
+        commands = { "references-view.clear", direction_cmd, "references-view.showCallHierarchy" },
+    })
+end
+
 ---@type table[] { mode, lhs, rhs, desc }
 local spec = {
     -- ── diagnostics ────────────────────────────────────────────────────────
@@ -72,6 +81,8 @@ local spec = {
     { "n", "gD", act("editor.action.revealDeclaration"), "Goto Declaration" },
     { "n", "K", act("editor.action.showHover"), "Hover" },
     { "n", "gK", act("editor.action.triggerParameterHints"), "Signature Help" },
+    { "n", "gc", calls("references-view.showIncomingCalls"), "Incoming Calls" },
+    { "n", "gC", calls("references-view.showOutgoingCalls"), "Outgoing Calls" },
     { "n", "]]", act("editor.action.wordHighlight.next"), "Next Reference" },
     { "n", "[[", act("editor.action.wordHighlight.prev"), "Prev Reference" },
     { { "n", "x" }, "<leader>ca", act("editor.action.quickFix"), "Code Action" },
@@ -151,6 +162,12 @@ local spec = {
 function M.setup()
     for _, m in ipairs(spec) do
         vim.keymap.set(m[1], m[2], m[3], { desc = m[4], silent = true })
+    end
+
+    -- Any longer gc* map makes gc wait out timeoutlen. nvim's buffer-local nowait gc shadows these in LSP
+    -- buffers anyway, so dropping them matches. Visual gc still comments.
+    for _, lhs in ipairs({ "gcc", "gco", "gcO" }) do
+        pcall(vim.keymap.del, "n", lhs)
     end
 
     -- Needs the word under the cursor at press time, so it cannot be a plain

@@ -1,242 +1,146 @@
--- which-key for vscode-neovim, on vim.ui.select.
+-- which-key.nvim's popup, mirrored into VSCode as editor decorations.
+--
+-- which-key runs unchanged: triggers, getcharstr loop, tree, layout. Only its float is invisible, because
+-- vscode-neovim never draws nvim floating windows. So every time which-key renders the popup text into that float
+-- (view.lua: text:render(M.view.buf)), the same segments are sent to VSCode and drawn over the editor, one
+-- decoration per segment on a character grid. Decorations never take focus, so keys keep flowing to nvim.
+--
+-- VSCode keeps only the first line of a decoration's contentText, and pastes textDecoration into CSS verbatim,
+-- which is what lets each segment carry its own position:absolute.
 
 local M = {}
 
--- Copied from LazyVim's which-key spec (plugins/editor.lua:68-93) so the group
--- labels read the same in both editors.
-local GROUPS = {
-    ["<tab>"] = "tabs",
-    b = "buffer",
-    c = "code",
-    d = "debug",
-    dp = "profiler",
-    f = "file/find",
-    g = "git",
-    gh = "hunks",
-    q = "quit/session",
-    s = "search",
-    t = "test",
-    u = "ui",
-    w = "windows",
-    x = "diagnostics/quickfix",
-}
+local RENDER = [[
+  const { lines, w, title } = args;
+  const editor = vscode.window.activeTextEditor;
+  const g = globalThis.__whichkey ||
+    (globalThis.__whichkey = { type: vscode.window.createTextEditorDecorationType({}) });
+  if (g.editor && g.editor !== editor) {
+    try { g.editor.setDecorations(g.type, []); } catch {}
+  }
+  g.editor = editor;
+  if (!editor || editor.visibleRanges.length === 0) return 0;
 
---- Extra keys that open the picker, on top of <leader>.
----
---- Empty on purpose. Claiming a key here shadows every Vim builtin under it:
---- "g" covers gg, gv, gJ, gq, gu, gU, gf, g;, g~ and dozens more, "[" and "]"
---- cover ]}, ]), ]m, ]s, ]p. Since an unmatched sequence now closes instead of
---- being forwarded, any builtin under a claimed prefix stops working.
----
---- `:WhichKey g` browses a prefix on demand without claiming the key.
-local EXTRA_PREFIXES = {}
+  const ranges = editor.visibleRanges;
+  const first = ranges[0].start.line;
+  const last = ranges[ranges.length - 1].end.line;
+  const h = lines.length;
+  const cursor = editor.selection.active.line;
 
-local function leader()
-    return vim.g.mapleader or "\\"
+  // Grow up from the second-to-last visible line, like which-key's bottom placement. Grow down from the top
+  // instead when that would run off the top or cover the cursor. Growing down may run past the last line of a
+  // short file; that space is still editor, and anything past the editor's edge is clipped.
+  let anchor = Math.max(ranges[ranges.length - 1].start.line, last - 1);
+  let top = 1 - h;
+  if (anchor + top < first || (cursor >= anchor + top && cursor <= anchor)) {
+    anchor = first;
+    top = 0;
+  }
+
+  const COLORS = {
+    WhichKey: "symbolIcon.functionForeground",
+    WhichKeyGroup: "symbolIcon.keywordForeground",
+    WhichKeySeparator: "descriptionForeground",
+    WhichKeyTitle: "descriptionForeground",
+  };
+  const range = new vscode.Range(anchor, 0, anchor, 0);
+  const box = {
+    range,
+    renderOptions: { after: {
+      contentText: "",
+      textDecoration: `none; position:absolute; z-index:10; top:calc(${top} * 1lh); left:0;
+        width:calc(${w} * 1ch); height:calc(${h} * 1lh); box-sizing:border-box;
+        background:var(--vscode-editorHoverWidget-background);
+        border:1px solid var(--vscode-editorHoverWidget-border)`,
+    } },
+  };
+  const text = (row, col, t, hl) => ({
+    range,
+    renderOptions: { after: {
+      contentText: t,
+      color: new vscode.ThemeColor(COLORS[hl] || "editor.foreground"),
+      textDecoration: `none; position:absolute; z-index:11; white-space:pre;
+        top:calc(${top + row} * 1lh); left:calc(${col} * 1ch)`,
+    } },
+  });
+
+  const decorations = [box];
+  // editor.experimentalGpuAcceleration paints text on a canvas stacked above the DOM lines, where no z-index
+  // reaches. A line with an `after` decoration falls back to DOM rendering, so tag every line under the box.
+  for (let l = Math.max(0, anchor + top); l < Math.min(editor.document.lineCount, anchor + top + h); l++) {
+    if (l !== anchor) {
+      decorations.push({ range: new vscode.Range(l, 0, l, 0), renderOptions: { after: { contentText: "" } } });
+    }
+  }
+  // row 0 is which-key's top padding line, free for the breadcrumb
+  if (title) decorations.push(text(0, 2, title, "WhichKeyTitle"));
+  lines.forEach((segs, r) => segs.forEach((s) => decorations.push(text(r, s.c, s.t, s.h))));
+  editor.setDecorations(g.type, decorations);
+  return decorations.length;
+]]
+
+local HIDE = [[
+  const g = globalThis.__whichkey;
+  if (!g || !g.editor) return 0;
+  try { g.editor.setDecorations(g.type, []); } catch {}
+  g.editor = undefined;
+  return 1;
+]]
+
+---@param code string
+---@param a? table
+local function eval(code, a)
+    require("vscode").eval_async(code, { args = a })
 end
 
----@param tok string
----@return string raw bytes for the token
-local function raw(tok)
-    return vim.api.nvim_replace_termcodes(tok, true, true, true)
-end
-
----Split a keymap lhs into display tokens, keeping <Tab>/<C-x>/<CR> whole.
----@param lhs string
----@return string[]
-local function tokenize(lhs)
-    local toks, i = {}, 1
-    while i <= #lhs do
-        local c = lhs:sub(i, i)
-        if c == "<" then
-            local j = lhs:find(">", i + 1, true)
-            local candidate = j and lhs:sub(i, j) or nil
-            -- only a key name if it looks like one and actually translates
-            if candidate and candidate:match("^<[%w%-_]+>$") and raw(candidate) ~= candidate then
-                toks[#toks + 1] = candidate
-                i = j + 1
-            else
-                toks[#toks + 1] = c
-                i = i + 1
+--- Segments with their display column; blank ones dropped. segment.width is a byte count (text.lua append), which
+--- is right for which-key's extmarks but not for screen columns once a separator like ➜ is involved.
+---@param text wk.Text
+local function payload(text)
+    local lines = {}
+    for l, line in ipairs(text._lines) do
+        local segs, col = {}, 0
+        for _, s in ipairs(line) do
+            local lead, body = s.str:match("^( *)(.-)%s*$")
+            if body ~= "" then
+                segs[#segs + 1] = { c = col + #lead, t = body, h = s.hl }
             end
-        else
-            toks[#toks + 1] = c
-            i = i + 1
+            col = col + vim.fn.strdisplaywidth(s.str)
         end
-    end
-    return toks
-end
-
----@param prefix string raw byte prefix including leader
----@return string
-local function prefix_label(prefix)
-    local ldr = leader()
-    local rest = prefix
-    local head = ""
-    if ldr ~= "" and vim.startswith(prefix, ldr) then
-        head, rest = "<leader>", prefix:sub(#ldr + 1)
-    end
-    return head .. vim.fn.keytrans(rest)
-end
-
----The mapping bound to exactly `seq`, if any.
----@param mode string
----@param seq string raw byte sequence
----@return table|nil
-local function exact(mode, seq)
-    for _, list in ipairs({ vim.api.nvim_buf_get_keymap(0, mode), vim.api.nvim_get_keymap(mode) }) do
-        for _, m in ipairs(list) do
-            if (m.lhsraw or m.lhs) == seq then return m end
-        end
-    end
-    return nil
-end
-
----Collapse everything under `prefix` down to its next keystroke, which-key
----style: one row per distinct next key, branches shown as +group.
----@param mode string "n" or "x"
----@param prefix string raw byte prefix
----@return table[] rows
-local function next_keys(mode, prefix)
-    local ldr = leader()
-    local buckets, order, seen = {}, {}, {}
-
-    local function consider(m)
-        if seen[m.lhs] or m.desc == "which_key_ignore" then return end
-        seen[m.lhs] = true
-
-        -- walk tokens until their raw bytes equal the prefix, then the token
-        -- after that is the key this mapping contributes
-        local toks = tokenize(m.lhs)
-        local acc = ""
-        for i, t in ipairs(toks) do
-            if acc == prefix then
-                local b = buckets[t]
-                if not b then
-                    b = { n = 0 }
-                    buckets[t] = b
-                    order[#order + 1] = t
-                end
-                b.n = b.n + 1
-                if i == #toks then b.leaf = m end
-                return
-            end
-            acc = acc .. raw(t)
-            if #acc > #prefix then return end
-        end
+        lines[l] = segs
     end
 
-    for _, m in ipairs(vim.api.nvim_buf_get_keymap(0, mode)) do consider(m) end
-    for _, m in ipairs(vim.api.nvim_get_keymap(mode)) do consider(m) end
+    local trail = require("which-key.view").trail(require("which-key.state").state.node, { title = true }) or {}
+    local title = vim.trim(table.concat(vim.tbl_map(function(s)
+        return s[1]
+    end, trail)))
 
-    local rows = {}
-    for _, t in ipairs(order) do
-        local b = buckets[t]
-        local desc, group
-        if b.n == 1 and b.leaf then
-            desc = b.leaf.desc or "…"
-        else
-            -- name the branch from LazyVim's group table when it knows it
-            local path = prefix .. raw(t)
-            if vim.startswith(path, ldr) then path = path:sub(#ldr + 1) end
-            group = GROUPS[vim.fn.keytrans(path):lower()] or GROUPS[path]
-            desc = "+" .. (group or vim.fn.keytrans(path))
-            group = group or true
-        end
-        rows[#rows + 1] = { t = t, k = t == " " and "␣" or t, d = desc, g = group ~= nil }
-    end
-
-    table.sort(rows, function(a, b)
-        if a.k:lower() ~= b.k:lower() then return a.k:lower() < b.k:lower() end
-        return a.k < b.k
-    end)
-
-    -- A sequence can be both a mapping and a prefix: <leader>gh is Diffview
-    -- Branch History and also the +hunks group. Vim resolves that by waiting
-    -- out timeoutlen, which the getcharstr loop cannot do, so the group would
-    -- win and the leaf become unreachable. Offer it on <cr> instead.
-    --
-    -- Guarded on #rows > 0: without children this row would be the only one,
-    -- and the caller reads a non-empty result as "this is a group, descend",
-    -- which would trap plain leaves like <leader>ghs one level short.
-    if #rows > 0 and not buckets["<CR>"] then
-        local leaf = exact(mode, prefix)
-        if leaf then
-            table.insert(rows, 1, { t = "<CR>", k = "<cr>", d = leaf.desc or "…", g = false, here = true })
-        end
-    end
-    return rows
-end
-
--- ------------------------------------------------------------------- picker
-
-local KEYW = 8
-
----@param row table
----@return string
-local function label(row)
-    return row.k .. string.rep(" ", math.max(1, KEYW - vim.fn.strdisplaywidth(row.k))) .. row.d
-end
-
----@param start? string raw prefix to open on; defaults to <leader>
-function M.run(start)
-    local root = start or leader()
-
-    local m = vim.api.nvim_get_mode().mode:sub(1, 1)
-    local visual = m == "v" or m == "V" or m == "\22"
-    local mode = visual and "x" or "n"
-
-    local function fire(seq)
-        vim.api.nvim_feedkeys((visual and "gv" or "") .. seq, "m", false)
-    end
-
-    local descend
-    descend = function(prefix)
-        local rows = next_keys(mode, prefix)
-        if #rows == 0 then
-            if exact(mode, prefix) then fire(prefix) end
-            return
-        end
-
-        vim.ui.select(rows, {
-            prompt = prefix_label(prefix),
-            format_item = label,
-        }, function(row)
-            if not row then return end
-
-            if row.here then
-                fire(prefix)
-                return
-            end
-
-            local nextp = prefix .. raw(row.t)
-            if row.g then
-                descend(nextp)
-            elseif exact(mode, nextp) then
-                fire(nextp)
-            end
-        end)
-    end
-
-    descend(root)
+    return { lines = lines, w = text:width(), title = title }
 end
 
 function M.setup()
-    vim.opt.timeoutlen = 500
+    local Text = require("which-key.text")
+    local View = require("which-key.view")
+    local shown = false
 
-    vim.keymap.set({ "n", "x" }, "<leader>", function()
-        M.run()
-    end, { desc = "Which-key" })
-
-    for _, p in ipairs(EXTRA_PREFIXES) do
-        vim.keymap.set({ "n", "x" }, p, function()
-            M.run(p)
-        end, { desc = "Which-key: " .. p })
+    local render = Text.render
+    Text.render = function(self, buf)
+        render(self, buf)
+        -- the footer renders into its own buffer first; only the main popup is mirrored
+        if View.view and buf == View.view.buf then
+            shown = true
+            eval(RENDER, payload(self))
+        end
     end
 
-    vim.api.nvim_create_user_command("WhichKey", function(o)
-        M.run(o.args ~= "" and o.args or nil)
-    end, { nargs = "?", desc = "Which-key picker for a prefix" })
+    local hide = View.hide
+    View.hide = function()
+        hide()
+        if shown then
+            shown = false
+            eval(HIDE)
+        end
+    end
 end
 
 return M

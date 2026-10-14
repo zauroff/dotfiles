@@ -10,7 +10,6 @@
       "Bash(wezterm cli:*)"
     ]
   },
-  "model": "claude-opus-5-5[1m]",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -29,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "case \"$CLAUDE_FILE_PATH\" in *.go) command -v gofmt >/dev/null 2>&1 && gofmt -w \"$CLAUDE_FILE_PATH\" ;; *.ts|*.tsx|*.js|*.jsx) command -v prettier >/dev/null 2>&1 && npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null; command -v eslint >/dev/null 2>&1 && npx eslint --fix \"$CLAUDE_FILE_PATH\" 2>/dev/null ;; *.py) command -v ruff >/dev/null 2>&1 && ruff format --quiet \"$CLAUDE_FILE_PATH\" ;; esac || true",
+            "command": "f=\"$(jq -r '.tool_input.file_path // empty')\"; case \"$f\" in *.go) command -v gofmt >/dev/null 2>&1 && gofmt -w \"$f\" ;; *.ts|*.tsx|*.js|*.jsx) command -v prettier >/dev/null 2>&1 && npx prettier --write \"$f\" 2>/dev/null; command -v eslint >/dev/null 2>&1 && npx eslint --fix \"$f\" 2>/dev/null ;; *.py) command -v ruff >/dev/null 2>&1 && ruff format --quiet \"$f\" ;; esac || true",
             "timeout": 30
           }
         ]
@@ -109,6 +108,7 @@
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
+    "codex@openai-codex": true
   },
   "outputStyle": "Dry",
   "effortLevel": "high",
@@ -128,7 +128,7 @@
     }
   },
   "tui": "fullscreen",
-  "theme": "light",
+  "theme": "custom:vscode-2026-dark",
   "editorMode": "vim",
   "verbose": false
 }

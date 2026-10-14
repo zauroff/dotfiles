@@ -8,13 +8,13 @@
 
 [ -f "$HOME/.claude/.no-comments-off" ] && exit 0
 
-case "$CLAUDE_FILE_PATH" in
+case "$(jq -r '.tool_input.file_path // empty')" in
   *.go | *.ts | *.tsx | *.js | *.jsx | *.mjs | *.cjs | *.py | *.rs | *.lua | \
     *.sh | *.bash | *.zsh | *.c | *.h | *.cc | *.cpp | *.hpp | *.java) ;;
   *) exit 0 ;; # not code, nothing to say
 esac
 
-cat <<'EOF'
+python3 -c 'import sys,json; print(json.dumps({"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":sys.stdin.read()}}))' <<'EOF'
 DO NOT WRITE COMMENTS IN THIS CODE.
 
 - No explanatory comments, no section banners, no "// BEFORE/AFTER" markers, no

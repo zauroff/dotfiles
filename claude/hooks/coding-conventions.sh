@@ -12,7 +12,7 @@
 
 [ -f "$HOME/.claude/.coding-conventions-off" ] && exit 0
 
-case "$CLAUDE_FILE_PATH" in
+case "$(jq -r '.tool_input.file_path // empty')" in
   *.go) lang=go ;;
   *.ts | *.tsx | *.js | *.jsx | *.mjs | *.cjs) lang=typescript ;;
   *.py) lang=python ;;
@@ -25,25 +25,24 @@ case "$CLAUDE_FILE_PATH" in
 esac
 
 skill="$HOME/.claude/skills/${lang}-coding-conventions/SKILL.md"
+go_skill="$HOME/.claude/skills/go-coding-conventions/SKILL.md"
 
 if [ -f "$skill" ]; then
-  echo "Follow the $lang coding conventions below for this edit."
-  echo
-  # strip the YAML frontmatter, emit the skill body
-  awk 'NR==1 && /^---$/ {fm=1; next} fm && /^---$/ {fm=0; next} !fm' "$skill"
+  intro="Follow the $lang coding conventions below for this edit."
+elif [ -f "$go_skill" ]; then
+  # No skill for this language: fall back to the Go conventions' principles, which
+  # are language-agnostic enough to carry (naming, error handling, comments).
+  skill="$go_skill"
+  intro="No dedicated $lang convention skill exists. Apply the Go coding conventions
+below in spirit — naming, function shape, comments, and error handling —
+translated into idiomatic $lang."
+else
   exit 0
 fi
 
-# No skill for this language: fall back to the Go conventions' principles, which
-# are language-agnostic enough to carry (naming, error handling, comments).
-go_skill="$HOME/.claude/skills/go-coding-conventions/SKILL.md"
-[ -f "$go_skill" ] || exit 0
-
-echo "No dedicated $lang convention skill exists. Apply the Go coding conventions"
-echo "below in spirit — naming, function shape, comments, and error handling —"
-echo "translated into idiomatic $lang."
-echo
-
-awk 'NR==1 && /^---$/ {fm=1; next} fm && /^---$/ {fm=0; next} !fm' "$go_skill"
-
-exit 0
+{
+  echo "$intro"
+  echo
+  # strip the YAML frontmatter, emit the skill body
+  awk 'NR==1 && /^---$/ {fm=1; next} fm && /^---$/ {fm=0; next} !fm' "$skill"
+} | python3 -c 'import sys,json; print(json.dumps({"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":sys.stdin.read()}}))'

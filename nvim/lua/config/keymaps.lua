@@ -19,6 +19,7 @@ if vim.g.vscode then
     vim.keymap.set("n", "<leader>E", function()
         vscode.action("workbench.files.action.showActiveFileInExplorer")
     end)
+    require("config.vscode_keymaps").setup()
 end
 
 if vim.g.neovide then
