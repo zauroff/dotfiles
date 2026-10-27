@@ -1,0 +1,30 @@
+# Boltz Light: the light palette from boltz/reference.html.
+# Slot 0 is ink and 7/15 are dark greys so "black" and "white" text both stay
+# readable on the warm grey background. Bright variants are a small step
+# lighter while keeping enough contrast on #e9e9e4.
+
+background = #e9e9e4
+foreground = #161616
+
+cursor-color = #ff4f00
+cursor-text = #e9e9e4
+
+# No selection-foreground, so selected text keeps its own colors.
+selection-background = #cfcfc8
+
+palette = 0=#161616
+palette = 1=#e0201b
+palette = 2=#00995c
+palette = 3=#ff4f00
+palette = 4=#0047ff
+palette = 5=#7a3fd1
+palette = 6=#00879c
+palette = 7=#4a4a45
+palette = 8=#77776f
+palette = 9=#ec3d38
+palette = 10=#14ad6e
+palette = 11=#ff6a24
+palette = 12=#2a63ff
+palette = 13=#8f5ade
+palette = 14=#169cb0
+palette = 15=#2a2a28

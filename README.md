@@ -30,12 +30,20 @@ Install these separately: Claude Code, Codex, Obsidian, GoLand.
 | WezTerm           | `wezterm.lua`                                                                        | `~/.wezterm.lua`                                                            |
 | iTerm2            | `iterm2/`                                                                            | generated profile in `~/Library/Application Support/iTerm2/DynamicProfiles` |
 | AeroSpace         | `aerospace.toml`                                                                     | `~/.aerospace.toml`                                                         |
-| zsh prompt        | `zsh/asiimov.zsh-theme`                                                              | oh-my-zsh custom themes; select with `ZSH_THEME="asiimov"`                  |
+| zsh prompt        | `zsh/boltz.zsh-theme`                                                                | oh-my-zsh custom themes; select with `ZSH_THEME="boltz"`                    |
 | Claude Code       | `claude/` (settings, hooks, agents, output styles, themes, status line, `CLAUDE.md`) | `~/.claude`, `~/CLAUDE.md`                                                  |
 | Codex             | `codex/config.toml`                                                                  | `~/.codex/config.toml`                                                      |
 | Agent skills      | `skills/`                                                                            | `~/.claude/skills`, `~/.codex/skills`                                       |
 | opencode          | `opencode/`                                                                          | `~/.config/opencode`                                                        |
-| Obsidian theme    | `obsidian/themes/Asiimov`                                                            | `.obsidian/themes` in the vault at `$OBSIDIAN_VAULT`                        |
+| Obsidian theme    | `obsidian/themes/Boltz`                                                              | `.obsidian/themes` in the vault at `$OBSIDIAN_VAULT`                        |
+
+## Boltz
+
+Boltz is the color scheme and design language used everywhere in this repo: near-monochrome greys, one orange accent, and color only where it means something. Every port has a dark and a light variant. `toggle-theme.sh` switches the terminals, editors and Claude Code together; Obsidian follows the system appearance.
+
+- Design reference, palette and ports list: `boltz/reference.html` (open it in a browser).
+- Claude Code mod that restyles the terminal UI: `claude/mods/boltz`.
+- Fonts (JetBrains Mono, Barlow, Barlow Semi Condensed, Martian Mono) come from the `Brewfile`.
 
 ## Scripts
 

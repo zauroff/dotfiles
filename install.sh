@@ -146,18 +146,20 @@ echo "Checked diagram tools (mmdc)"
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Documents/DANIEL ZAUROFF}"
 if [ -d "$OBSIDIAN_VAULT/.obsidian" ]; then
   mkdir -p "$OBSIDIAN_VAULT/.obsidian/themes"
-  ln -sfn "$DOTFILES/obsidian/themes/Asiimov" "$OBSIDIAN_VAULT/.obsidian/themes/Asiimov"
-  echo "Linked obsidian/themes/Asiimov -> $OBSIDIAN_VAULT/.obsidian/themes/Asiimov"
+  ln -sfn "$DOTFILES/obsidian/themes/Boltz" "$OBSIDIAN_VAULT/.obsidian/themes/Boltz"
+  find "$OBSIDIAN_VAULT/.obsidian/themes" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+  echo "Linked obsidian/themes/Boltz -> $OBSIDIAN_VAULT/.obsidian/themes/Boltz"
 else
   echo "Skipped Obsidian (no vault at $OBSIDIAN_VAULT)"
 fi
 
-# Link the oh-my-zsh prompt theme. ~/.zshrc selects it with ZSH_THEME="asiimov".
+# Link the oh-my-zsh prompt theme. ~/.zshrc selects it with ZSH_THEME="boltz".
 if [ -d "$HOME/.oh-my-zsh" ]; then
   ZSH_THEMES="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
   mkdir -p "$ZSH_THEMES"
-  ln -sf "$DOTFILES/zsh/asiimov.zsh-theme" "$ZSH_THEMES/asiimov.zsh-theme"
-  echo "Linked zsh/asiimov.zsh-theme -> $ZSH_THEMES/asiimov.zsh-theme"
+  ln -sf "$DOTFILES/zsh/boltz.zsh-theme" "$ZSH_THEMES/boltz.zsh-theme"
+  find "$ZSH_THEMES" -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+  echo "Linked zsh/boltz.zsh-theme -> $ZSH_THEMES/boltz.zsh-theme"
 else
   echo "Skipped oh-my-zsh theme (no ~/.oh-my-zsh)"
 fi

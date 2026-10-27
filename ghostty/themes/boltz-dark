@@ -1,0 +1,31 @@
+# Boltz Dark: the dark palette from boltz/reference.html.
+# Near-monochrome greys, one orange accent, blue/green/red as category colors.
+# Boltz has no yellow, magenta or cyan: yellow takes the orange accent, and
+# magenta/cyan are muted blends of blue+red and blue+green so they stay quiet.
+# Bright variants are a small step lighter, not neon.
+
+background = #0d0d0d
+foreground = #f0f0ec
+
+cursor-color = #ff5a1f
+cursor-text = #0d0d0d
+
+# No selection-foreground, so selected text keeps its own colors.
+selection-background = #2e2e2b
+
+palette = 0=#3a3a37
+palette = 1=#ff3b30
+palette = 2=#1fc77a
+palette = 3=#ff5a1f
+palette = 4=#3d7bff
+palette = 5=#a07ee6
+palette = 6=#36aebb
+palette = 7=#c8c8c3
+palette = 8=#8a8a85
+palette = 9=#ff6259
+palette = 10=#4cd494
+palette = 11=#ff7a48
+palette = 12=#6696ff
+palette = 13=#b59ced
+palette = 14=#5fc1cb
+palette = 15=#f0f0ec

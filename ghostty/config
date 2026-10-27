@@ -23,9 +23,8 @@ confirm-close-surface = false
 # Ghostty counts bytes here, not lines. ~100MB covers wezterm's 90k lines.
 scrollback-limit = 100000000
 
-# Theme (toggle-theme.sh rewrites both of these lines together)
-theme = vscode-2026-dark
-background = #121314
+# Theme (toggle-theme.sh swaps boltz-dark and boltz-light; the theme sets the background)
+theme = boltz-dark
 
 # Shaders
 # custom-shader = crt.glsl

@@ -43,10 +43,9 @@ config.front_end = "WebGpu"
 config.freetype_load_target = "Light"
 config.freetype_load_flags = "NO_AUTOHINT"
 
--- Read theme mode from state file. dark_colors is byte-for-byte Ghostty's
--- "Gruvbox Dark" theme; light_colors matches ghostty/themes/vscode-2026-light.
--- toggle-theme.sh selects the matching Ghostty theme at the same time it
--- writes this file.
+-- Read theme mode from state file. dark_colors and light_colors match
+-- ghostty/themes/boltz-dark and boltz-light. toggle-theme.sh selects the
+-- matching Ghostty theme at the same time it writes this file.
 local theme_file = wezterm.home_dir .. "/.config/wezterm/.theme-mode"
 
 local function read_theme_mode()
@@ -62,115 +61,113 @@ end
 wezterm.add_to_config_reload_watch_list(theme_file)
 
 local dark_colors = {
-	foreground = "#ebdbb2",
-	background = "#1f1f1f",
-	cursor_bg = "#ebdbb2",
-	cursor_fg = "#282828",
-	cursor_border = "#ebdbb2",
-	selection_bg = "#665c54",
-	selection_fg = "#ebdbb2",
-	split = "#504945",
+	foreground = "#f0f0ec",
+	background = "#0d0d0d",
+	cursor_bg = "#ff5a1f",
+	cursor_fg = "#0d0d0d",
+	cursor_border = "#ff5a1f",
+	selection_bg = "#2e2e2b",
+	selection_fg = "#f0f0ec",
+	split = "#2e2e2b",
 
 	ansi = {
-		"#282828", -- black (bg0)
-		"#cc241d", -- red
-		"#98971a", -- green
-		"#d79921", -- yellow
-		"#458588", -- blue
-		"#b16286", -- magenta (purple)
-		"#689d6a", -- cyan (aqua)
-		"#a89984", -- white (fg4)
+		"#3a3a37", -- black
+		"#ff3b30", -- red
+		"#1fc77a", -- green
+		"#ff5a1f", -- yellow
+		"#3d7bff", -- blue
+		"#a07ee6", -- magenta
+		"#36aebb", -- cyan
+		"#c8c8c3", -- white
 	},
 	brights = {
-		"#928374", -- bright black (gray)
-		"#fb4934", -- bright red
-		"#b8bb26", -- bright green
-		"#fabd2f", -- bright yellow
-		"#83a598", -- bright blue
-		"#d3869b", -- bright magenta
-		"#8ec07c", -- bright cyan
-		"#ebdbb2", -- bright white (fg1)
+		"#8a8a85", -- bright black
+		"#ff6259", -- bright red
+		"#4cd494", -- bright green
+		"#ff7a48", -- bright yellow
+		"#6696ff", -- bright blue
+		"#b59ced", -- bright magenta
+		"#5fc1cb", -- bright cyan
+		"#f0f0ec", -- bright white
 	},
 
 	tab_bar = {
-		background = "#1d2021",
+		background = "#131312",
 		active_tab = {
-			bg_color = "#282828",
-			fg_color = "#ebdbb2",
+			bg_color = "#0d0d0d",
+			fg_color = "#f0f0ec",
 		},
 		inactive_tab = {
-			bg_color = "#1d2021",
-			fg_color = "#928374",
+			bg_color = "#131312",
+			fg_color = "#8a8a85",
 		},
 		inactive_tab_hover = {
-			bg_color = "#3c3836",
-			fg_color = "#ebdbb2",
+			bg_color = "#2e2e2b",
+			fg_color = "#f0f0ec",
 		},
 		new_tab = {
-			bg_color = "#1d2021",
-			fg_color = "#928374",
+			bg_color = "#131312",
+			fg_color = "#8a8a85",
 		},
 		new_tab_hover = {
-			bg_color = "#3c3836",
-			fg_color = "#ebdbb2",
+			bg_color = "#2e2e2b",
+			fg_color = "#f0f0ec",
 		},
 	},
 }
 
--- VS Code "2026 Light" counterpart to dark_colors, matching
--- ghostty/themes/vscode-2026-light and nvim/colors/vscode2026-light.lua.
 local light_colors = {
-	foreground = "#000000",
-	background = "#ffffff",
-	cursor_bg = "#000000",
-	cursor_fg = "#ffffff",
-	cursor_border = "#000000",
-	selection_bg = "#add6ff",
-	selection_fg = "#000000",
-	split = "#d4d4d4",
+	foreground = "#161616",
+	background = "#e9e9e4",
+	cursor_bg = "#ff4f00",
+	cursor_fg = "#e9e9e4",
+	cursor_border = "#ff4f00",
+	selection_bg = "#cfcfc8",
+	selection_fg = "#161616",
+	split = "#cfcfc8",
 
 	ansi = {
-		"#000000", -- black
-		"#cd3131", -- red
-		"#00bc00", -- green
-		"#949800", -- yellow
-		"#0451a5", -- blue
-		"#bc05bc", -- magenta
-		"#0598bc", -- cyan
-		"#555555", -- white
+		"#161616", -- black
+		"#e0201b", -- red
+		"#00995c", -- green
+		"#ff4f00", -- yellow
+		"#0047ff", -- blue
+		"#7a3fd1", -- magenta
+		"#00879c", -- cyan
+		"#4a4a45", -- white
 	},
 	brights = {
-		"#666666", -- bright black (gray)
-		"#cd3131", -- bright red
-		"#14ce14", -- bright green
-		"#b5ba00", -- bright yellow
-		"#0451a5", -- bright blue
-		"#bc05bc", -- bright magenta
-		"#0598bc", -- bright cyan
-		"#a5a5a5", -- bright white
+		"#77776f", -- bright black
+		"#ec3d38", -- bright red
+		"#14ad6e", -- bright green
+		"#ff6a24", -- bright yellow
+		"#2a63ff", -- bright blue
+		"#8f5ade", -- bright magenta
+		"#169cb0", -- bright cyan
+		"#2a2a28", -- bright white
 	},
 
 	tab_bar = {
-		background = "#f3f3f3",
+		background = "#dfdfd9",
 		active_tab = {
-			bg_color = "#ffffff",
-			fg_color = "#000000",
+			bg_color = "#e9e9e4",
+			fg_color = "#161616",
 		},
 		inactive_tab = {
-			bg_color = "#f3f3f3",
-			fg_color = "#666666",
+			bg_color = "#dfdfd9",
+			fg_color = "#65655e",
 		},
 		inactive_tab_hover = {
-			bg_color = "#e8e8e8",
-			fg_color = "#000000",
+			bg_color = "#cfcfc8",
+			fg_color = "#161616",
 		},
 		new_tab = {
-			bg_color = "#f3f3f3",
-			fg_color = "#666666",
+			bg_color = "#dfdfd9",
+			fg_color = "#65655e",
 		},
 		new_tab_hover = {
-			bg_color = "#e8e8e8",
-			fg_color = "#000000",
+			bg_color = "#cfcfc8",
+			fg_color = "#161616",
 		},
 	},
 }

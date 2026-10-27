@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boltz · design reference</title>
+<style>
+@font-face { font-family: "Barlow"; font-weight: 400; src: local("Barlow"), local("Barlow-Regular"), url("../skills/report/assets/fonts/barlow-400-latin.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 400; font-style: italic; src: local("Barlow Italic"), local("Barlow-Italic"), url("../skills/report/assets/fonts/barlow-400-italic-latin.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 500; src: local("Barlow Medium"), local("Barlow-Medium"), url("../skills/report/assets/fonts/barlow-500-latin.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 600; src: local("Barlow SemiBold"), local("Barlow-SemiBold"), url("../skills/report/assets/fonts/barlow-600-latin.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-weight: 500; src: local("Barlow Semi Condensed Medium"), local("BarlowSemiCondensed-Medium"), url("../skills/report/assets/fonts/barlow-semi-condensed-500-latin.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-weight: 600; src: local("Barlow Semi Condensed SemiBold"), local("BarlowSemiCondensed-SemiBold"), url("../skills/report/assets/fonts/barlow-semi-condensed-600-latin.woff2") format("woff2"); }
+@font-face { font-family: "Martian Mono"; font-weight: 400 500; src: local("Martian Mono"), url("../skills/report/assets/fonts/martian-mono-400-500-latin.woff2") format("woff2"); }
+
+:root {
+  --head: "Barlow Semi Condensed", Barlow, "Arial Narrow", sans-serif;
+  --sans: Barlow, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Martian Mono", Menlo, Consolas, monospace;
+  --term: "JetBrains Mono", "JetBrainsMono Nerd Font", "SF Mono", ui-monospace, Menlo, monospace;
+  --dot: 9px;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d0d0d; --raised: #161615; --sunken: #131312; --code: #171716;
+  --line: #2e2e2b; --frame: #2a2a28; --dim: #3a3a37; --rule: #5a5a55;
+  --faint: #6a6a65; --grey: #8a8a85; --body: #cfcfca; --ink: #f0f0ec;
+  --orange: #ff5a1f; --mark: #ff5a1f; --soft: #3b1d12; --on-chip: #0d0d0d;
+  --blue: #3d7bff; --green: #1fc77a; --red: #ff3b30;
+  --kw: #ff7a48; --ty: #6696ff; --fn: #5fc1cb; --st: #4cd494; --nu: #b59ced;
+}
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #e9e9e4; --raised: #f2f2ee; --sunken: #dfdfd9; --code: #f4f4f0;
+  --line: #cfcfc8; --frame: #c9c9c3; --dim: #b0b0a9; --rule: #9a9a93;
+  --faint: #8a8a83; --grey: #65655e; --body: #2a2a28; --ink: #161616;
+  --orange: #cc3d00; --mark: #ff4f00; --soft: #ffd3bf; --on-chip: #ffffff;
+  --blue: #0047ff; --green: #007d4b; --red: #cc1a16;
+  --kw: #cc3d00; --ty: #0047ff; --fn: #00788b; --st: #007d4b; --nu: #7a3fd1;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { margin: 0; color: var(--body); font: 400 17px/1.66 var(--sans); -webkit-font-smoothing: antialiased; transition: background 200ms, color 200ms; }
+a { color: var(--orange); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+strong { color: var(--ink); font-weight: 600; background: var(--soft); padding: 0 3px; }
+code { font: 400 0.78em var(--mono); color: var(--blue); background: var(--raised); padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+
+.appbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 22px; height: 46px; padding: 0 24px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--frame); font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.appbar .brand { color: var(--ink); }
+.appbar .brand i { display: inline-block; width: 8px; height: 8px; background: var(--mark); margin-right: 8px; }
+.appbar nav { display: flex; gap: 18px; }
+.appbar nav a { color: var(--grey); text-decoration: none; }
+.appbar nav a:hover { color: var(--ink); }
+.keys { display: flex; gap: 6px; margin-left: auto; }
+.keys button { font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--frame); background: var(--bg); color: var(--grey); border-radius: 6px; padding: 7px 10px; cursor: pointer; }
+.keys button:hover { color: var(--ink); border-color: var(--rule); }
+.keys button.on { background: var(--orange); border-color: var(--orange); color: var(--on-chip); }
+.keys button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+.page { max-width: 1180px; margin: 0 auto; padding: 0 32px 96px; }
+.narrow { max-width: 780px; }
+.masthead { padding: 64px 0 0; }
+.eyebrow { font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.eyebrow b { color: var(--orange); font-weight: 500; }
+.dots { display: inline-flex; flex-direction: column; gap: calc(var(--dot) * 0.3); margin: 30px 0 0; }
+.dots .row { display: flex; gap: calc(var(--dot) * 0.3); }
+.dots i { width: var(--dot); height: var(--dot); border-radius: 50%; background: var(--dim); opacity: 0.55; transform: scale(0.45); }
+.dots i.on { background: var(--ink); opacity: 1; transform: none; }
+.dots i.gap { visibility: hidden; }
+h1 { margin: 26px 0 0; font: 600 42px/1.08 var(--head); letter-spacing: -0.005em; color: var(--ink); }
+.lede { margin: 18px 0 0; font-size: 19.5px; line-height: 1.55; color: var(--ink); max-width: 64ch; }
+.knobs { display: grid; grid-template-columns: repeat(4, 1fr); margin: 36px 0 0; border-top: 1px solid var(--frame); border-bottom: 1px solid var(--frame); }
+.knob { padding: 16px 0 18px; }
+.knob + .knob { padding-left: 20px; border-left: 1px solid var(--frame); }
+.knob .label { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.knob .label::before { content: "◉ "; color: var(--c, var(--ink)); }
+.knob .value { margin-top: 10px; font: 600 22px/1 var(--head); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+
+.sec { padding: 64px 0 0; }
+h2 { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font: 600 24px/1.1 var(--head); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
+.chip { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.04em; padding: 5px 7px; background: var(--ink); color: var(--on-chip); }
+.chip.o { background: var(--orange); }
+h3 { margin: 36px 0 12px; font: 600 14.5px/1.3 var(--head); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+h3::before { content: "— "; }
+p { margin: 0 0 16px; max-width: 70ch; }
+
+ul, ol { margin: 0 0 18px; padding: 0; list-style: none; }
+ul > li, ol.n > li { position: relative; padding-left: 34px; margin: 0 0 10px; max-width: 74ch; }
+ul > li::before { content: "▪"; position: absolute; left: 8px; color: var(--orange); }
+ol.n { counter-reset: n; }
+ol.n > li { counter-increment: n; }
+ol.n > li::before { content: counter(n); position: absolute; left: 0; top: 4px; min-width: 20px; text-align: center; font: 600 10.5px/1 var(--mono); padding: 4px 5px; background: var(--orange); color: var(--on-chip); }
+ol.n b { color: var(--ink); font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 15px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font: 500 10px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 10px 14px 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+td { padding: 10px 14px 10px 0; vertical-align: middle; border-bottom: 1px solid var(--frame); }
+tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+td.key { font: 500 12px/1.3 var(--mono); color: var(--ink); white-space: nowrap; }
+td.group { padding-top: 22px; font: 500 10px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); border-bottom-color: var(--rule); }
+.sw { display: inline-flex; align-items: center; gap: 10px; font: 400 11.5px/1 var(--mono); color: var(--ink); white-space: nowrap; }
+.sw i { display: inline-block; width: 44px; height: 24px; border: 1px solid var(--frame); }
+
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 8px 0 0; }
+.panel { padding: 18px 18px 14px; border: 1px solid var(--frame); }
+.panel .eyebrow { margin-bottom: 14px; }
+.ansi { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.ansi div { aspect-ratio: 1.6; display: flex; align-items: flex-end; padding: 4px; font: 500 9px/1 var(--mono); }
+.ansi + .ansi { margin-top: 4px; }
+
+.cats { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 8px 0 22px; }
+.cat { padding: 16px 14px 18px 0; }
+.cat + .cat { padding-left: 16px; border-left: 1px solid var(--frame); }
+.cat .name { font: 600 13px/1 var(--mono); letter-spacing: 0.08em; color: var(--c); }
+.cat .name::before { content: "■ "; }
+.cat .what { margin-top: 10px; font: 500 10px/1.5 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey); }
+.cat .tools { margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--body); }
+
+.type { display: grid; grid-template-columns: 170px 1fr; border-top: 1px solid var(--rule); }
+.type > div { padding: 18px 0; border-bottom: 1px solid var(--frame); }
+.type > div:nth-last-child(-n + 2) { border-bottom-color: var(--rule); }
+.type .spec { font: 500 10px/1.6 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding-right: 18px; }
+.type .s-h1 { font: 600 42px/1.08 var(--head); color: var(--ink); }
+.type .s-h2 { display: flex; align-items: center; gap: 14px; font: 600 24px/1.1 var(--head); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
+.type .s-h3 { font: 600 14.5px/1.3 var(--head); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.type .s-h3::before { content: "— "; }
+.type .s-label { font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.type .s-value { font: 600 22px/1 var(--head); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); margin-top: 8px; }
+.type .s-term { font: 400 14px/1.5 var(--term); color: var(--ink); white-space: pre; }
+
+.codebox { margin: 6px 0 22px; background: var(--code); border: 1px solid var(--frame); }
+.codebox .tab { display: flex; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid var(--frame); font: 500 9.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.codebox pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 13.5px/1.65 var(--term); color: var(--ink); }
+.kw { color: var(--kw); } .ty { color: var(--ty); } .fn { color: var(--fn); } .st { color: var(--st); } .nu { color: var(--nu); }
+.cm { color: var(--grey); font-style: italic; } .op { color: var(--grey); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0 0 22px; font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.legend span::before { content: "■ "; color: var(--c); }
+
+.fig { margin: 8px 0 0; }
+.window { border: 1px solid var(--frame); border-radius: 10px; background: var(--bg); width: max-content; }
+.titlebar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; border-bottom: 1px solid var(--frame); font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; color: var(--grey); text-transform: uppercase; }
+.titlebar i { width: 9px; height: 9px; border-radius: 50%; background: var(--dim); display: inline-block; }
+.titlebar span { margin: 0 auto; }
+.term { color: var(--ink); padding: 14px 18px 18px; font: 400 13px/1.2 var(--term); position: relative; }
+.term .row { white-space: pre; position: relative; height: 1.2em; }
+.term .row.user { background: var(--raised); margin: 0 -18px; padding: 0 18px; }
+.note { position: absolute; left: calc(100% + 56px); top: 0; white-space: nowrap; font: 500 9.5px/1.25 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.note::before { content: ""; position: absolute; right: calc(100% + 8px); top: 0.6em; width: 28px; border-top: 1px solid var(--frame); }
+.note.proposed { color: var(--orange); }
+body.hide-notes .note { display: none; }
+.term .k { color: var(--grey); } .term .dim { color: var(--dim); } .term .rule { color: var(--rule); }
+.term .o { color: var(--orange); } .term .b { color: var(--blue); } .term .g { color: var(--green); } .term .w { color: var(--ink); } .term .r { color: var(--red); }
+.term .bold { font-weight: 700; } .term .ital { font-style: italic; } .term .strike { text-decoration: line-through; }
+.term .chip { font: inherit; font-weight: 700; letter-spacing: 0; padding: 0; background: var(--ink); color: var(--on-chip); }
+.term .chip-o { font-weight: 700; background: var(--orange); color: var(--on-chip); }
+.term .hl { background: var(--soft); }
+.term .cb { background: var(--code); }
+.term .ph { background: var(--mark); color: var(--bg); }
+.term .cursor { background: var(--mark); color: var(--mark); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.fig figcaption { margin-top: 14px; max-width: 80ch; font-size: 14px; line-height: 1.5; color: var(--grey); }
+
+.foot { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; margin-top: 80px; padding: 22px 0 0; border-top: 1px solid var(--frame); font: 500 10px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+
+@media (max-width: 980px) {
+  .modes, .cats { grid-template-columns: 1fr; }
+  .cat + .cat { padding-left: 0; border-left: 0; border-top: 1px solid var(--frame); }
+  .knobs { grid-template-columns: repeat(2, 1fr); }
+  .appbar nav { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <span class="brand"><i></i>Boltz</span>
+  <nav>
+    <a href="#principles">Principles</a>
+    <a href="#palette">Palette</a>
+    <a href="#categories">Categories</a>
+    <a href="#type">Type</a>
+    <a href="#syntax">Syntax</a>
+    <a href="#terminal">Terminal</a>
+    <a href="#ports">Ports</a>
+  </nav>
+  <div class="keys">
+    <button data-theme-choice="dark" class="on">Dark</button>
+    <button data-theme-choice="light">Light</button>
+    <button id="notes" class="on">Notes</button>
+  </div>
+</div>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="eyebrow">Design reference · <b>dark + light</b> · dotfiles</div>
+  <div class="dots" id="title-dots" aria-hidden="true"></div>
+  <h1>Boltz design reference</h1>
+  <p class="lede">Boltz is the colour scheme and design language for every tool in these dotfiles, inspired by teenage engineering. It reads like the faceplate of a piece of music hardware: near-monochrome greys, one orange accent, and colour that only appears when it means something.</p>
+  <div class="knobs">
+    <div class="knob" style="--c: var(--mark)"><div class="label">Accent</div><div class="value">Orange</div></div>
+    <div class="knob" style="--c: var(--blue)"><div class="label">Categories</div><div class="value">5</div></div>
+    <div class="knob" style="--c: var(--green)"><div class="label">Modes</div><div class="value">Dark · Light</div></div>
+    <div class="knob"><div class="label">Ports</div><div class="value">11</div></div>
+  </div>
+</header>
+
+<section class="sec narrow" id="principles">
+  <h2><span class="chip">01</span>Principles</h2>
+  <ol class="n">
+    <li><b>Greys carry the structure.</b> Surfaces, rules and text sit on one warm, near-neutral grey ramp. Nothing gets a hue unless the hue carries meaning.</li>
+    <li><b>One accent.</b> Orange marks the active thing: the cursor, the current turn, links, keywords, a running step, a numbered list. There is never a second accent.</li>
+    <li><b>Colour is a category.</b> Blue reads, green writes, orange runs, ink delegates, red fails. The mapping is the same in every port, so a colour means the same thing in the terminal, the editor and a report.</li>
+    <li><b>Rules, not shadows.</b> 1px lines in <code>line</code>, <code>frame</code> and <code>rule</code> separate things. No drop shadows, no gradients, radii of 6px or less.</li>
+    <li><b>Labels are hardware labels.</b> Mono, uppercase, letter-spaced 0.1 to 0.16em, in grey. The value sits next to or under the label in ink, bold. Knobs are <code>◉</code>, categories are <code>■</code>.</li>
+    <li><b>Real numbers, tabular figures.</b> Durations, counts and percents are exact and aligned: <code>0.21s</code>, <code>34%</code>, <code>02</code>. Turn numbers are zero-padded to two digits.</li>
+    <li><b>Gear vocabulary is decoration.</b> Status words borrow from music gear: work is sequencing, sampling, bouncing, mixing, patching, tracking, tuning or looping. Anything you refer to by name keeps its plain name: a prompt and its reply are a turn, as in Claude Code and the status line.</li>
+    <li><b>Both modes, always.</b> Every port ships dark and light. <code>toggle-theme.sh</code> flips the terminals, editors and Claude Code together; Obsidian and reports follow the system appearance.</li>
+  </ol>
+</section>
+
+<section class="sec" id="palette">
+  <h2><span class="chip">02</span>Palette</h2>
+  <p>Canonical tokens. Ports take their values from this table. A <code>_text</code> token is the same hue tuned to read as text on <code>bg</code>; the plain token is for marks, glyphs and fills.</p>
+  <table>
+    <thead><tr><th style="width: 150px">Token</th><th>Role</th><th style="width: 170px">Dark</th><th style="width: 170px">Light</th></tr></thead>
+    <tbody id="tokens"></tbody>
+  </table>
+
+  <h3>Terminal ANSI 16</h3>
+  <p>Boltz has no yellow, magenta or cyan of its own. Yellow takes the orange accent; magenta and cyan are muted blends so they stay quiet. Bright variants are a small step up, not neon. In light mode slot 0 is ink and slots 7 and 15 are dark greys, so programs that print "black" or "white" text stay readable.</p>
+  <div class="modes" id="ansi"></div>
+</section>
+
+<section class="sec" id="categories">
+  <h2><span class="chip">03</span>Categories</h2>
+  <p>Every tool call, diff and status maps to one of five categories. Red is not a category: it only marks failure.</p>
+  <div class="cats">
+    <div class="cat" style="--c: var(--blue)"><div class="name">READ</div><div class="what">Looks, changes nothing</div><div class="tools">Read, Grep, Glob, LSP, WebFetch, WebSearch</div></div>
+    <div class="cat" style="--c: var(--green)"><div class="name">WRITE</div><div class="what">Changes files</div><div class="tools">Edit, MultiEdit, Write, NotebookEdit</div></div>
+    <div class="cat" style="--c: var(--orange)"><div class="name">SHELL</div><div class="what">Runs something</div><div class="tools">Bash</div></div>
+    <div class="cat" style="--c: var(--ink)"><div class="name">AGENT</div><div class="what">Delegates</div><div class="tools">Agent, Task, Skill</div></div>
+    <div class="cat" style="--c: var(--grey)"><div class="name">OTHER</div><div class="what">Everything else</div><div class="tools">MCP tools and the rest</div></div>
+  </div>
+  <p>The same hues carry into the editors: additions and success are green, deletions and errors are red, warnings and modified lines are orange, information and links are blue.</p>
+</section>
+
+<section class="sec" id="type">
+  <h2><span class="chip">04</span>Type</h2>
+  <p>Two stacks. Terminals and editors use <strong>JetBrains Mono</strong> for everything. Documents (reports, Obsidian, this page) use <strong>Barlow</strong> for body text, <strong>Barlow Semi Condensed</strong> for headings and <strong>Martian Mono</strong> for labels and code. The <code>Brewfile</code> installs all four.</p>
+  <div class="type">
+    <div class="spec">H1<br>Semi Condensed 600<br>sentence case</div><div><div class="s-h1">Proxy reuses closed connections</div></div>
+    <div class="spec">H2<br>numbered ink chip<br>caps, +0.05em</div><div><div class="s-h2"><span class="chip">02</span>Root cause</div></div>
+    <div class="spec">H3<br>grey caps, +0.1em<br>dash prefix</div><div><div class="s-h3">Timeouts</div></div>
+    <div class="spec">Body<br>Barlow 400, 17/1.66</div><div><p style="margin: 0">The proxy reuses connections the server has already closed. <strong>Bold reads as a highlighter stroke</strong>, <a href="#type">links are orange</a> and <code>inline code</code> is blue.</p></div>
+    <div class="spec">Label + value<br>Martian Mono 500<br>caps, +0.16em</div><div><div class="s-label">◉ Idle timeout</div><div class="s-value">30s</div></div>
+    <div class="spec">Terminal<br>JetBrains Mono 400</div><div><div class="s-term">■ READ    server/server.go    ✓  0.21s</div></div>
+  </div>
+  <p style="margin-top: 18px">In the terminal the same hierarchy is drawn in cells: H1 becomes a 5-row dot-matrix font, H2 a numbered ink chip followed by caps, H3 grey caps behind a dash. The masthead above uses the same glyphs.</p>
+</section>
+
+<section class="sec narrow" id="syntax">
+  <h2><span class="chip">05</span>Syntax</h2>
+  <p>Editors (Neovim, VS Code) colour code by role. Prose and identifiers stay ink, so colour stays meaningful.</p>
+  <div class="legend">
+    <span style="--c: var(--kw)">Keyword · orange_text</span>
+    <span style="--c: var(--ty)">Type · blue_text</span>
+    <span style="--c: var(--fn)">Function · teal</span>
+    <span style="--c: var(--st)">String · green_text</span>
+    <span style="--c: var(--nu)">Number, constant · violet</span>
+    <span style="--c: var(--grey)">Comment, operator · grey</span>
+  </div>
+  <div class="codebox">
+    <div class="tab"><span>Go</span><span>pool.go</span></div>
+<pre><span class="kw">package</span> proxy
+
+<span class="cm">// healthyBackends returns the backends that answered their last check.</span>
+<span class="kw">func</span> (p <span class="op">*</span><span class="ty">Pool</span>) <span class="fn">healthyBackends</span>(now <span class="ty">time.Time</span>) []<span class="op">*</span><span class="ty">Backend</span> {
+	healthy <span class="op">:=</span> <span class="fn">make</span>([]<span class="op">*</span><span class="ty">Backend</span>, <span class="nu">0</span>, <span class="fn">len</span>(p.backends))
+	<span class="kw">for</span> _, b <span class="op">:=</span> <span class="kw">range</span> p.backends {
+		<span class="kw">if</span> now.<span class="fn">Sub</span>(b.LastSeen) <span class="op">&gt;</span> p.idleTimeout {
+			<span class="kw">continue</span> <span class="cm">// stale, skip it</span>
+		}
+		healthy <span class="op">=</span> <span class="fn">append</span>(healthy, b)
+	}
+	<span class="kw">if</span> <span class="fn">len</span>(healthy) <span class="op">==</span> <span class="nu">0</span> {
+		p.log.<span class="fn">Warn</span>(<span class="st">"no healthy backend"</span>, <span class="st">"pool"</span>, p.name, <span class="st">"retry"</span>, <span class="nu">true</span>)
+	}
+	<span class="kw">return</span> healthy
+}</pre>
+  </div>
+  <p>Reports use a reduced set: keyword orange, function blue, string green, comment grey.</p>
+</section>
+
+<section class="sec" id="terminal">
+  <h2><span class="chip">06</span>Terminal</h2>
+  <p>Claude Code with the boltz mod, the Claude Code theme and the status line. Notes in grey name the render site that draws each element. Notes in orange are proposed and not built yet.</p>
+  <figure class="fig">
+    <div class="window">
+      <div class="titlebar"><i></i><i></i><i></i><span>claude · ~/code/api · 96×52</span></div>
+      <div class="term" id="term"></div>
+    </div>
+    <figcaption>Every element is drawn from terminal cells a mod can emit: text, colour, block and box-drawing glyphs. The prompt box belongs to the engine and stays stock; the Claude Code theme colours it.</figcaption>
+  </figure>
+</section>
+
+<section class="sec" id="ports">
+  <h2><span class="chip">07</span>Ports</h2>
+  <p>Where Boltz lives in this repo. <code>toggle-theme.sh [dark|light]</code> switches every port except Obsidian and reports, which follow the system appearance.</p>
+  <table>
+    <thead><tr><th style="width: 200px">Tool</th><th style="width: 380px">File</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="key">Ghostty</td><td><code>ghostty/themes/boltz-dark</code>, <code>boltz-light</code></td><td>Source of the ANSI 16.</td></tr>
+      <tr><td class="key">WezTerm</td><td><code>wezterm.lua</code></td><td>Same values as the Ghostty themes, inline.</td></tr>
+      <tr><td class="key">iTerm2</td><td><code>iterm2/gen-profile.sh</code></td><td>Generated from the Ghostty themes.</td></tr>
+      <tr><td class="key">zsh prompt</td><td><code>zsh/boltz.zsh-theme</code></td><td>ANSI slots only, so it follows the terminal theme.</td></tr>
+      <tr><td class="key">Neovim</td><td><code>nvim/colors/boltz.lua</code></td><td>One file; picks the palette from <code>'background'</code>.</td></tr>
+      <tr><td class="key">VS Code</td><td><code>vscode/extensions/boltz-theme</code></td><td>Boltz Dark and Boltz Light, installed by <code>install.sh</code>.</td></tr>
+      <tr><td class="key">Obsidian</td><td><code>obsidian/themes/Boltz</code></td><td>Document stack. Follows Obsidian's light or dark mode.</td></tr>
+      <tr><td class="key">Claude Code theme</td><td><code>claude/themes/boltz-dark.json</code>, <code>boltz-light.json</code></td><td>Colours the parts the mod does not draw.</td></tr>
+      <tr><td class="key">Claude Code mod</td><td><code>claude/mods/boltz</code></td><td>Palette in <code>hooks/palette.ts</code>. See its README.</td></tr>
+      <tr><td class="key">Status line</td><td><code>claude/statusline.sh</code></td><td>Knobs line plus location line.</td></tr>
+      <tr><td class="key">Reports</td><td><code>skills/report/assets/template.html</code></td><td>Document stack, follows the system mode.</td></tr>
+    </tbody>
+  </table>
+  <h3>Adding a port</h3>
+  <ul>
+    <li>Take every value from the palette table. If a tool needs a colour the table lacks, derive it from an existing token (a mix toward <code>bg</code>) instead of inventing a hue.</li>
+    <li>Keep the category mapping and the single accent.</li>
+    <li>Ship dark and light, and teach <code>toggle-theme.sh</code> to switch it.</li>
+    <li>Add a row to this table.</li>
+  </ul>
+</section>
+
+<footer class="foot">
+  <span>Boltz · design reference</span>
+  <span>boltz/reference.html</span>
+</footer>
+
+</div>
+
+<script>
+const TOKENS = [
+  ["Surfaces", [
+    ["bg", "Page, editor and terminal background", "#0d0d0d", "#e9e9e4"],
+    ["bg_raised", "Floats, popups, code blocks, inputs", "#161615", "#f2f2ee"],
+    ["bg_sunken", "Status bars, sidebars, cursor line", "#131312", "#dfdfd9"],
+  ]],
+  ["Lines", [
+    ["line", "Selection, splits, panel borders", "#2e2e2b", "#cfcfc8"],
+    ["dim", "Line numbers, off dots, empty meter cells", "#3a3a37", "#b0b0a9"],
+    ["rule", "Table and code rules, quote rail", "#5a5a55", "#9a9a93"],
+  ]],
+  ["Text", [
+    ["faint", "Inlay hints, unused code, blame", "#6a6a65", "#8a8a83"],
+    ["grey", "Labels, comments, operators, secondary text", "#8a8a85", "#65655e"],
+    ["body", "Long-form prose in documents", "#cfcfca", "#2a2a28"],
+    ["ink", "Primary text, values, the agent category", "#f0f0ec", "#161616"],
+  ]],
+  ["Accent", [
+    ["orange", "The one accent: cursor, active item, chips, shell category", "#ff5a1f", "#ff4f00"],
+    ["orange_text", "Orange as text: keywords, links, warnings", "#ff7a48", "#cc3d00"],
+    ["orange_soft", "Search hits, bold highlight, tags", "#3b1d12", "#ffd3bf"],
+  ]],
+  ["Categories", [
+    ["blue", "Read category, info, inline code", "#3d7bff", "#0047ff"],
+    ["blue_text", "Types, links in code", "#6696ff", "#0047ff"],
+    ["green", "Write category, success, additions", "#1fc77a", "#00995c"],
+    ["green_text", "Strings", "#4cd494", "#007d4b"],
+    ["red", "Failure and deletions only", "#ff3b30", "#e0201b"],
+    ["red_text", "Error text", "#ff6259", "#cc1a16"],
+  ]],
+  ["Syntax only", [
+    ["violet", "Numbers, constants, booleans", "#b59ced", "#7a3fd1"],
+    ["teal", "Functions and methods", "#5fc1cb", "#00788b"],
+  ]],
+];
+
+const ANSI = {
+  dark: { bg: "#0d0d0d", fg: "#f0f0ec", colors: ["#3a3a37", "#ff3b30", "#1fc77a", "#ff5a1f", "#3d7bff", "#a07ee6", "#36aebb", "#c8c8c3", "#8a8a85", "#ff6259", "#4cd494", "#ff7a48", "#6696ff", "#b59ced", "#5fc1cb", "#f0f0ec"] },
+  light: { bg: "#e9e9e4", fg: "#161616", colors: ["#161616", "#e0201b", "#00995c", "#ff4f00", "#0047ff", "#7a3fd1", "#00879c", "#4a4a45", "#77776f", "#ec3d38", "#14ad6e", "#ff6a24", "#2a63ff", "#8f5ade", "#169cb0", "#2a2a28"] },
+};
+
+const GLYPHS = {
+  B: ["##.", "#.#", "##.", "#.#", "##."], O: [".#.", "#.#", "#.#", "#.#", ".#."],
+  L: ["#..", "#..", "#..", "#..", "###"], T: ["###", ".#.", ".#.", ".#.", ".#."],
+  Z: ["###", "..#", ".#.", "#..", "###"], F: ["###", "#..", "##.", "#..", "#.."],
+  I: ["###", ".#.", ".#.", ".#.", "###"], N: ["##.", "#.#", "#.#", "#.#", "#.#"],
+  D: ["##.", "#.#", "#.#", "#.#", "##."], G: [".##", "#..", "#.#", "#.#", ".##"],
+  S: [".##", "#..", ".#.", "..#", "##."], " ": ["...", "...", "...", "...", "..."],
+};
+
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+document.getElementById("tokens").innerHTML = TOKENS.map(([group, rows]) =>
+  `<tr><td class="group" colspan="4">${group}</td></tr>` +
+  rows.map(([name, role, dark, light]) =>
+    `<tr><td class="key">${name}</td><td>${role}</td>` +
+    `<td><span class="sw"><i style="background:${dark}"></i>${dark}</span></td>` +
+    `<td><span class="sw"><i style="background:${light}"></i>${light}</span></td></tr>`).join("")
+).join("");
+
+document.getElementById("ansi").innerHTML = Object.entries(ANSI).map(([mode, { bg, fg, colors }]) =>
+  `<div class="panel" style="background:${bg}"><div class="eyebrow" style="color:${colors[8]}">${mode} · bg ${bg} · fg ${fg}</div>` +
+  [colors.slice(0, 8), colors.slice(8)].map((row, r) =>
+    `<div class="ansi">${row.map((c, i) => `<div style="background:${c};color:${i === 0 && r === 0 && mode === "dark" ? fg : bg}">${r * 8 + i}</div>`).join("")}</div>`
+  ).join("") + `</div>`
+).join("");
+
+document.getElementById("title-dots").innerHTML = [0, 1, 2, 3, 4].map((r) =>
+  `<div class="row">${[..."BOLTZ"].map((ch) => [...GLYPHS[ch][r]].map((p) => `<i class="${p === "#" ? "on" : ""}"></i>`).join("") + `<i class="gap"></i>`).join("")}</div>`
+).join("");
+
+const W = 96;
+const GUTTER = 5;
+const S = (t, c = "") => ({ t, c });
+const len = (segs) => segs.reduce((n, s) => n + [...s.t].length, 0);
+const pad = (segs, w) => [...segs, S(" ".repeat(Math.max(0, w - len(segs))))];
+const spread = (left, right, w = W) => [...left, S(" ".repeat(Math.max(1, w - len(left) - len(right)))), ...right];
+const indent = (label = "") => [S(label.padEnd(GUTTER), "o bold")];
+
+const CATEGORY = { READ: "b", GREP: "b", EDIT: "g", WRITE: "g", BASH: "o", AGENT: "w" };
+const METER = ["▁▃▅▇", "▃▅▇▅", "▅▇▅▃", "▇▅▃▁", "▅▃▁▃", "▃▁▃▅"];
+const RUNNING = ["·  ", "·· ", "···", " ··", "  ·", "   "];
+const STEPS = ["b", "b", "b", "b", "o", "w", "b", "o", "g", null, null, null, null, null, null, null];
+
+let tick = 0;
+
+function dotMatrix(text) {
+  const glyphs = [...text].map((ch) => GLYPHS[ch] ?? GLYPHS[" "]);
+  return [0, 1, 2, 3, 4].map((r) =>
+    glyphs.flatMap((g) => [...[...g[r]].map((p) => (p === "#" ? S("● ", "w") : S("· ", "dim"))), S(" ")]),
+  );
+}
+
+function render() {
+  const rows = [];
+  const push = (segs, note, cls = "") => rows.push({ segs, note, cls });
+  const blank = () => push([S("")]);
+  const body = (segs, note, label = "") => push([...indent(label), ...segs], note);
+  const user = (text, note) => push([S("> ", "k"), S(text, "w")], note, "user");
+
+  const tool = (name, arg, state, time, note) => {
+    const cat = CATEGORY[name];
+    const left = [...indent(), S("■ ", cat), S(name.padEnd(8), `${cat} bold`), S(arg, "k")];
+    const right = state === "run" ? [S(RUNNING[tick % RUNNING.length], "k")] : [S("✓", "g"), S(time.padStart(7), "k")];
+    push(spread(left, right), note);
+  };
+
+  user("why are some requests to /api/search returning 502 after the deploy?", "UserMessage · stock, Claude Code theme");
+  blank();
+  tool("READ", "server/server.go", "done", "0.21s", "ToolUse · one row per call, colour = category");
+  tool("GREP", '"IdleTimeout" server', "done", "0.08s");
+  tool("BASH", "go test ./server/... -run TestKeepAlive", "done", "3.40s");
+  tool("AGENT", "explore · proxy upstream timeout settings", "done", "12.1s");
+  push(spread([...indent(), S("■", "b"), S("■", "b"), S("■", "b"), S("■ ", "b"), S("READ 3 · GREP 1", "k")], [S("✓", "g"), S("0.44s".padStart(7), "k")]), "ToolGroup · folded run");
+  blank();
+
+  dotMatrix("FINDINGS").forEach((r, i) => body(r, i === 0 ? "AssistantMessage · turn number + h1 dot-matrix" : undefined, i === 0 ? "01" : ""));
+  blank();
+  body([S("The proxy reuses connections the server already closed. The server's "), S("IdleTimeout", "b")]);
+  body([S("is "), S("30s", "bold hl"), S(", but the proxy keeps idle connections for 60s, so a request that lands")]);
+  body([S("on a connection idle for 30 to 60s gets a reset and returns a 502.")]);
+  blank();
+  body([S(" 01 ", "chip"), S("  ROOT CAUSE", "w bold")], "h2 · numbered ink chip");
+  blank();
+  body([S(" 1 ", "chip-o"), S(" The deploy lowered "), S("IdleTimeout", "b"), S(" from 90s to 30s.")], "ordered list · orange number chips");
+  body([S(" 2 ", "chip-o"), S(" The proxy still pools idle connections for 60s and reuses dead ones.")]);
+  body([S(" 3 ", "chip-o"), S(" A reset on a reused connection surfaces as a 502, with no retry.")]);
+  blank();
+
+  body([S("— TIMEOUTS", "k bold")], "h3 · grey caps");
+  const cols = [["LAYER", 14, "l"], ["IDLE TIMEOUT", 12, "r"], ["RESETS/MIN", 10, "r"]];
+  const cell = (text, w, align) => (align === "r" ? text.padStart(w) : text.padEnd(w));
+  const tableW = cols.reduce((n, c) => n + c[1], 0) + 2 * (cols.length - 1);
+  body(cols.map(([h, w, a], i) => S(cell(h, w, a) + (i < cols.length - 1 ? "  " : ""), "k")), "table · rules only, numbers right-aligned");
+  body([S("─".repeat(tableW), "rule")]);
+  [["proxy", "60s", "0"], ["server, before", "90s", "0"], ["server, after", "30s", "41"]].forEach((r) =>
+    body(r.map((v, i) => S(cell(v, cols[i][1], cols[i][2]) + (i < cols.length - 1 ? "  " : "")))),
+  );
+  body([S("─".repeat(tableW), "rule")]);
+  blank();
+
+  const codeW = 66;
+  const code = [
+    [S("func ", "o"), S("newServer", "b"), S("(router http.Handler) *http.Server {")],
+    [S("    return ", "o"), S("&http.Server{")],
+    [S("        Addr:        "), S('":8080"', "g"), S(",")],
+    [S("        Handler:     router,")],
+    [S("        IdleTimeout: 30 * time.Second, "), S("// was 90s", "k ital")],
+    [S("    }")],
+    [S("}")],
+  ];
+  const codeRow = (segs) => [S(" ", "cb"), ...segs.map((s) => S(s.t, `${s.c} cb`)), S(" ".repeat(Math.max(0, codeW - 2 - len(segs))), "cb"), S(" ", "cb")];
+  body(codeRow(spread([S("GO", "k")], [S("copy", "k")], codeW - 2)), "code · raised ground, language + copy button");
+  code.forEach((l, i) => body(codeRow(l)));
+  blank();
+
+  body([S("▎ ", "rule"), S("the proxy keeps idle upstream connections for 60s unless told otherwise.", "k")], "quote · rule-coloured rail");
+  blank();
+  body([S(" NOTE ", "chip-o"), S("  Keep the server idle timeout above the proxy's", "w bold")], "callout · orange chip label");
+  blank();
+  body([S("☑ ", "g"), S("reproduced locally with a 45s idle gap", "k strike")], "tasks · done fades and strikes through");
+  body([S("☐ ", "o"), S("raise IdleTimeout back above 60s")]);
+  body([S("▪ ", "o"), S("bullets are orange squares")]);
+  blank();
+  push([...indent(), S("■ ", "o"), S("BOUNCED", "w bold"), S("  4.2s", "k")], "TurnDuration · gear verb, past tense");
+  blank();
+
+  user("add a test for the idle connection case");
+  blank();
+  tool("READ", "server/server_test.go", "done", "0.12s");
+  tool("EDIT", "server/server_test.go", "run", "", "ToolUse · running");
+  blank();
+  push([S("✻ ", "o"), S(["SEQUENCING", "SAMPLING", "PATCHING"][Math.floor(tick / 40) % 3], "o"), S(" " + METER[tick % METER.length], "o"), S(" (8s · ↓ 1.1k tokens · esc to interrupt)", "k")], "Spinner · gear verb + level meter");
+  blank();
+
+  const playhead = tick % 9;
+  const steps = STEPS.flatMap((cat, i) => [cat ? S("■", i === playhead ? "ph" : cat) : S("·", "dim"), S(i % 4 === 3 ? "   " : " ")]);
+  push([S("SEQ  ", "k"), ...steps], "step sequencer · one step per tool call", "proposed");
+  blank();
+
+  push([S("─".repeat(W), "rule")], "prompt · engine-owned");
+  push([S("> ", "k"), S("also cover the proxy retry path"), S(" ", "cursor")]);
+  push([S("─".repeat(W), "rule")]);
+  const fill = 3;
+  push([
+    S("◉", "b"), S(" MODEL ", "k"), S("opus 5.5", "w bold"), S("   "),
+    S("◉", "g"), S(" EFFORT ", "k"), S("xhigh", "w bold"), S("   "),
+    S("◉", "o"), S(" TURN ", "k"), S("02", "w bold"), S("   "),
+    S("◉", "w"), S(" CONTEXT ", "k"), S("█".repeat(fill), "o"), S("█".repeat(10 - fill), "dim"), S(" 34%", "w bold"), S(" 340.0k", "k"),
+  ], "statusline.sh · knobs");
+  push([S("api", "o bold"), S("  ·  ", "k"), S("main ", "w"), S("+2 ~1", "o"), S("  ·  ", "k"), S("14:02", "w"), S("  ·  ", "k"), S("12°C overcast", "w")], "statusline.sh · location");
+
+  document.getElementById("term").innerHTML = rows
+    .map(({ segs, note, cls }) => {
+      const cells = segs.map(({ t, c }) => `<span class="${c}">${esc(t)}</span>`).join("");
+      const isProposed = cls === "proposed";
+      const noteHtml = note ? `<span class="note${isProposed ? " proposed" : ""}">${isProposed ? "proposed · " : ""}${note}</span>` : "";
+      return `<div class="row${cls === "user" ? " user" : ""}">${cells || " "}${noteHtml}</div>`;
+    })
+    .join("");
+}
+
+document.querySelectorAll("[data-theme-choice]").forEach((button) =>
+  button.addEventListener("click", () => {
+    document.documentElement.dataset.theme = button.dataset.themeChoice;
+    document.querySelectorAll("[data-theme-choice]").forEach((b) => b.classList.toggle("on", b === button));
+  }),
+);
+document.getElementById("notes").addEventListener("click", (event) => {
+  document.body.classList.toggle("hide-notes");
+  event.currentTarget.classList.toggle("on");
+});
+
+render();
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  setInterval(() => {
+    tick++;
+    render();
+  }, 140);
+}
+</script>
+</body>
+</html>

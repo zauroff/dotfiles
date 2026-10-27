@@ -31,7 +31,7 @@ require("lazy").setup({
         -- version = "*", -- try installing the latest stable version for plugins that support semver
     },
     dev = { path = "~/repos/personal", fallback = true },
-    install = { colorscheme = { "gruvbox", "tokyonight", "habamax" } },
+    install = { colorscheme = { "boltz", "habamax" } },
     checker = {
         enabled = true, -- check for plugin updates periodically
         notify = false, -- notify on update

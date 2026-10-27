@@ -16,16 +16,14 @@ fi
 # --- Ghostty ---
 GHOSTTY_CONFIG="$(readlink -f "$HOME/.config/ghostty/config" 2>/dev/null || echo "$HOME/.config/ghostty/config")"
 if [ -f "$GHOSTTY_CONFIG" ]; then
-    # The background line overrides the theme's own background, so it has to flip
-    # alongside it or light mode inherits the dark #1f1f1f. The shader patterns are
-    # deliberately unanchored so they keep matching while those lines are commented out.
+    # The boltz themes set their own background, so only the theme line flips. The
+    # shader patterns are deliberately unanchored so they keep matching while those
+    # lines are commented out.
     if [ "$target" = "light" ]; then
-        sed -i '' 's/^theme = vscode-2026-dark$/theme = vscode-2026-light/' "$GHOSTTY_CONFIG"
-        sed -i '' 's/^background = #121314$/background = #FFFFFF/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^theme = boltz-dark$/theme = boltz-light/' "$GHOSTTY_CONFIG"
         sed -i '' 's/custom-shader = crt\.glsl/custom-shader = crt-light.glsl/' "$GHOSTTY_CONFIG"
     else
-        sed -i '' 's/^theme = vscode-2026-light$/theme = vscode-2026-dark/' "$GHOSTTY_CONFIG"
-        sed -i '' 's/^background = #FFFFFF$/background = #121314/' "$GHOSTTY_CONFIG"
+        sed -i '' 's/^theme = boltz-light$/theme = boltz-dark/' "$GHOSTTY_CONFIG"
         sed -i '' 's/custom-shader = crt-light\.glsl/custom-shader = crt.glsl/' "$GHOSTTY_CONFIG"
     fi
 fi
@@ -59,25 +57,17 @@ echo "$target" > "$HOME/.config/nvim/.theme-mode"
 VSCODE_SETTINGS="$HOME/Library/Application Support/Code/User/settings.json"
 VSCODE_SETTINGS="$(readlink -f "$VSCODE_SETTINGS" 2>/dev/null || echo "$VSCODE_SETTINGS")"
 if [ -f "$VSCODE_SETTINGS" ]; then
-    if [ "$target" = "light" ]; then
-        sed -i '' 's/"workbench.colorTheme": "Gruvbox Dark Soft"/"workbench.colorTheme": "Gruvbox Light Soft"/' "$VSCODE_SETTINGS"
-    else
-        sed -i '' 's/"workbench.colorTheme": "Gruvbox Light Soft"/"workbench.colorTheme": "Gruvbox Dark Soft"/' "$VSCODE_SETTINGS"
-    fi
+    [ "$target" = "light" ] && vscode_theme="Boltz Light" || vscode_theme="Boltz Dark"
+    sed -i '' -E "s/\"workbench.colorTheme\": \"[^\"]*\"/\"workbench.colorTheme\": \"$vscode_theme\"/" "$VSCODE_SETTINGS"
 fi
 
 # --- Claude Code ---
-# Dark uses the custom theme in claude/themes/vscode-2026-dark.json. There is no
-# light counterpart, so light falls back to the built-in. Resolve the symlink
-# first for the same reason as VSCode above.
+# Custom themes in claude/themes/boltz-{dark,light}.json. The boltz mod follows
+# this setting. Resolve the symlink first for the same reason as VSCode above.
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
 CLAUDE_SETTINGS="$(readlink -f "$CLAUDE_SETTINGS" 2>/dev/null || echo "$CLAUDE_SETTINGS")"
 if [ -f "$CLAUDE_SETTINGS" ]; then
-    if [ "$target" = "light" ]; then
-        sed -i '' 's/"theme": "custom:vscode-2026-dark"/"theme": "light"/' "$CLAUDE_SETTINGS"
-    else
-        sed -i '' 's/"theme": "light"/"theme": "custom:vscode-2026-dark"/' "$CLAUDE_SETTINGS"
-    fi
+    sed -i '' -E "s/\"theme\": \"(custom:[^\"]*|light|dark)\"/\"theme\": \"custom:boltz-$target\"/" "$CLAUDE_SETTINGS"
 fi
 
 # --- Save state ---

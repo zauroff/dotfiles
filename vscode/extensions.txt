@@ -1,4 +1,3 @@
-alisterpublisher.pastel-peach-theme
 anthropic.claude-code
 asvetliakov.vscode-neovim
 bodil.file-browser
@@ -8,8 +7,6 @@ emeraldwalk.runonsave
 esbenp.prettier-vscode
 github.vscode-pull-request-github
 golang.go
-jdinhlife.gruvbox
-kafwe.orng-vscode
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance
@@ -18,12 +15,6 @@ ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode.remote-explorer
-nninept.macintosh-theme
 redhat.vscode-xml
 redhat.vscode-yaml
-seahyx.woody-theme
-shoizz.dimmed
-sinedied.vscode-windows-xp-theme
 sirmspencer.vscode-autohide
-thiagolciobittencourt.ubuntuvscode
-tomphilbin.gruvbox-themes

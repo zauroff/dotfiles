@@ -10,12 +10,11 @@ local function read_theme_mode()
     return "dark"
 end
 
--- Both modes use nvim/colors/asiimov.lua, which picks its palette from
--- 'background'. The previous VS Code 2026 ports stay in nvim/colors as
--- vscode2026 and vscode2026-light.
+-- Both modes use nvim/colors/boltz.lua, which picks its palette from
+-- 'background'.
 local function apply_theme()
     vim.o.background = read_theme_mode() == "light" and "light" or "dark"
-    pcall(vim.cmd.colorscheme, "asiimov")
+    pcall(vim.cmd.colorscheme, "boltz")
 end
 
 local function watch_theme_file()
@@ -37,14 +36,8 @@ local function watch_theme_file()
 end
 
 return {
-    {
-        "ellisonleao/gruvbox.nvim",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            require("gruvbox").setup({})
-        end,
-    },
+    { "folke/tokyonight.nvim", enabled = false },
+    { "catppuccin/nvim", name = "catppuccin", enabled = false },
     -- Let LazyVim apply our theme as its final colorscheme step, otherwise
     -- LazyVim re-applies its default (tokyonight) after our plugins load and
     -- clobbers whatever apply_theme() set.

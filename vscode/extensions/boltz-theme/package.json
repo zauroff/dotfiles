@@ -1,0 +1,29 @@
+{
+  "name": "boltz-theme",
+  "displayName": "Boltz",
+  "description": "Boltz color theme, dark and light. Palette in boltz/reference.html.",
+  "publisher": "dzauroff1",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "id": "Boltz Dark",
+        "label": "Boltz Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/boltz-dark.json"
+      },
+      {
+        "id": "Boltz Light",
+        "label": "Boltz Light",
+        "uiTheme": "vs",
+        "path": "./themes/boltz-light.json"
+      }
+    ]
+  }
+}

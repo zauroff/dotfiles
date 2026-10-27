@@ -116,7 +116,7 @@
     }
   },
   "tui": "fullscreen",
-  "theme": "custom:vscode-2026-dark",
+  "theme": "custom:boltz-dark",
   "editorMode": "vim",
   "verbose": false
 }

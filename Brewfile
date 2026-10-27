@@ -24,5 +24,6 @@ cask "visual-studio-code"
 
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
-cask "font-ibm-plex-mono"
-cask "font-newsreader"
+cask "font-barlow"
+cask "font-barlow-semi-condensed"
+cask "font-martian-mono"

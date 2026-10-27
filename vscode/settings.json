@@ -47,24 +47,7 @@
   "workbench.colorCustomizations": {
     "editorGhostText.border": "#ff000050",
     "editorGhostText.foreground": "#ff000050",
-    "scrollbarSlider.background": "#c494df60",
-    "scrollbarSlider.hoverBackground": "#c494df90",
-    "scrollbarSlider.activeBackground": "#c6a0f6",
     "editorOverviewRuler.border": "#00000000",
-    "[Gruvbox Dark Soft]": {
-      "editor.lineHighlightBackground": "#3c3836",
-      "editor.lineHighlightBorder": "#504945",
-      "editorLineNumber.activeForeground": "#fabd2f",
-      "list.activeSelectionBackground": "#3c3836",
-      "list.inactiveSelectionBackground": "#3c3836",
-    },
-    "[Gruvbox Light Soft]": {
-      "editor.lineHighlightBackground": "#ebdbb2",
-      "editor.lineHighlightBorder": "#d5c4a1",
-      "editorLineNumber.activeForeground": "#b57614",
-      "list.activeSelectionBackground": "#ebdbb2",
-      "list.inactiveSelectionBackground": "#ebdbb2",
-    },
   },
   "task.allowAutomaticTasks": "on",
   "go.inlayHints.assignVariableTypes": true,
@@ -124,6 +107,6 @@
   "chat.fontSize": 18,
   "chat.disableAIFeatures": true,
   "security.workspace.trust.untrustedFiles": "open",
-  "workbench.colorTheme": "orng Dark",
+  "workbench.colorTheme": "Boltz Dark",
   "editor.minimap.enabled": false,
 }
