@@ -14,7 +14,6 @@ brew "prettier"
 
 brew "jq"
 brew "gh"
-brew "librsvg"
 
 cask "ghostty"
 cask "wezterm"

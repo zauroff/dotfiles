@@ -5,9 +5,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(mmdc:*)",
-      "Bash(rsvg-convert:*)",
-      "Bash(magick:*)",
       "Bash(wezterm cli:*)"
     ]
   },

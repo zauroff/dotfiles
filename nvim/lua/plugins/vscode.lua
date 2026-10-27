@@ -13,7 +13,6 @@ end
 return {
     { "ThePrimeagen/refactoring.nvim", vscode = true },
     { "olexsmir/gopher.nvim", vscode = true },
-    { "obsidian-nvim/obsidian.nvim", vscode = true },
     { "nvim-treesitter/nvim-treesitter-textobjects", vscode = true },
     -- Runs unchanged; config.vscode_whichkey redraws its invisible float as editor decorations. helix (LazyVim's
     -- preset) is one column up to 75 rows tall against vscode-neovim's 100-line grid, so pack columns instead, capped

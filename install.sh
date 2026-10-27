@@ -138,10 +138,6 @@ echo "Linked skills/ -> ~/.claude/skills and ~/.codex/skills"
 ln -sf "$DOTFILES/claude/CLAUDE.md" "$HOME/CLAUDE.md"
 echo "Linked claude/CLAUDE.md -> ~/CLAUDE.md"
 
-# Install diagram tools used by the visualize skill's maker agents
-command -v mmdc >/dev/null 2>&1 || npm i -g @mermaid-js/mermaid-cli
-echo "Checked diagram tools (mmdc)"
-
 # Link Obsidian theme into the vault
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Documents/DANIEL ZAUROFF}"
 if [ -d "$OBSIDIAN_VAULT/.obsidian" ]; then
