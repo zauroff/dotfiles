@@ -1,16 +1,17 @@
 # Font
 font-family = "JetBrainsMono Nerd Font"
-font-style = Bold
-font-size = 20
-font-thicken = true
-adjust-cell-height = 20%
+font-size = 16
+# Regular weight: font-style = Bold and font-thicken = true made everything heavy.
+font-thicken = false
+bold-is-bright = false
+adjust-cell-height = 8%
 alpha-blending = linear-corrected
 
 # Window
 window-width = 120
 window-height = 120
-window-padding-x = 2
-window-padding-y = 0
+window-padding-x = 16
+window-padding-y = 12
 window-padding-balance = true
 window-padding-color = background
 window-colorspace = srgb

@@ -88,10 +88,13 @@ if [ -d "/Applications/iTerm.app" ] || [ -d "$HOME/Applications/iTerm.app" ]; th
   # profile. iTerm2 overwrites its plist on quit, so only set it while closed.
   if pgrep -x iTerm2 >/dev/null 2>&1; then
     echo "NOTE: iTerm2 is running; set the \"dotfiles\" profile as default yourself (Settings > Profiles > Other Actions)"
+    echo "NOTE: iTerm2 is running; set Settings > Advanced > \"Tab bar height (points) for the Minimal theme\" to 28 yourself"
   else
     defaults write com.googlecode.iterm2 "Default Bookmark Guid" \
       -string "$(jq -r .Guid "$DOTFILES/iterm2/profile.json")"
     echo "Set iTerm2 default profile to dotfiles"
+    defaults write com.googlecode.iterm2 compactMinimalTabBarHeight -float 28
+    echo "Set iTerm2 Minimal tab bar height to 28pt"
   fi
 else
   echo "Skipped iTerm2 (not installed)"

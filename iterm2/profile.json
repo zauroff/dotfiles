@@ -5,13 +5,13 @@
   "Use Separate Colors for Light and Dark Mode": false,
   "Use Bright Bold": false,
 
-  "Normal Font": "BlexMonoNF-Medium 16",
+  "Normal Font": "JetBrainsMonoNF-Regular 16",
   "Use Bold Font": true,
   "Use Italic Font": true,
   "Use Non-ASCII Font": false,
   "ASCII Anti Aliased": true,
   "Horizontal Spacing": 1.0,
-  "Vertical Spacing": 1.0,
+  "Vertical Spacing": 1.08,
 
   "Columns": 120,
   "Rows": 120,
@@ -26,6 +26,7 @@
   "Unlimited Scrollback": false,
   "Prompt Before Closing 2": false,
   "Mouse Reporting": true,
+  "Show Mark Indicators": false,
   "Terminal Type": "xterm-256color",
   "Custom Directory": "Recycle",
   "Option Key Sends": 2,
