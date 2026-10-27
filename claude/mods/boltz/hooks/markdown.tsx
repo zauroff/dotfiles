@@ -52,6 +52,9 @@ type MarkdownContext = {
 
 const MAX_RAIL_ROWS = 2000;
 const COPY_LABEL = "copy";
+const DIFF_LANGUAGES = new Set(["diff", "patch"]);
+const DIFF_HEADER =
+  /^(diff --git |index [0-9a-f]|--- (a\/|\/dev\/null)|\+\+\+ (b\/|\/dev\/null))/;
 const FENCE = /^\s{0,3}(`{3,}|~{3,})\s*([\w+#.-]*)/;
 const HEADING = /^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/;
 const RULE = /^\s{0,3}([-*_])(\s*\1){2,}\s*$/;
@@ -503,7 +506,10 @@ function renderTable(
   const floors = naturals.map((natural, c) =>
     Math.min(
       natural,
-      Math.max(MIN_TABLE_COLUMN, Math.min(MAX_TABLE_FLOOR, ...cellsOf(c).map(longestWord))),
+      Math.max(
+        MIN_TABLE_COLUMN,
+        Math.min(MAX_TABLE_FLOOR, ...cellsOf(c).map(longestWord)),
+      ),
     ),
   );
   const widths = columnWidths(
@@ -528,7 +534,8 @@ function renderTable(
         : "flex-start";
   };
   const rule = "─".repeat(
-    widths.reduce((sum, width) => sum + width, 0) + TABLE_GAP * (columnCount - 1),
+    widths.reduce((sum, width) => sum + width, 0) +
+      TABLE_GAP * (columnCount - 1),
   );
 
   return (
@@ -557,6 +564,27 @@ function renderTable(
   );
 }
 
+function diffColor(palette: Palette, line: string): string {
+  if (DIFF_HEADER.test(line)) return palette.grey;
+  if (line.startsWith("@@")) return palette.blue;
+  if (line.startsWith("+")) return palette.green;
+  if (line.startsWith("-")) return palette.red;
+  return palette.ink;
+}
+
+function renderDiff(ctx: MarkdownContext, source: string): RenderNode {
+  const { Box, Text } = ctx.els;
+  return (
+    <Box flexDirection="column">
+      {source.split("\n").map((line) => (
+        <Text color={diffColor(ctx.palette, line)}>
+          {line === "" ? " " : line}
+        </Text>
+      ))}
+    </Box>
+  );
+}
+
 function renderBlock(ctx: MarkdownContext, block: Block): RenderNode {
   const { Box, Text, Code } = ctx.els;
   const { palette } = ctx;
@@ -579,18 +607,33 @@ function renderBlock(ctx: MarkdownContext, block: Block): RenderNode {
       const copyKey = `copy:${ctx.codeBlocks.count}`;
       const hasHeader = block.language !== "" || onCopy !== undefined;
       return (
-        <Box flexDirection="column" backgroundColor={palette.codeBg} paddingX={1}>
+        <Box
+          flexDirection="column"
+          backgroundColor={palette.codeBg}
+          paddingX={1}
+        >
           {hasHeader && (
             <Box flexDirection="row" justifyContent="space-between">
               <Text color={palette.grey}>{block.language.toUpperCase()}</Text>
               {onCopy !== undefined && (
-                <Button key={copyKey} plain onPress={(press) => onCopy(block.source, press)}>
+                <Button
+                  key={copyKey}
+                  plain
+                  onPress={(press) => onCopy(block.source, press)}
+                >
                   <Text color={palette.grey}>{COPY_LABEL}</Text>
                 </Button>
               )}
             </Box>
           )}
-          <Code source={block.source} language={block.language || undefined} />
+          {DIFF_LANGUAGES.has(block.language.toLowerCase()) ? (
+            renderDiff(ctx, block.source)
+          ) : (
+            <Code
+              source={block.source}
+              language={block.language || undefined}
+            />
+          )}
         </Box>
       );
     }
@@ -685,7 +728,14 @@ export function renderMarkdown(
   onCopy?: CopyCode,
 ): RenderNode {
   return renderBlocks(
-    { els, palette, columns, sections: { count: 0 }, codeBlocks: { count: 0 }, onCopy },
+    {
+      els,
+      palette,
+      columns,
+      sections: { count: 0 },
+      codeBlocks: { count: 0 },
+      onCopy,
+    },
     parseBlocks(markdown),
   );
 }

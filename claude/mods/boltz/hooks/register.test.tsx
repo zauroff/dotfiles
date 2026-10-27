@@ -70,7 +70,9 @@ function childrenOf(node: unknown): unknown[] {
 }
 
 function textOf(node: unknown): string {
-  return typeof node === "string" ? node : childrenOf(node).map(textOf).join("");
+  return typeof node === "string"
+    ? node
+    : childrenOf(node).map(textOf).join("");
 }
 
 function boxesOf(node: unknown): DrawnNode[] {
@@ -89,10 +91,16 @@ test("leaves prompts as Claude Code draws them", async ($, on) => {
     surface: "terminal",
     component: "UserMessage",
     requestId: "prompt-stock",
-    props: { text: "why is agent-3 skipped?", origin: { kind: "composer" }, isExpanded: false },
+    props: {
+      text: "why is agent-3 skipped?",
+      origin: { kind: "composer" },
+      isExpanded: false,
+    },
   });
 
-  expect(await ui.find({ type: "Text", text: "stock why is agent-3 skipped?" })).toBeDefined();
+  expect(
+    await ui.find({ type: "Text", text: "stock why is agent-3 skipped?" }),
+  ).toBeDefined();
   expect(await ui.find({ type: "Text", text: /▶/ })).toBeUndefined();
   await ui.unmount();
 });
@@ -207,7 +215,12 @@ test("/boltz off reverts the tool group to stock", async ($, on) => {
 
 const THEME_CASES = [
   { name: "light", setting: "light", files: {}, want: "light" },
-  { name: "daltonized dark", setting: "dark-daltonized", files: {}, want: "dark" },
+  {
+    name: "daltonized dark",
+    setting: "dark-daltonized",
+    files: {},
+    want: "dark",
+  },
   {
     name: "custom theme with a light base",
     setting: "custom:paper",
@@ -237,7 +250,11 @@ for (const tc of THEME_CASES) {
       const text = files[e.path];
       return text === undefined ? { deny: "ENOENT" } : { value: text };
     });
-    const ran = await $.command.run({ command: "boltz", args: "auto", ...SUBMIT });
+    const ran = await $.command.run({
+      command: "boltz",
+      args: "auto",
+      ...SUBMIT,
+    });
     const ui = await $.ui.mount(BASH_ROW);
 
     expect(ran.text).toBe(`boltz auto (${tc.want}).`);
@@ -304,13 +321,21 @@ test("stacks a table into label rows when the pane is too narrow", async ($) => 
 });
 
 test("numbers a reply while it is still being written", async ($, on) => {
-  let stored: { role: "user" | "assistant"; text: string; toolUses: never[] }[] = [
+  let stored: {
+    role: "user" | "assistant";
+    text: string;
+    toolUses: never[];
+  }[] = [
     { role: "user", text: "first question", toolUses: [] },
     { role: "assistant", text: "first answer", toolUses: [] },
   ];
   on("session.messages", () => ({ value: stored }));
   on("prompt.submit", (_$, e) => ({ text: e.text }));
-  await $.prompt.submit({ text: "second question", wait: false, origin: { kind: "composer" } });
+  await $.prompt.submit({
+    text: "second question",
+    wait: false,
+    origin: { kind: "composer" },
+  });
   stored = [...stored, { role: "user", text: "second question", toolUses: [] }];
   const ui = await $.ui.mount({
     plugin: "boltz",
@@ -335,7 +360,12 @@ test("strips rails, gutters and code rules from copied text", () => {
   ].join("\n");
 
   expect(cleanCopy(copied)).toBe(
-    ["Run the tests first:", "", "go test ./server/...", "legacy boxed line"].join("\n"),
+    [
+      "Run the tests first:",
+      "",
+      "go test ./server/...",
+      "legacy boxed line",
+    ].join("\n"),
   );
 });
 
@@ -352,7 +382,10 @@ test("copies a code block's exact source from its copy button", async ($, on) =>
     surface: "terminal",
     component: "AssistantMessage",
     requestId: "copy-reply",
-    props: { text: `Here:\n\n\`\`\`go\n${source}\n\`\`\``, isFirstOfReply: true },
+    props: {
+      text: `Here:\n\n\`\`\`go\n${source}\n\`\`\``,
+      isFirstOfReply: true,
+    },
   });
 
   await ui.press({ key: "copy:1" });
@@ -369,7 +402,11 @@ test("keeps numbering the reply when a subagent's turn ends mid-turn", async ($,
   on("session.messages", () => ({ value: stored }));
   on("prompt.submit", (_$, e) => ({ text: e.text }));
   on("turn.complete", (_$, e) => ({ text: e.answer }));
-  await $.prompt.submit({ text: "second question", wait: false, origin: { kind: "composer" } });
+  await $.prompt.submit({
+    text: "second question",
+    wait: false,
+    origin: { kind: "composer" },
+  });
   await $.turn.complete({
     turnId: "sub-1",
     agentId: "agent-1",
@@ -383,10 +420,48 @@ test("keeps numbering the reply when a subagent's turn ends mid-turn", async ($,
     surface: "terminal",
     component: "AssistantMessage",
     requestId: "after-subagent",
-    props: { text: "Most likely yes, the queue is constantly full", isFirstOfReply: true },
+    props: {
+      text: "Most likely yes, the queue is constantly full",
+      isFirstOfReply: true,
+    },
   });
 
   expect(await ui.find({ type: "Text", text: "02" })).toBeDefined();
+  await ui.unmount();
+});
+
+test("colours diff blocks line by line, with or without hunk headers", async ($) => {
+  const ui = await $.ui.mount({
+    plugin: "boltz",
+    surface: "terminal",
+    component: "AssistantMessage",
+    viewport: { columns: 80, rows: 40 },
+    props: {
+      text: [
+        "```diff",
+        "--- a/app.ts",
+        "+++ b/app.ts",
+        "@@ -1,3 +1,3 @@",
+        "   useEffect(() => {",
+        "-    if (!enabled) {",
+        "+    if (enabled) {",
+        "--- removed lua comment",
+        "```",
+      ].join("\n"),
+      isFirstOfReply: true,
+    },
+  });
+  const colorOf = async (text: string) =>
+    (await ui.find({ type: "Text", text }))?.props.color;
+  const palette = PALETTES.dark;
+
+  expect(await colorOf("--- a/app.ts")).toBe(palette.grey);
+  expect(await colorOf("+++ b/app.ts")).toBe(palette.grey);
+  expect(await colorOf("@@ -1,3 +1,3 @@")).toBe(palette.blue);
+  expect(await colorOf("   useEffect(() => {")).toBe(palette.ink);
+  expect(await colorOf("-    if (!enabled) {")).toBe(palette.red);
+  expect(await colorOf("+    if (enabled) {")).toBe(palette.green);
+  expect(await colorOf("--- removed lua comment")).toBe(palette.red);
   await ui.unmount();
 });
 
@@ -396,19 +471,26 @@ test("draws summary blocks in the reply layout, in grey", async ($) => {
     surface: "terminal",
     component: "AssistantMessage",
     requestId: "summary-block",
-    props: { text: "Found it: the flag clears early.", isFirstOfReply: false, isSummary: true },
+    props: {
+      text: "Found it: the flag clears early.",
+      isFirstOfReply: false,
+      isSummary: true,
+    },
   });
   const root = (await ui.drawn()) as DrawnNode;
 
   expect(root.props?.flexDirection).toBe("row");
-  expect((await ui.find({ type: "Text", text: "Found it: the flag clears early." }))?.props.color).toBe(
-    PALETTES.dark.grey,
-  );
+  expect(
+    (await ui.find({ type: "Text", text: "Found it: the flag clears early." }))
+      ?.props.color,
+  ).toBe(PALETTES.dark.grey);
   await ui.unmount();
 });
 
 test("asks Claude to put runnable commands in copyable code blocks", async ($, on) => {
-  on("prompt.compose", () => ({ sections: [{ id: "intro", text: "You are Claude Code.", scope: "shared" }] }));
+  on("prompt.compose", () => ({
+    sections: [{ id: "intro", text: "You are Claude Code.", scope: "shared" }],
+  }));
   const composed = await $.prompt.compose({
     model: "claude-opus-5-5",
     promptModel: "claude-opus-5-5",
@@ -418,7 +500,10 @@ test("asks Claude to put runnable commands in copyable code blocks", async ($, o
     traits: [],
   });
 
-  expect(composed.sections.map((section) => section.id)).toEqual(["intro", "boltz:command-blocks"]);
+  expect(composed.sections.map((section) => section.id)).toEqual([
+    "intro",
+    "boltz:command-blocks",
+  ]);
   expect(composed.sections[1]?.text).toContain("copy button");
 });
 
@@ -428,10 +513,16 @@ test("saves reply numbers to session state when the turn ends", async ($, on) =>
     writes.push({ key: e.key, value: e.value });
     return next(e);
   });
-  on("session.messages", () => ({ value: [{ role: "user", text: "first question", toolUses: [] }] }));
+  on("session.messages", () => ({
+    value: [{ role: "user", text: "first question", toolUses: [] }],
+  }));
   on("prompt.submit", (_$, e) => ({ text: e.text }));
   on("turn.complete", (_$, e) => ({ text: e.answer }));
-  await $.prompt.submit({ text: "second question", wait: false, origin: { kind: "composer" } });
+  await $.prompt.submit({
+    text: "second question",
+    wait: false,
+    origin: { kind: "composer" },
+  });
   const ui = await $.ui.mount({
     plugin: "boltz",
     surface: "terminal",
@@ -439,9 +530,16 @@ test("saves reply numbers to session state when the turn ends", async ($, on) =>
     requestId: "persisted-reply",
     props: { text: "The answer to the second question", isFirstOfReply: true },
   });
-  await $.turn.complete({ turnId: "t2", reason: "answer", answer: "done", durationMs: 900, isAborted: false });
+  await $.turn.complete({
+    turnId: "t2",
+    reason: "answer",
+    answer: "done",
+    durationMs: 900,
+    isAborted: false,
+  });
 
-  const saved = writes.filter((write) => write.key === "replyNumbers").at(-1)?.value as Record<string, number>;
+  const saved = writes.filter((write) => write.key === "replyNumbers").at(-1)
+    ?.value as Record<string, number>;
   expect(saved["persisted-reply"]).toBe(2);
   await ui.unmount();
 });
