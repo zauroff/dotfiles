@@ -223,8 +223,6 @@ if [ -d "$(dirname "$VSCODE_USER")" ]; then
   else
     echo "Skipped VSCode extensions (no \`code\` CLI on PATH)"
   fi
-
-  echo "NOTE: run \"Enable Custom CSS and JS\" from the Command Palette, then restart"
 else
   echo "Skipped VSCode (not installed)"
 fi
