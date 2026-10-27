@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}} · report</title>
+<style>
+:root {
+  --head: "Barlow Semi Condensed", Barlow, "Arial Narrow", sans-serif;
+  --sans: Barlow, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Martian Mono", Menlo, Consolas, monospace;
+  --dot: clamp(4px, 0.62vw, 7px);
+}
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d0d0d; --surface: #171716; --frame: #2a2a28;
+  --ink: #f0f0ec; --body: #cfcfca; --grey: #8a8a85; --dim: #3a3a37; --rule: #5a5a55;
+  --orange: #ff5a1f; --blue: #3d7bff; --green: #1fc77a; --red: #ff3b30;
+  --on-chip: #0d0d0d; --hl: #3b1d12;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #e9e9e4; --surface: #f4f4f0; --frame: #c9c9c3;
+    --ink: #161616; --body: #2a2a28; --grey: #65655e; --dim: #b0b0a9; --rule: #9a9a93;
+    --orange: #cc3d00; --blue: #0047ff; --green: #007d4b; --red: #cc1a16;
+    --on-chip: #ffffff; --hl: #ffd3bf;
+  }
+}
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #e9e9e4; --surface: #f4f4f0; --frame: #c9c9c3;
+  --ink: #161616; --body: #2a2a28; --grey: #65655e; --dim: #b0b0a9; --rule: #9a9a93;
+  --orange: #cc3d00; --blue: #0047ff; --green: #007d4b; --red: #cc1a16;
+  --on-chip: #ffffff; --hl: #ffd3bf;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { margin: 0; color: var(--body); font: 400 17px/1.66 var(--sans); -webkit-font-smoothing: antialiased; transition: background 200ms, color 200ms; }
+a { color: var(--orange); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+strong { color: var(--ink); font-weight: 600; background: var(--hl); padding: 0 3px; }
+code { font: 400 0.78em var(--mono); color: var(--blue); background: var(--surface); padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+.callout code, .fig code { background: var(--bg); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.appbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; height: 46px; padding: 0 24px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--frame); font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.appbar .brand { color: var(--ink); }
+.appbar .brand i { display: inline-block; width: 8px; height: 8px; background: var(--orange); margin-right: 8px; }
+.appbar .keys { margin-left: auto; }
+.keys { display: flex; gap: 6px; }
+.keys button { font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--frame); background: var(--bg); color: var(--grey); border-radius: 6px; padding: 7px 10px; cursor: pointer; }
+.keys button:hover { color: var(--ink); border-color: var(--rule); }
+.keys button.on { background: var(--orange); border-color: var(--orange); color: var(--on-chip); }
+.keys button:focus-visible, .step:focus-visible, .plot:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+.page { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0 48px; max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+.masthead { grid-column: 1 / -1; padding: 64px 0 0; }
+.rail { position: sticky; top: 46px; align-self: start; padding: 48px 0; border-right: 1px solid var(--frame); }
+.rail ol { list-style: none; margin: 0; padding: 0; }
+.rail a { display: flex; gap: 10px; padding: 6px 0; font: 500 10.5px/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); text-decoration: none; }
+.rail a .n { width: 34px; flex-shrink: 0; text-align: right; color: var(--dim); }
+.rail a:hover, .rail a.on { color: var(--ink); }
+.rail a.on .n { color: var(--orange); }
+.rail a.on .n::before { content: "▶ "; }
+main { min-width: 0; max-width: 780px; padding-bottom: 96px; }
+
+.eyebrow { font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.eyebrow b { color: var(--orange); font-weight: 500; }
+.dots { display: inline-flex; flex-direction: column; gap: calc(var(--dot) * 0.3); margin: 30px 0 0; }
+.dots .row { display: flex; gap: calc(var(--dot) * 0.3); }
+.dots i { width: var(--dot); height: var(--dot); border-radius: 50%; background: var(--dim); opacity: 0.55; transform: scale(0.45); }
+.dots i.on { background: var(--ink); opacity: 1; transform: none; }
+h1 { margin: 26px 0 0; font: 600 clamp(30px, 3.4vw, 42px)/1.08 var(--head); letter-spacing: -0.005em; color: var(--ink); max-width: 30ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 20px 0 0; font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+.meta a { color: var(--grey); }
+.knobs { display: grid; grid-template-columns: repeat(4, 1fr); margin: 36px 0 0; border-top: 1px solid var(--frame); border-bottom: 1px solid var(--frame); }
+.knob { padding: 16px 0 18px; }
+.knob + .knob { padding-left: 20px; border-left: 1px solid var(--frame); }
+.knob .label { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.knob .label::before { content: "◉ "; color: var(--c, var(--ink)); }
+.knob .value { margin-top: 10px; font: 600 22px/1 var(--head); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+
+.sec { padding: 56px 0 0; }
+h2 { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font: 600 24px/1.1 var(--head); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
+.chip { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.04em; padding: 5px 7px; background: var(--ink); color: var(--on-chip); }
+.chip.o { background: var(--orange); }
+h3 { margin: 34px 0 12px; font: 600 14.5px/1.3 var(--head); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
+h3::before { content: "— "; }
+p { margin: 0 0 16px; max-width: 68ch; }
+.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink); }
+
+ul, ol { margin: 0 0 18px; padding: 0; list-style: none; }
+ul > li, ol.n > li { position: relative; padding-left: 34px; margin: 0 0 9px; }
+ul > li::before { content: "▪"; position: absolute; left: 8px; color: var(--orange); }
+ol.n { counter-reset: n; }
+ol.n > li { counter-increment: n; }
+ol.n > li::before { content: counter(n); position: absolute; left: 0; top: 4px; min-width: 20px; text-align: center; font: 600 10.5px/1 var(--mono); padding: 4px 5px; background: var(--orange); color: var(--on-chip); }
+ul.tasks > li::before { left: 4px; font-size: 16px; line-height: 1.6; }
+ul.tasks > li.done { color: var(--grey); }
+ul.tasks > li.done::before { content: "☑"; color: var(--green); }
+ul.tasks > li.open::before { content: "☐"; color: var(--orange); }
+
+.tldr { display: grid; grid-template-columns: 110px 1fr; margin: 24px 0 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.tldr dt, .tldr dd { margin: 0; padding: 13px 0; }
+.tldr dt + dd ~ dt, .tldr dt + dd ~ dd { border-top: 1px solid var(--frame); }
+.tldr dt { font: 500 10.5px/2.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.tldr dd { color: var(--ink); }
+
+table { width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 15.5px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font: 500 10px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 10px 14px 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+td { padding: 11px 14px 11px 0; vertical-align: top; border-bottom: 1px solid var(--frame); }
+tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+td.key { color: var(--ink); white-space: nowrap; }
+.tag { display: inline-block; font: 500 9.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 6px; border: 1px solid currentColor; white-space: nowrap; color: var(--grey); }
+.tag.o { color: var(--on-chip); background: var(--orange); border-color: var(--orange); }
+.tag.b { color: var(--blue); } .tag.g { color: var(--green); } .tag.r { color: var(--red); } .tag.w { color: var(--ink); }
+
+.code { margin: 6px 0 22px; background: var(--surface); border: 1px solid var(--frame); }
+.code-tab { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 1px solid var(--frame); font: 500 9.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.code-tab span { text-transform: none; letter-spacing: 0.02em; }
+.code-tab b { margin-left: auto; font-weight: 500; color: var(--blue); }
+.code-tab button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--grey); background: none; border: 0; padding: 0; cursor: pointer; }
+.code-tab button:hover { color: var(--orange); }
+pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 12.2px/1.7 var(--mono); color: var(--ink); }
+pre code { font: inherit; color: inherit; background: none; padding: 0; white-space: pre; }
+pre .k { color: var(--orange); } pre .f { color: var(--blue); } pre .s { color: var(--green); } pre .c { color: var(--grey); font-style: italic; }
+pre .warn { color: var(--orange); } pre .err { color: var(--red); } pre .info { color: var(--blue); } pre .debug { color: var(--grey); }
+pre .add { color: var(--green); } pre .del { color: var(--red); }
+pre .hl { background: var(--hl); display: inline-block; width: 100%; }
+
+.callout { margin: 8px 0 24px; padding: 16px 18px 4px; background: var(--surface); border: 1px solid var(--frame); }
+.callout .head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font: 600 15px/1.2 var(--head); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.callout p { color: var(--ink); }
+
+a.cite { display: inline-block; font: 500 9.5px/1 var(--mono); letter-spacing: 0.04em; color: var(--grey); border: 1px solid var(--rule); padding: 3px 4px; margin: 0 1px; vertical-align: 2px; text-decoration: none; }
+a.cite:hover, a.cite:focus-visible { color: var(--orange); border-color: var(--orange); outline: none; }
+.tip { position: absolute; z-index: 30; max-width: 340px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--rule); font: 400 13.5px/1.45 var(--sans); color: var(--ink); pointer-events: none; opacity: 0; transition: opacity 120ms; }
+.tip.show { opacity: 1; }
+.tip .t { display: block; margin-bottom: 4px; font: 500 9.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+
+.fig { margin: 30px 0 32px; background: var(--surface); border: 1px solid var(--frame); }
+.fig-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 10px 14px; border-bottom: 1px solid var(--frame); }
+.fig-num { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; color: var(--orange); }
+.fig-head h4 { margin: 0; font: 600 14px/1.2 var(--head); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.fig-head .keys { margin-left: auto; }
+.fig-body { padding: 18px; }
+.fig figcaption { padding: 0 18px 16px; font-size: 14px; line-height: 1.5; color: var(--grey); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.legend span::before, .legend button::before { content: "■ "; color: var(--c); }
+.legend button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--grey); background: none; border: 0; padding: 0; cursor: pointer; }
+.legend button[aria-pressed="false"] { color: var(--dim); text-decoration: line-through; }
+.legend button[aria-pressed="false"]::before { color: var(--dim); }
+.when { font: 500 20px/1.1 var(--mono); color: var(--ink); }
+.when small { display: block; margin-top: 6px; font: 500 10px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.when .tag { margin-top: 10px; }
+
+.seq { display: grid; grid-template-columns: repeat(var(--steps), minmax(52px, 1fr)); gap: 8px; margin-top: 18px; overflow-x: auto; padding: 4px; }
+.step { display: flex; flex-direction: column; gap: 7px; padding: 0; background: none; border: 0; cursor: pointer; text-align: left; font: 500 9.5px/1.1 var(--mono); letter-spacing: 0.06em; color: var(--grey); }
+.step .num { color: var(--dim); }
+.step .cell { height: 34px; background: var(--c); opacity: 0.55; transition: opacity 120ms; }
+.step .delta { color: var(--dim); }
+.step:hover .cell { opacity: 0.85; }
+.step.on .num { color: var(--orange); }
+.step.on .num::before { content: "▶ "; }
+.step.on .cell { opacity: 1; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--orange); }
+.step.on .time { color: var(--ink); }
+.tl-detail, .detail [data-detail] { display: grid; grid-template-columns: 150px 1fr; gap: 6px 22px; }
+.tl-detail, .detail { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--frame); min-height: 110px; }
+.tl-detail h5, .detail h5 { margin: 0 0 6px; font: 600 19px/1.25 var(--head); color: var(--ink); }
+.tl-detail p, .detail p { margin: 0 0 8px; font-size: 15.5px; }
+
+svg { display: block; width: 100%; height: auto; overflow: visible; color: var(--body); }
+svg text { font-family: var(--mono); }
+svg .life { stroke: var(--rule); stroke-dasharray: 2 4; }
+svg .box { fill: var(--bg); stroke: var(--rule); }
+svg .box-on { fill: var(--bg); stroke: var(--orange); stroke-width: 1.5; }
+svg .t { font: 400 11px var(--mono); fill: currentColor; }
+svg .t-head { font: 500 11.5px var(--mono); letter-spacing: 0.08em; fill: var(--ink); }
+svg .t-small { font: 500 9.5px var(--mono); letter-spacing: 0.1em; fill: var(--grey); }
+svg .x { font: 600 14px var(--mono); fill: currentColor; }
+svg .c-ink { color: var(--ink); } svg .c-body { color: var(--body); } svg .c-grey { color: var(--grey); } svg .c-dim { color: var(--dim); }
+svg .c-orange { color: var(--orange); } svg .c-blue { color: var(--blue); } svg .c-green { color: var(--green); } svg .c-red { color: var(--red); }
+svg [class*="c-"] > line, svg [class*="c-"] > path, svg [class*="c-"] > polyline { stroke: currentColor; stroke-width: 1.6; fill: none; }
+svg [class*="c-"] > polygon, svg [class*="c-"] > circle { fill: currentColor; }
+.pick { cursor: pointer; outline: none; }
+.pick .hit { fill: transparent; }
+.pick:hover .hit { fill: color-mix(in srgb, var(--orange) 8%, transparent); }
+.pick.on .hit { fill: color-mix(in srgb, var(--orange) 14%, transparent); }
+.pick:focus-visible .hit { stroke: var(--orange); }
+.pick .num { font: 500 9.5px var(--mono); fill: var(--dim); }
+.pick.on .num { fill: var(--orange); }
+.readout { display: flex; flex-wrap: wrap; gap: 6px 20px; min-height: 20px; margin: 14px 0 6px; font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.06em; color: var(--grey); font-variant-numeric: tabular-nums; }
+.readout b { color: var(--ink); font-weight: 500; }
+.readout span::before { content: "■ "; color: var(--c); }
+.plot { outline: none; }
+
+ol.refs { border-top: 1px solid var(--rule); }
+ol.refs > li { display: grid; grid-template-columns: 44px 84px 1fr; gap: 0 14px; align-items: baseline; padding: 13px 8px 13px 0; border-bottom: 1px solid var(--frame); transition: background 400ms; }
+ol.refs > li:last-child { border-bottom-color: var(--rule); }
+ol.refs > li:target { background: var(--hl); }
+ol.refs .id { font: 600 10.5px/1 var(--mono); color: var(--ink); padding-left: 8px; }
+ol.refs .title { color: var(--ink); }
+ol.refs .src { display: block; margin-top: 3px; font: 400 11px/1.5 var(--mono); color: var(--grey); }
+
+.foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; padding: 22px 0 40px; border-top: 1px solid var(--frame); font: 500 10px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+
+@media (max-width: 980px) {
+  .page { grid-template-columns: minmax(0, 1fr); }
+  .rail { display: none; }
+  .knobs { grid-template-columns: repeat(2, 1fr); }
+  .knob:nth-child(3) { padding-left: 0; border-left: 0; }
+  .tl-detail, .detail [data-detail] { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
+@media print {
+  .appbar, .rail, .keys, .code-tab button { display: none !important; }
+  .page { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <span class="brand"><i></i>Report</span>
+  <span>{{kind}} · {{area}}</span>
+  <div class="keys" role="group" aria-label="Theme">
+    <button data-theme-choice="auto" class="on">Auto</button>
+    <button data-theme-choice="dark">Dark</button>
+    <button data-theme-choice="light">Light</button>
+  </div>
+</div>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="eyebrow"><b>■</b> {{kind}} · {{component}} · {{context}}</div>
+  <div class="dots" data-dots="{{DOT LINE 1}}|{{DOT LINE 2}}" aria-hidden="true"></div>
+  <h1>{{title}}</h1>
+  <p class="meta"><span>{{authors}}</span><span>{{date}}</span><a href="{{ticket-url}}">{{ticket}}</a></p>
+  <div class="knobs">
+    <div class="knob" style="--c: var(--red)"><div class="label">{{knob 1}}</div><div class="value">{{value 1}}</div></div>
+    <div class="knob" style="--c: var(--blue)"><div class="label">{{knob 2}}</div><div class="value">{{value 2}}</div></div>
+    <div class="knob" style="--c: var(--orange)"><div class="label">{{knob 3}}</div><div class="value">{{value 3}}</div></div>
+    <div class="knob" style="--c: var(--green)"><div class="label">{{knob 4}}</div><div class="value">{{value 4}}</div></div>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Sections"><ol></ol></nav>
+
+<main>
+
+<section id="tldr" class="sec" data-rail="TL;DR">
+<h2>TL;DR</h2>
+<p class="lede">Two or three sentences a reader can stop after: what happened or what changes, and why.</p>
+<dl class="tldr">
+  <dt>{{row}}</dt><dd>One sentence.</dd>
+  <dt>{{row}}</dt><dd>One sentence.</dd>
+  <dt>{{row}}</dt><dd>One sentence.</dd>
+  <dt>{{row}}</dt><dd>One sentence.</dd>
+</dl>
+</section>
+
+<!-- investigation:start -->
+<section id="context" class="sec">
+<h2>Context</h2>
+<p>What happened and when, in order, with absolute UTC times. Cite every event <a class="cite" href="#ref-1">R1</a>.</p>
+
+<figure class="fig" id="figure-1" data-timeline>
+  <div class="fig-head"><span class="fig-num">FIG 1</span><h4>Incident timeline</h4></div>
+  <div class="fig-body"></div>
+  <figcaption>Events on {{date}}, UTC, evenly spaced. The delta under each step is the time since the previous event. Select a step, or use the arrow keys.</figcaption>
+  <ol class="tl-data sr-only">
+    <li data-time="13:58:10" data-kind="change" data-refs="1"><b>Title of the event.</b> <span>One or two sentences of detail.</span></li>
+    <li data-time="14:02:05" data-kind="cause" data-refs="1"><b>Title of the event.</b> <span>One or two sentences of detail.</span></li>
+  </ol>
+</figure>
+
+<h3>Scope</h3>
+<p>What was affected and what was not.</p>
+</section>
+
+<section id="findings" class="sec">
+<h2>Findings</h2>
+<div class="callout">
+  <div class="head"><span class="chip o">Root cause</span>{{one-line cause}}</div>
+  <p>The cause in two or three sentences, naming the function and file.</p>
+</div>
+<p>An explorer figure of the failing path goes here, then one h3 per piece of evidence.</p>
+<h3>Evidence 1: {{source}}</h3>
+<p>What the evidence shows, then the excerpt.</p>
+<h3>Ruled out</h3>
+<table>
+<thead><tr><th>Hypothesis</th><th>Verdict</th><th>Evidence</th></tr></thead>
+<tbody>
+<tr><td class="key">{{hypothesis}}</td><td><span class="tag">Ruled out</span></td><td>Why, with a citation.</td></tr>
+<tr><td class="key">{{hypothesis}}</td><td><span class="tag o">Confirmed</span></td><td>Evidence 1 to N above.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="remediation" class="sec" data-rail="Remediation">
+<h2>Remediation and next steps</h2>
+<h3>Mitigation</h3>
+<ul class="tasks">
+  <li class="done">What was done to stop the impact, with time and citation.</li>
+</ul>
+<h3>Fix</h3>
+<ol class="n">
+  <li>The change, then the reason for it.</li>
+</ol>
+<h3>Next steps</h3>
+<table>
+<thead><tr><th>Action</th><th>Owner</th><th>Ticket</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td class="key">{{action}}</td><td>{{team}}</td><td><a href="{{url}}">{{ticket}}</a></td><td><span class="tag">Open</span></td></tr>
+</tbody>
+</table>
+</section>
+<!-- investigation:end -->
+
+<!-- proposal:start -->
+<section id="problem" class="sec">
+<h2>Problem</h2>
+<p>What is wrong or missing today. Name the code involved and give a concrete case of the consequence.</p>
+</section>
+
+<section id="goals" class="sec" data-rail="Goals">
+<h2>Goals and non-goals</h2>
+<p>What the proposal must achieve, and what it deliberately leaves unchanged.</p>
+</section>
+
+<section id="proposal" class="sec">
+<h2>Proposal</h2>
+<p>The design. Put the reason right after each requirement. Include an explorer figure with before and after variants.</p>
+</section>
+
+<!-- optional -->
+<section id="usage-examples" class="sec" data-rail="Usage">
+<h2>Usage examples</h2>
+<p>Concrete cases that show the proposal in use.</p>
+</section>
+
+<!-- optional -->
+<section id="api" class="sec">
+<h2>API</h2>
+<p>Changes to wire schemas, types, configuration, or other interfaces.</p>
+</section>
+
+<!-- optional -->
+<section id="compatibility" class="sec" data-rail="Compatibility">
+<h2>Compatibility and migration</h2>
+<p>What existing components and data do with the change, and how users move to it.</p>
+</section>
+
+<!-- optional -->
+<section id="rollout" class="sec">
+<h2>Rollout</h2>
+<p>The order the changes ship in and what each step depends on. A timeline figure with milestone events fits here.</p>
+</section>
+
+<!-- optional -->
+<section id="risks" class="sec">
+<h2>Risks</h2>
+<p>What could go wrong and how it is handled.</p>
+</section>
+
+<section id="alternatives" class="sec">
+<h2>Alternatives considered</h2>
+<p>Other designs and why the proposal doesn't use them.</p>
+</section>
+
+<section id="open-questions" class="sec" data-rail="Open questions">
+<h2>Open questions</h2>
+<p>Decisions still to make. Write "None" if there are none.</p>
+</section>
+<!-- proposal:end -->
+
+<section id="references" class="sec">
+<h2>References</h2>
+<ol class="refs">
+  <li id="ref-1"><span class="id">R1</span><span class="tag w">Log</span><span><a class="title" href="{{url}}">{{title}}</a><span class="src">{{query, panel, commit or file:line}} · {{time range UTC}}</span></span></li>
+</ol>
+</section>
+
+</main>
+
+<footer class="foot"><span>{{title}} · {{date}}</span><span>Generated with {{model}}</span></footer>
+</div>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+(() => {
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const svgEl = (tag, attrs = {}, text) => {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  if (text !== undefined) el.textContent = text;
+  return el;
+};
+const pad2 = (n) => String(n).padStart(2, "0");
+const cite = (n) => `<a class="cite" href="#ref-${n}">R${n}</a>`;
+$$("[data-theme-choice]").forEach((b) => b.addEventListener("click", () => {
+  const choice = b.dataset.themeChoice;
+  if (choice === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.dataset.theme = choice;
+  $$("[data-theme-choice]").forEach((x) => x.classList.toggle("on", x === b));
+}));
+const railList = $(".rail ol");
+const sections = $$("main > section.sec");
+sections.forEach((sec, i) => {
+  const h2 = $("h2", sec);
+  const label = sec.dataset.rail ?? h2.textContent.trim();
+  h2.insertAdjacentHTML("afterbegin", `<span class="chip">${pad2(i + 1)}</span>`);
+  railList?.insertAdjacentHTML("beforeend", `<li><a href="#${sec.id}"><span class="n">${pad2(i + 1)}</span>${label}</a></li>`);
+});
+const railLinks = $$(".rail a");
+const markRail = () => {
+  let current = 0;
+  sections.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) current = i; });
+  if (innerHeight + scrollY >= document.body.scrollHeight - 4) current = sections.length - 1;
+  railLinks.forEach((a, i) => a.classList.toggle("on", i === current));
+};
+addEventListener("scroll", markRail, { passive: true });
+markRail();
+const GLYPHS = {
+  A: ".###. #...# #...# #...# ##### #...# #...#", B: "####. #...# #...# ####. #...# #...# ####.", C: ".###. #...# #.... #.... #.... #...# .###.",
+  D: "###.. #..#. #...# #...# #...# #..#. ###..", E: "##### #.... #.... ####. #.... #.... #####", F: "##### #.... #.... ####. #.... #.... #....",
+  G: ".###. #...# #.... #.### #...# #...# .####", H: "#...# #...# #...# ##### #...# #...# #...#", I: ".###. ..#.. ..#.. ..#.. ..#.. ..#.. .###.",
+  J: "..### ...#. ...#. ...#. ...#. #..#. .##..", K: "#...# #..#. #.#.. ##... #.#.. #..#. #...#", L: "#.... #.... #.... #.... #.... #.... #####",
+  M: "#...# ##.## #.#.# #.#.# #...# #...# #...#", N: "#...# #...# ##..# #.#.# #..## #...# #...#", O: ".###. #...# #...# #...# #...# #...# .###.",
+  P: "####. #...# #...# ####. #.... #.... #....", Q: ".###. #...# #...# #...# #.#.# #..#. .##.#", R: "####. #...# #...# ####. #.#.. #..#. #...#",
+  S: ".#### #.... #.... .###. ....# ....# ####.", T: "##### ..#.. ..#.. ..#.. ..#.. ..#.. ..#..", U: "#...# #...# #...# #...# #...# #...# .###.",
+  V: "#...# #...# #...# #...# #...# .#.#. ..#..", W: "#...# #...# #...# #.#.# #.#.# #.#.# .#.#.", X: "#...# #...# .#.#. ..#.. .#.#. #...# #...#",
+  Y: "#...# #...# #...# .#.#. ..#.. ..#.. ..#..", Z: "##### ....# ...#. ..#.. .#... #.... #####",
+  0: ".###. #...# #..## #.#.# ##..# #...# .###.", 1: "..#.. .##.. ..#.. ..#.. ..#.. ..#.. .###.", 2: ".###. #...# ....# ...#. ..#.. .#... #####",
+  3: "##### ...#. ..#.. ...#. ....# #...# .###.", 4: "...#. ..##. .#.#. #..#. ##### ...#. ...#.", 5: "##### #.... ####. ....# ....# #...# .###.",
+  6: "..##. .#... #.... ####. #...# #...# .###.", 7: "##### ....# ...#. ..#.. .#... .#... .#...", 8: ".###. #...# #...# .###. #...# #...# .###.",
+  9: ".###. #...# #...# .#### ....# ...#. .##..", " ": "... ... ... ... ... ... ...", "-": "..... ..... ..... .###. ..... ..... .....",
+  ".": "..... ..... ..... ..... ..... .##.. .##..", ":": "..... .##.. .##.. ..... .##.. .##.. .....", "/": "..... ....# ...#. ..#.. .#... #.... .....",
+  "'": "..#.. ..#.. ..... ..... ..... ..... .....", "!": "..#.. ..#.. ..#.. ..#.. ..#.. ..... ..#..", "?": ".###. #...# ....# ...#. ..#.. ..... ..#..",
+};
+$$("[data-dots]").forEach((box) => {
+  const lines = box.dataset.dots.toUpperCase().split("|").map((line) =>
+    [...line].map((ch) => (GLYPHS[ch] ?? GLYPHS["?"]).split(" ")));
+  const width = Math.max(...lines.map((g) => g.reduce((n, glyph) => n + glyph[0].length + 1, -1)));
+  const row = (bits) => `<div class="row">${[...bits.padEnd(width, ".")].map((b) => `<i class="${b === "#" ? "on" : ""}"></i>`).join("")}</div>`;
+  box.innerHTML = lines.map((glyphs) => [0, 1, 2, 3, 4, 5, 6].map((r) => row(glyphs.map((g) => g[r]).join("."))).join("")).join(row("") + row(""));
+});
+const tip = $("#tip");
+const showTip = (a) => {
+  if (!a) return;
+  const li = $(a.getAttribute("href"));
+  if (!li) return;
+  tip.innerHTML = `<span class="t">${a.textContent} · ${$(".tag", li)?.textContent ?? ""}</span>${$(".title", li)?.textContent ?? ""}`;
+  const r = a.getBoundingClientRect();
+  tip.style.left = `${Math.min(r.left + scrollX, scrollX + innerWidth - 360)}px`;
+  tip.style.top = `${r.bottom + scrollY + 8}px`;
+  tip.classList.add("show");
+};
+document.addEventListener("mouseover", (e) => showTip(e.target.closest?.("a.cite")));
+document.addEventListener("focusin", (e) => showTip(e.target.closest?.("a.cite")));
+document.addEventListener("mouseout", (e) => { if (e.target.closest?.("a.cite")) tip.classList.remove("show"); });
+document.addEventListener("focusout", () => tip.classList.remove("show"));
+$$(".code").forEach((block) => {
+  const tab = $(".code-tab", block);
+  if (!tab || $("button", tab)) return;
+  tab.insertAdjacentHTML("beforeend", "<button>Copy</button>");
+  const b = $("button", tab);
+  b.addEventListener("click", async () => {
+    await navigator.clipboard.writeText($("pre", block).innerText);
+    b.textContent = "Copied";
+    setTimeout(() => (b.textContent = "Copy"), 1200);
+  });
+});
+const KINDS = {
+  change: ["Change", "blue", "b"], system: ["System", "grey", ""], cause: ["Cause", "orange", "o"],
+  alert: ["Alert", "red", "r"], action: ["Action", "green", "g"], milestone: ["Milestone", "ink", "w"],
+};
+const toSeconds = (t) => {
+  const [date, clock] = /^\d{4}-\d{2}-\d{2}/.test(t) ? t.split(/[ T]/) : [null, t];
+  const [h = 0, m = 0, s = 0] = (clock ?? "").split(":").map(Number);
+  return (date ? Date.parse(`${date}T00:00:00Z`) / 1000 : 0) + h * 3600 + m * 60 + s;
+};
+const delta = (s) => {
+  const units = [[86400, "d"], [3600, "h"], [60, "m"], [1, "s"]];
+  const i = units.findIndex(([u]) => s >= u);
+  if (i < 0) return "+0s";
+  const a = Math.floor(s / units[i][0]);
+  const next = units[i + 1];
+  const b = next ? Math.floor((s - a * units[i][0]) / next[0]) : 0;
+  return `+${a}${units[i][1]}${b ? pad2(b) + next[1] : ""}`;
+};
+$$("figure[data-timeline]").forEach((fig) => {
+  const events = $$(".tl-data > li", fig).map((li) => ({
+    time: li.dataset.time,
+    label: li.dataset.label ?? (li.dataset.time.match(/\d{1,2}:\d{2}/)?.[0] ?? li.dataset.time.slice(5)),
+    kind: KINDS[li.dataset.kind] ? li.dataset.kind : "system",
+    refs: (li.dataset.refs ?? "").split(",").map((r) => r.trim()).filter(Boolean),
+    title: $("b", li)?.innerHTML ?? "",
+    body: $("span", li)?.innerHTML ?? "",
+  }));
+  if (!events.length) return;
+  $(".fig-head", fig).insertAdjacentHTML("beforeend", '<div class="keys"><button data-tl="prev" aria-label="Previous event">◀</button><button data-tl="next" aria-label="Next event">▶</button><button data-tl="play">Play</button></div>');
+  const kinds = [...new Set(events.map((e) => e.kind))];
+  $(".fig-body", fig).innerHTML = `<div class="legend">${kinds.map((k) => `<span style="--c: var(--${KINDS[k][1]})">${KINDS[k][0]}</span>`).join("")}</div><div class="seq" role="listbox" aria-label="Timeline events"></div><div class="tl-detail" aria-live="polite"></div>`;
+  const box = $(".seq", fig);
+  box.style.setProperty("--steps", events.length);
+  box.innerHTML = events.map((e, i) => `
+    <button class="step" role="option" style="--c: var(--${KINDS[e.kind][1]})">
+      <span class="num">${pad2(i + 1)}</span><span class="cell"></span>
+      <span class="time">${e.label}</span>
+      <span class="delta">${i ? delta(toSeconds(e.time) - toSeconds(events[i - 1].time)) : "start"}</span>
+    </button>`).join("");
+  const steps = $$(".step", box);
+  const play = $("[data-tl=play]", fig);
+  let at = 0, timer = null;
+  const select = (i, focus) => {
+    at = (i + events.length) % events.length;
+    const e = events[at];
+    steps.forEach((s, j) => { s.classList.toggle("on", j === at); s.setAttribute("aria-selected", j === at); s.tabIndex = j === at ? 0 : -1; });
+    if (focus) steps[at].focus();
+    $(".tl-detail", fig).innerHTML = `<div class="when">${e.time}<br><span class="tag ${KINDS[e.kind][2]}">${KINDS[e.kind][0]}</span></div><div><h5>${e.title}</h5><p>${e.body} ${e.refs.map(cite).join("")}</p></div>`;
+  };
+  const stop = () => { clearInterval(timer); timer = null; play.classList.remove("on"); play.textContent = "Play"; };
+  steps.forEach((s, i) => s.addEventListener("click", () => { stop(); select(i); }));
+  box.addEventListener("keydown", (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (step) { e.preventDefault(); stop(); select(at + step, true); }
+  });
+  $("[data-tl=prev]", fig).addEventListener("click", () => { stop(); select(at - 1); });
+  $("[data-tl=next]", fig).addEventListener("click", () => { stop(); select(at + 1); });
+  play.addEventListener("click", () => {
+    if (timer) return stop();
+    if (reduced) return select(at + 1);
+    play.classList.add("on");
+    play.textContent = "Stop";
+    select(at === events.length - 1 ? 0 : at + 1);
+    timer = setInterval(() => (at === events.length - 1 ? stop() : select(at + 1)), 1600);
+  });
+  select(fig.dataset.start ? Number(fig.dataset.start) - 1 : Math.max(0, events.findIndex((e) => e.kind === "cause")));
+});
+$$("figure[data-chart]").forEach((fig) => {
+  const spec = JSON.parse($('script[type="application/json"]', fig).textContent);
+  const n = spec.labels.length;
+  const W = 880, H = 300, L = 48, R = 16, T = 26, B = 30;
+  const x = (i) => L + (n > 1 ? (i / (n - 1)) * (W - L - R) : 0);
+  const nice = (v) => { const p = 10 ** Math.floor(Math.log10(v || 1)); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; };
+  if (spec.views.length > 1) {
+    $(".fig-head", fig).insertAdjacentHTML("beforeend", `<div class="keys" role="group" aria-label="View">${spec.views.map((v, i) => `<button data-view="${i}"${i ? "" : ' class="on"'}>${v.name}</button>`).join("")}</div>`);
+  }
+  const body = $(".fig-body", fig);
+  body.innerHTML = '<div class="legend"></div><div class="readout" aria-live="polite"></div>';
+  const svg = svgEl("svg", { class: "plot", viewBox: `0 0 ${W} ${H}`, tabindex: 0, role: "img", "aria-label": $("h4", fig)?.textContent ?? "Chart" });
+  body.append(svg);
+  let view = 0, cursor = spec.cursor ?? n - 1;
+  const hidden = new Set();
+  const draw = () => {
+    const v = spec.views[view];
+    const peak = v.max ?? Math.max(...v.series.flatMap((s) => s.values.filter((d) => d != null)), v.threshold?.value ?? 0) * 1.1;
+    const tickStep = nice(peak / 5);
+    const max = v.max ?? Math.ceil(peak / tickStep) * tickStep;
+    const ticks = v.ticks ?? Array.from({ length: Math.floor(max / tickStep + 1e-9) + 1 }, (_, k) => +(k * tickStep).toFixed(6));
+    const y = (val) => H - B - (val / max) * (H - T - B);
+    svg.replaceChildren();
+    for (const t of ticks) {
+      svg.append(svgEl("line", { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: t ? "var(--frame)" : "var(--rule)" }));
+      svg.append(svgEl("text", { x: L - 10, y: y(t) + 3.5, "text-anchor": "end", "font-size": 9.5, fill: "var(--grey)" }, t));
+    }
+    const every = spec.tickEvery ?? Math.ceil(n / 6);
+    for (let i = spec.tickOffset ?? 0; i < n; i += every) svg.append(svgEl("text", { x: x(i), y: H - 8, "text-anchor": "middle", "font-size": 9.5, fill: "var(--grey)" }, spec.labels[i]));
+    if (spec.band) svg.append(svgEl("rect", { x: x(spec.band.from), y: T, width: x(spec.band.to) - x(spec.band.from), height: H - T - B, fill: "var(--orange)", opacity: 0.06 }));
+    for (const mark of spec.marks ?? []) {
+      svg.append(svgEl("line", { x1: x(mark.at), x2: x(mark.at), y1: T - 6, y2: H - B, stroke: "var(--rule)", "stroke-dasharray": "3 3" }));
+      svg.append(svgEl("text", { x: x(mark.at) + 5, y: T - 10, "font-size": 9, fill: "var(--grey)", "letter-spacing": "0.08em" }, mark.label.toUpperCase()));
+    }
+    if (v.threshold) {
+      svg.append(svgEl("line", { x1: L, x2: W - R, y1: y(v.threshold.value), y2: y(v.threshold.value), stroke: "var(--red)", "stroke-dasharray": "6 4" }));
+      svg.append(svgEl("text", { x: W - R, y: y(v.threshold.value) - 6, "text-anchor": "end", "font-size": 9, fill: "var(--red)", "letter-spacing": "0.08em" }, v.threshold.label.toUpperCase()));
+    }
+    v.series.forEach((s, si) => {
+      if (hidden.has(si)) return;
+      const d = s.values.map((val, i) => (val == null ? "" : `${i && s.values[i - 1] != null ? "L" : "M"}${x(i)},${y(val)}`)).join("");
+      svg.append(svgEl("path", { d, fill: "none", stroke: `var(--${s.color})`, "stroke-width": s.emphasis ? 2.2 : 1.6, "stroke-linejoin": "round" }));
+    });
+    svg.append(svgEl("line", { x1: x(cursor), x2: x(cursor), y1: T, y2: H - B, stroke: "var(--orange)" }));
+    v.series.forEach((s, si) => {
+      if (!hidden.has(si) && s.values[cursor] != null) svg.append(svgEl("circle", { cx: x(cursor), cy: y(s.values[cursor]), r: 3.5, fill: "var(--bg)", stroke: `var(--${s.color})`, "stroke-width": 2 }));
+    });
+    $(".readout", fig).innerHTML = `<b>${spec.labels[cursor]}</b>` + v.series.filter((_, si) => !hidden.has(si)).map((s) => `<span style="--c: var(--${s.color})">${s.label} <b>${s.values[cursor] ?? "n/a"}${v.unit ?? ""}</b></span>`).join("");
+    $(".legend", fig).innerHTML = v.series.length > 1 ? v.series.map((s, si) => `<button style="--c: var(--${s.color})" data-series="${si}" aria-pressed="${!hidden.has(si)}">${s.label}</button>`).join("") : "";
+    $$("[data-series]", fig).forEach((b) => b.addEventListener("click", () => {
+      const si = Number(b.dataset.series);
+      hidden.has(si) ? hidden.delete(si) : hidden.add(si);
+      draw();
+    }));
+  };
+  svg.addEventListener("mousemove", (e) => {
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    const i = Math.round(((p.x - L) / (W - L - R)) * (n - 1));
+    if (i >= 0 && i < n && i !== cursor) { cursor = i; draw(); }
+  });
+  svg.addEventListener("keydown", (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    cursor = Math.max(0, Math.min(n - 1, cursor + step));
+    draw();
+  });
+  $$("[data-view]", fig).forEach((b) => b.addEventListener("click", () => {
+    view = Number(b.dataset.view);
+    hidden.clear();
+    $$("[data-view]", fig).forEach((x) => x.classList.toggle("on", x === b));
+    draw();
+  }));
+  draw();
+});
+$$("figure[data-explore]").forEach((fig) => {
+  const picks = $$("[data-pick]", fig);
+  const details = $$("[data-detail]", fig);
+  const ids = [...new Set(picks.map((p) => p.dataset.pick))];
+  const select = (id, focus) => {
+    picks.forEach((p) => p.classList.toggle("on", p.dataset.pick === id));
+    details.forEach((d) => (d.hidden = d.dataset.detail !== id));
+    if (focus) picks.find((p) => p.dataset.pick === id)?.focus();
+  };
+  const setVariant = (v) => {
+    fig.dataset.variant = v;
+    $$("[data-only]", fig).forEach((el) => (el.style.display = el.dataset.only.split(" ").includes(v) ? "" : "none"));
+    $$("[data-set-variant]", fig).forEach((b) => b.classList.toggle("on", b.dataset.setVariant === v));
+  };
+  picks.forEach((p) => {
+    p.addEventListener("click", () => select(p.dataset.pick));
+    p.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(p.dataset.pick); }
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (step) { e.preventDefault(); select(ids[(ids.indexOf(p.dataset.pick) + step + ids.length) % ids.length], true); }
+    });
+  });
+  $$("[data-set-variant]", fig).forEach((b) => b.addEventListener("click", () => setVariant(b.dataset.setVariant)));
+  if (fig.dataset.variant) setVariant(fig.dataset.variant);
+  if (ids.length) select(fig.dataset.default ?? ids[0]);
+});
+})();
+</script>
+</body>
+<!--@FONTS@-->
+</html>
