@@ -1,0 +1,7 @@
+{
+  "name": "boltz",
+  "version": "0.1.0",
+  "description": "Boltz theme for Claude Code: colour-coded tool rows, its own markdown renderer with dot-matrix headings, a prompt TOC and side questions. /boltz toggles it.",
+  "author": { "name": "dzauroff1" },
+  "types": "./types/index.d.ts"
+}

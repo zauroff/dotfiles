@@ -1,0 +1,5 @@
+{
+  "name": "dotfiles",
+  "owner": { "name": "dzauroff1" },
+  "plugins": [{ "name": "boltz", "source": "./boltz" }]
+}
