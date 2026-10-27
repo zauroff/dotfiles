@@ -90,17 +90,6 @@
           }
         ]
       }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/session-start.sh",
-            "timeout": 5
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
@@ -110,7 +99,6 @@
   "enabledPlugins": {
     "codex@openai-codex": true
   },
-  "outputStyle": "Dry",
   "effortLevel": "high",
   "modelSettings": {
     "claude-fable-5-1": {
