@@ -32,7 +32,7 @@ config.initial_rows = 120
 
 config.font = wezterm.font("JetBrains Mono", { weight = "Bold" })
 config.launch_menu = launch_menu
-config.font_size = 20
+config.font_size = 14
 
 -- readability fixes?
 config.line_height = 1.2
