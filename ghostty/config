@@ -1,6 +1,7 @@
 # Font
 font-family = "JetBrainsMono Nerd Font"
 font-size = 16
+font-codepoint-map = U+27A4=Menlo
 # Regular weight: font-style = Bold and font-thicken = true made everything heavy.
 font-thicken = false
 bold-is-bright = false
@@ -22,12 +23,14 @@ background-blur = 10
 confirm-close-surface = false
 # Ghostty counts bytes here, not lines. ~100MB covers wezterm's 90k lines.
 scrollback-limit = 100000000
+# Defaults are precision:1,discrete:3. discrete = mouse wheel lines per notch, precision = trackpad.
+mouse-scroll-multiplier = precision:0.5,discrete:1
 
 # Theme (toggle-theme.sh swaps boltz-dark and boltz-light; the theme sets the background)
-theme = boltz-dark
+theme = boltz-light
 
 # Shaders
-# custom-shader = crt.glsl
+# custom-shader = crt-light.glsl
 # custom-shader-animation = false
 
 # Keybindings
@@ -67,3 +70,4 @@ mouse-hide-while-typing = true
 macos-titlebar-proxy-icon = hidden
 unfocused-split-opacity = 0.9
 shell-integration-features = no-cursor,ssh-terminfo
+config-file = ?tode/keybinds.ghostty
