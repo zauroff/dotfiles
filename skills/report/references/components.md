@@ -1,8 +1,8 @@
 # Components
 
-Markup for every part of a report. The template's script does the wiring: it numbers the `h2` chips, builds the rail, adds copy buttons to code blocks, shows citation tooltips, and renders the three interactive figure types. Never edit the `<style>` or `<script>` blocks per report. Styling a report needs beyond these classes goes in a second `<style>` block in `<head>`.
+Markup for every part of a report. The template's script does the wiring: it numbers the `h2` chips, builds the rail, adds copy buttons to code blocks, shows citation and glossary tooltips, and renders the seven interactive figure types. Never edit the `<style>` or `<script>` blocks per report. Styling a report needs beyond these classes goes in a second `<style>` block in `<head>`.
 
-`references/example-investigation.html` is a complete investigation report built from these components. Read it before writing the first figure.
+`references/example-investigation.html` is a complete investigation report built from these components. Read it before writing the first figure. `references/example-figures.html` shows the sequence, matrix, bars and heatmap figures and the glossary terms with working markup.
 
 ## Masthead
 
@@ -19,7 +19,7 @@ Markup for every part of a report. The template's script does the wiring: it num
 </header>
 ```
 
-- `data-dots` is the dot-matrix title: one or two lines split by `|`, at most 9 characters per line. Supported: `A-Z 0-9 space - . : / ' ! ?`. Anything else renders as `?`. Pick the two or three words a reader would use to name the report, not the full title.
+- `data-dots` is the dot-matrix title, Boltz design only (delete the line for plain): one or two lines split by `|`, at most 9 characters per line. Supported: `A-Z 0-9 space - . : / ' ! ?`. Anything else renders as `?`. Pick the two or three words a reader would use to name the report, not the full title.
 - The `h1` is the full title, sentence case, naming the component affected.
 - `.meta` holds authors, the report date as `YYYY-MM-DD`, and the ticket or issue link. Add the time window for investigations.
 - Exactly four knobs. Values are short (12 characters or fewer) because they render uppercase at 22px. `--c` colors the knob's dot: use `--red`, `--blue`, `--orange`, `--green` in that order unless a value has a natural color (green for Resolved, red for Sev-1).
@@ -125,6 +125,55 @@ The references section is always last:
 | Chat | `tag` | channel, author, timestamp |
 
 The citation tooltip shows the tag and title, so the title must say what the source is ("Logs: worker-3 and scheduler logs"), not just repeat a URL.
+
+## Glossary terms
+
+Link a term in the text to its glossary entry. Hovering or focusing the link shows the definition, and the example when there is one, in a tooltip. Without JavaScript the link jumps to the entry.
+
+```html
+…the resume path in <a class="term" href="#term-handleconnect">handleConnect</a> returns early…
+```
+
+The glossary section sits right before References:
+
+```html
+<section id="glossary" class="sec">
+<h2>Glossary</h2>
+<dl class="glossary">
+  <div id="term-capability">
+    <dt>Capability</dt>
+    <dd>A step type a worker says it can run. The dispatcher only sends a step to workers that list a matching capability.</dd>
+    <dd class="eg">worker-3 lists 14 capabilities when healthy.</dd>
+  </div>
+  <div id="term-handleconnect">
+    <dt>handleConnect</dt>
+    <dd>The scheduler function that runs when a worker connects. It resumes the worker's session or creates a new one.</dd>
+    <dd class="eg"><div class="code"><div class="code-tab"><span>scheduler/session.go:88</span><b>go</b></div><pre><code>…three to six lines…</code></pre></div></dd>
+  </div>
+</dl>
+</section>
+```
+
+- The id is `term-` plus a lowercase kebab slug. The link is always written `<a class="term" href="#term-slug">`.
+- The first `dd` is the definition: one or two sentences, at most 40 words. Say what the term means in general first, then what it does in this system.
+- The `dd class="eg"` is optional. Use one sentence with a concrete instance, or, when the term names code, a code block of three to six lines with the `path:line` in its tab. The tooltip shows the code and the path.
+- Link the first use of a term in each section, not every use. Do not link inside headings, the TL;DR rows or figure SVG text.
+- Entries are in alphabetical order. Every entry is linked at least once.
+- Citations in a definition are hidden in the tooltip and shown in the glossary.
+
+## Choosing a figure
+
+| What the reader must see | Figure |
+|---|---|
+| Events in time order | Timeline |
+| Messages between components, in order | Sequence |
+| A metric changing over time | Chart |
+| Categories compared by size | Bars |
+| A metric across many entities and times, to spot which and when | Heatmap |
+| Which item has which property or permission | Matrix |
+| A structure: architecture, data layout, state machine, flow | Explorer |
+
+Prefer the data-driven types (timeline, sequence, chart, bars, heatmap, matrix) over a hand-drawn explorer when one fits. They are faster to write and always match the theme.
 
 ## Figures
 
@@ -247,6 +296,127 @@ A hand-drawn SVG (or HTML) diagram whose parts are selectable. Selecting a part 
 - `data-default` is the pick selected on load. Choose the one that carries the finding.
 - `data-variant` on the figure is the initial variant. Buttons with `data-set-variant` switch it. Any element with `data-only="before"` (space-separated list allowed) shows only in those variants, in the SVG and in the detail panels alike.
 - Leave out the variant buttons when there is only one state.
+
+### Sequence: `data-sequence`
+
+Messages between components, drawn from a list. The script draws the lanes, lifelines, arrows and step numbers. Selecting a message shows its detail and citations. Prev, next and Play controls are added by the script. Use it for request flows, handshakes, enrollment, retries.
+
+```html
+<figure class="fig" id="figure-2" data-sequence data-lanes="worker-3|scheduler|registry" data-lane-notes="host|scheduler-1|in memory" data-variant="before">
+  <div class="fig-head">
+    <span class="fig-num">FIG 2</span><h4>Reconnect sequence</h4>
+    <div class="keys" role="group" aria-label="Variant"><button data-set-variant="before">v4.18.0</button><button data-set-variant="after">With fix</button></div>
+  </div>
+  <div class="fig-body"></div>
+  <figcaption>Messages when worker-3 reconnects. Select a message, use the arrow keys, or press Play. Switch to "With fix" to see the change.</figcaption>
+  <ol class="sq-data sr-only">
+    <li data-from="registry" data-kind="call" data-label="ClearCapabilities(worker-3)" data-refs="2"><b>The registry clears worker-3's capabilities.</b> <span>On disconnect, as it always has.</span></li>
+    <li data-from="worker-3" data-to="scheduler" data-kind="call" data-label="Connect(session=7f3a)" data-refs="2"><b>worker-3 reconnects with its session.</b> <span>18 seconds after the disconnect.</span></li>
+    <li data-from="scheduler" data-to="worker-3" data-kind="fail" data-only="before" data-label="RequestCapabilities" data-refs="1"><b>RequestCapabilities is never sent.</b> <span>Only the new-session branch calls <code>requestCapabilities</code>.</span></li>
+    <li data-from="scheduler" data-to="worker-3" data-kind="added" data-only="after" data-label="RequestCapabilities" data-refs="1"><b>The resume path asks for capabilities.</b> <span>The fix calls it before returning.</span></li>
+  </ol>
+</figure>
+```
+
+- `data-lanes`: two to six lane names split by `|`, in left to right order. Names render uppercase; keep them under 16 characters. `data-lane-notes` is an optional second line per lane, in the same order.
+- `data-from` and `data-to` name lanes exactly. Leave out `data-to`, or set it equal to `data-from`, for a step inside one component.
+- `data-kind`: `call` (ink, solid), `reply` (grey, dashed), `focus` (orange, the message the finding is about, at most one per variant), `fail` (red, dashed, ✕ at the receiver: never sent, rejected, or failed), `added` (green, what the proposal or fix adds).
+- `data-label` is the short text on the arrow, at most about 28 characters. `<b>` is the detail title, one sentence. `<span>` is one or two sentences of detail.
+- `data-refs`: every message needs at least one.
+- Variants work as in the explorer: buttons with `data-set-variant`, `data-variant` on the figure for the initial one, and `data-only` on a message to show it only in those variants. The script renumbers the messages for each variant.
+- `data-start` picks the initially selected message (1-based). Default: the first `focus` or `fail`, else the first.
+- 3 to 14 messages. The list doubles as the text version.
+
+### Matrix: `data-matrix`
+
+A plain table whose cells are marks. Hovering or selecting a cell highlights its row and column and shows the cell's note and citations. Use it for permissions, coverage, findings by component, or what each option supports.
+
+```html
+<figure class="fig" id="figure-3" data-matrix data-legend="yes:Allowed|no:Denied|part:Conditional|fail:Exposed today">
+  <div class="fig-head"><span class="fig-num">FIG 3</span><h4>Connect paths</h4></div>
+  <div class="fig-body">
+  <table>
+    <thead><tr><th>Path</th><th>Session</th><th>Asked for capabilities</th><th>Eligible</th></tr></thead>
+    <tbody>
+      <tr><th>New session</th><td data-v="yes" data-refs="1">A new session is created.</td><td data-v="yes" data-refs="1">…</td><td data-v="yes" data-refs="3">…</td></tr>
+      <tr><th>Resume, v4.18.0</th><td data-v="yes" data-refs="1">…</td><td data-v="fail" data-default data-refs="1">The resume branch returns first.</td><td data-v="fail" data-refs="3">…</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <figcaption>Each connect path against the steps that make a worker eligible. Hover or select a cell for its evidence, or use the arrow keys.</figcaption>
+</figure>
+```
+
+- Each body row starts with a `th` naming the row. The `thead` names the columns.
+- `data-v`: `yes` (green dot), `no` (empty ring), `part` (orange half dot), `fail` (red ✕). The cell's text is its note, one sentence, shown on selection.
+- `data-legend` renames the values for this figure, as `value:Label` pairs split by `|`. Only values used in the table appear in the legend.
+- `data-default` on one cell selects it on load. Choose the cell that carries the finding.
+- A `td` without `data-v` renders as plain text, for a column of notes or numbers.
+- At most about 8 columns and 12 rows. The table is its own text version.
+
+### Bars: `data-bars`
+
+Horizontal bars with a selected bar, its value and note, and an optional view switch and threshold.
+
+```html
+<figure class="fig" id="figure-4" data-bars>
+  <div class="fig-head"><span class="fig-num">FIG 4</span><h4>Impact by worker</h4></div>
+  <div class="fig-body"></div>
+  <figcaption>Totals for 14:02 to 14:34 UTC from the export-render dashboard <a class="cite" href="#ref-6">R6</a>. Hover a bar or use the arrow keys.</figcaption>
+  <p class="sr-only">Text version: …</p>
+  <script type="application/json">
+{"views": [
+  {"name": "Steps assigned", "unit": " steps", "bars": [
+    {"label": "worker-1", "value": 480, "note": "At its 15 per minute cap.", "refs": [6]},
+    {"label": "worker-3", "value": 3, "color": "orange", "note": "None after the resume.", "refs": [6]}]},
+  {"name": "P99 wait", "unit": "s", "threshold": {"value": 120, "label": "SLO 2m"}, "bars": ["…"]}],
+ "cursor": 1}
+  </script>
+</figure>
+```
+
+| Field | Meaning |
+|---|---|
+| `views` | one or more views. More than one adds a view switch. |
+| `views[].name`, `unit`, `max` | view label, unit appended to values, axis maximum. `unit` and `max` are optional. |
+| `views[].threshold` | dashed red line with a label. |
+| `bars[].label`, `value` | bar name and a number. |
+| `bars[].color` | `grey` by default. `orange` for the bar the finding is about, red for failing, green for healthy. |
+| `bars[].note`, `refs` | one sentence and reference numbers, shown when the bar is selected. |
+| `cursor` | initially selected bar index. |
+
+Sort bars by value unless the order means something. 2 to 15 bars per view.
+
+### Heatmap: `data-heatmap`
+
+A grid of cells, one row per entity and one column per time bucket, shaded by value. Hovering or moving the cursor shows the row, column and value. Use it to show which hosts, shards or services were affected and when.
+
+```html
+<figure class="fig" id="figure-5" data-heatmap>
+  <div class="fig-head"><span class="fig-num">FIG 5</span><h4>Assignments per worker</h4></div>
+  <div class="fig-body"></div>
+  <figcaption>Assignments per minute from the export-render dashboard <a class="cite" href="#ref-6">R6</a>. Hover a cell or use the arrow keys.</figcaption>
+  <p class="sr-only">Text version: …</p>
+  <script type="application/json">
+{"columns": ["13:56", "13:57", "…"], "tickEvery": 6, "tickOffset": 4, "unit": " / min", "color": "orange", "max": 15,
+ "rows": [{"label": "worker-1", "values": [13, 14, "…"]}, {"label": "worker-3", "values": [14, 0, null, "…"]}],
+ "marks": [{"at": 6, "label": "14:02 resume"}],
+ "cursor": [1, 20]}
+  </script>
+</figure>
+```
+
+| Field | Meaning |
+|---|---|
+| `columns` | label per column. Every row has exactly this many values. |
+| `tickEvery`, `tickOffset` | label every Nth column, starting at `tickOffset`. |
+| `rows[].label`, `values` | entity name and numbers. `0` renders as an empty cell, `null` as a dashed gap for missing data. |
+| `color` | shade color, `orange` by default. `red` for errors. |
+| `max` | value for full color. Default: the largest value. |
+| `marks` | dashed vertical lines at a column's left edge, labeled. Use the same moments as the timeline. |
+| `cursor` | `[row, column]` selected on load. Put it on the most telling cell. |
+
+2 to 20 rows and up to about 120 columns. Use real exported values, as for the chart.
 
 ## Drawing SVG
 

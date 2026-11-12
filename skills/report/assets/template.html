@@ -4,224 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{title}} · report</title>
-<style>
-:root {
-  --head: "Barlow Semi Condensed", Barlow, "Arial Narrow", sans-serif;
-  --sans: Barlow, "Helvetica Neue", Arial, sans-serif;
-  --mono: "Martian Mono", Menlo, Consolas, monospace;
-  --dot: clamp(4px, 0.62vw, 7px);
-}
-:root, [data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0d0d0d; --surface: #171716; --frame: #2a2a28;
-  --ink: #f0f0ec; --body: #cfcfca; --grey: #8a8a85; --dim: #3a3a37; --rule: #5a5a55;
-  --orange: #ff5a1f; --blue: #3d7bff; --green: #1fc77a; --red: #ff3b30;
-  --on-chip: #0d0d0d; --hl: #3b1d12;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-    --bg: #e9e9e4; --surface: #f4f4f0; --frame: #c9c9c3;
-    --ink: #161616; --body: #2a2a28; --grey: #65655e; --dim: #b0b0a9; --rule: #9a9a93;
-    --orange: #cc3d00; --blue: #0047ff; --green: #007d4b; --red: #cc1a16;
-    --on-chip: #ffffff; --hl: #ffd3bf;
-  }
-}
-[data-theme="light"] {
-  color-scheme: light;
-  --bg: #e9e9e4; --surface: #f4f4f0; --frame: #c9c9c3;
-  --ink: #161616; --body: #2a2a28; --grey: #65655e; --dim: #b0b0a9; --rule: #9a9a93;
-  --orange: #cc3d00; --blue: #0047ff; --green: #007d4b; --red: #cc1a16;
-  --on-chip: #ffffff; --hl: #ffd3bf;
-}
-
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 64px; }
-body { margin: 0; color: var(--body); font: 400 17px/1.66 var(--sans); -webkit-font-smoothing: antialiased; transition: background 200ms, color 200ms; }
-a { color: var(--orange); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-strong { color: var(--ink); font-weight: 600; background: var(--hl); padding: 0 3px; }
-code { font: 400 0.78em var(--mono); color: var(--blue); background: var(--surface); padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
-.callout code, .fig code { background: var(--bg); }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-.appbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; height: 46px; padding: 0 24px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--frame); font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
-.appbar .brand { color: var(--ink); }
-.appbar .brand i { display: inline-block; width: 8px; height: 8px; background: var(--orange); margin-right: 8px; }
-.appbar .keys { margin-left: auto; }
-.keys { display: flex; gap: 6px; }
-.keys button { font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--frame); background: var(--bg); color: var(--grey); border-radius: 6px; padding: 7px 10px; cursor: pointer; }
-.keys button:hover { color: var(--ink); border-color: var(--rule); }
-.keys button.on { background: var(--orange); border-color: var(--orange); color: var(--on-chip); }
-.keys button:focus-visible, .step:focus-visible, .plot:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
-
-.page { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0 48px; max-width: 1120px; margin: 0 auto; padding: 0 32px; }
-.masthead { grid-column: 1 / -1; padding: 64px 0 0; }
-.rail { position: sticky; top: 46px; align-self: start; padding: 48px 0; border-right: 1px solid var(--frame); }
-.rail ol { list-style: none; margin: 0; padding: 0; }
-.rail a { display: flex; gap: 10px; padding: 6px 0; font: 500 10.5px/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); text-decoration: none; }
-.rail a .n { width: 34px; flex-shrink: 0; text-align: right; color: var(--dim); }
-.rail a:hover, .rail a.on { color: var(--ink); }
-.rail a.on .n { color: var(--orange); }
-.rail a.on .n::before { content: "▶ "; }
-main { min-width: 0; max-width: 780px; padding-bottom: 96px; }
-
-.eyebrow { font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
-.eyebrow b { color: var(--orange); font-weight: 500; }
-.dots { display: inline-flex; flex-direction: column; gap: calc(var(--dot) * 0.3); margin: 30px 0 0; }
-.dots .row { display: flex; gap: calc(var(--dot) * 0.3); }
-.dots i { width: var(--dot); height: var(--dot); border-radius: 50%; background: var(--dim); opacity: 0.55; transform: scale(0.45); }
-.dots i.on { background: var(--ink); opacity: 1; transform: none; }
-h1 { margin: 26px 0 0; font: 600 clamp(30px, 3.4vw, 42px)/1.08 var(--head); letter-spacing: -0.005em; color: var(--ink); max-width: 30ch; }
-.meta { display: flex; flex-wrap: wrap; gap: 8px 26px; margin: 20px 0 0; font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
-.meta a { color: var(--grey); }
-.knobs { display: grid; grid-template-columns: repeat(4, 1fr); margin: 36px 0 0; border-top: 1px solid var(--frame); border-bottom: 1px solid var(--frame); }
-.knob { padding: 16px 0 18px; }
-.knob + .knob { padding-left: 20px; border-left: 1px solid var(--frame); }
-.knob .label { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
-.knob .label::before { content: "◉ "; color: var(--c, var(--ink)); }
-.knob .value { margin-top: 10px; font: 600 22px/1 var(--head); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
-
-.sec { padding: 56px 0 0; }
-h2 { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font: 600 24px/1.1 var(--head); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
-.chip { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.04em; padding: 5px 7px; background: var(--ink); color: var(--on-chip); }
-.chip.o { background: var(--orange); }
-h3 { margin: 34px 0 12px; font: 600 14.5px/1.3 var(--head); letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); }
-h3::before { content: "— "; }
-p { margin: 0 0 16px; max-width: 68ch; }
-.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink); }
-
-ul, ol { margin: 0 0 18px; padding: 0; list-style: none; }
-ul > li, ol.n > li { position: relative; padding-left: 34px; margin: 0 0 9px; }
-ul > li::before { content: "▪"; position: absolute; left: 8px; color: var(--orange); }
-ol.n { counter-reset: n; }
-ol.n > li { counter-increment: n; }
-ol.n > li::before { content: counter(n); position: absolute; left: 0; top: 4px; min-width: 20px; text-align: center; font: 600 10.5px/1 var(--mono); padding: 4px 5px; background: var(--orange); color: var(--on-chip); }
-ul.tasks > li::before { left: 4px; font-size: 16px; line-height: 1.6; }
-ul.tasks > li.done { color: var(--grey); }
-ul.tasks > li.done::before { content: "☑"; color: var(--green); }
-ul.tasks > li.open::before { content: "☐"; color: var(--orange); }
-
-.tldr { display: grid; grid-template-columns: 110px 1fr; margin: 24px 0 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.tldr dt, .tldr dd { margin: 0; padding: 13px 0; }
-.tldr dt + dd ~ dt, .tldr dt + dd ~ dd { border-top: 1px solid var(--frame); }
-.tldr dt { font: 500 10.5px/2.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
-.tldr dd { color: var(--ink); }
-
-table { width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 15.5px; font-variant-numeric: tabular-nums; }
-th { text-align: left; font: 500 10px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 10px 14px 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-td { padding: 11px 14px 11px 0; vertical-align: top; border-bottom: 1px solid var(--frame); }
-tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
-td.key { color: var(--ink); white-space: nowrap; }
-.tag { display: inline-block; font: 500 9.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 6px; border: 1px solid currentColor; white-space: nowrap; color: var(--grey); }
-.tag.o { color: var(--on-chip); background: var(--orange); border-color: var(--orange); }
-.tag.b { color: var(--blue); } .tag.g { color: var(--green); } .tag.r { color: var(--red); } .tag.w { color: var(--ink); }
-
-.code { margin: 6px 0 22px; background: var(--surface); border: 1px solid var(--frame); }
-.code-tab { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 1px solid var(--frame); font: 500 9.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
-.code-tab span { text-transform: none; letter-spacing: 0.02em; }
-.code-tab b { margin-left: auto; font-weight: 500; color: var(--blue); }
-.code-tab button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--grey); background: none; border: 0; padding: 0; cursor: pointer; }
-.code-tab button:hover { color: var(--orange); }
-pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 12.2px/1.7 var(--mono); color: var(--ink); }
-pre code { font: inherit; color: inherit; background: none; padding: 0; white-space: pre; }
-pre .k { color: var(--orange); } pre .f { color: var(--blue); } pre .s { color: var(--green); } pre .c { color: var(--grey); font-style: italic; }
-pre .warn { color: var(--orange); } pre .err { color: var(--red); } pre .info { color: var(--blue); } pre .debug { color: var(--grey); }
-pre .add { color: var(--green); } pre .del { color: var(--red); }
-pre .hl { background: var(--hl); display: inline-block; width: 100%; }
-
-.callout { margin: 8px 0 24px; padding: 16px 18px 4px; background: var(--surface); border: 1px solid var(--frame); }
-.callout .head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font: 600 15px/1.2 var(--head); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
-.callout p { color: var(--ink); }
-
-a.cite { display: inline-block; font: 500 9.5px/1 var(--mono); letter-spacing: 0.04em; color: var(--grey); border: 1px solid var(--rule); padding: 3px 4px; margin: 0 1px; vertical-align: 2px; text-decoration: none; }
-a.cite:hover, a.cite:focus-visible { color: var(--orange); border-color: var(--orange); outline: none; }
-.tip { position: absolute; z-index: 30; max-width: 340px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--rule); font: 400 13.5px/1.45 var(--sans); color: var(--ink); pointer-events: none; opacity: 0; transition: opacity 120ms; }
-.tip.show { opacity: 1; }
-.tip .t { display: block; margin-bottom: 4px; font: 500 9.5px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
-
-.fig { margin: 30px 0 32px; background: var(--surface); border: 1px solid var(--frame); }
-.fig-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 10px 14px; border-bottom: 1px solid var(--frame); }
-.fig-num { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; color: var(--orange); }
-.fig-head h4 { margin: 0; font: 600 14px/1.2 var(--head); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
-.fig-head .keys { margin-left: auto; }
-.fig-body { padding: 18px; }
-.fig figcaption { padding: 0 18px 16px; font-size: 14px; line-height: 1.5; color: var(--grey); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 9.5px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
-.legend span::before, .legend button::before { content: "■ "; color: var(--c); }
-.legend button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--grey); background: none; border: 0; padding: 0; cursor: pointer; }
-.legend button[aria-pressed="false"] { color: var(--dim); text-decoration: line-through; }
-.legend button[aria-pressed="false"]::before { color: var(--dim); }
-.when { font: 500 20px/1.1 var(--mono); color: var(--ink); }
-.when small { display: block; margin-top: 6px; font: 500 10px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
-.when .tag { margin-top: 10px; }
-
-.seq { display: grid; grid-template-columns: repeat(var(--steps), minmax(52px, 1fr)); gap: 8px; margin-top: 18px; overflow-x: auto; padding: 4px; }
-.step { display: flex; flex-direction: column; gap: 7px; padding: 0; background: none; border: 0; cursor: pointer; text-align: left; font: 500 9.5px/1.1 var(--mono); letter-spacing: 0.06em; color: var(--grey); }
-.step .num { color: var(--dim); }
-.step .cell { height: 34px; background: var(--c); opacity: 0.55; transition: opacity 120ms; }
-.step .delta { color: var(--dim); }
-.step:hover .cell { opacity: 0.85; }
-.step.on .num { color: var(--orange); }
-.step.on .num::before { content: "▶ "; }
-.step.on .cell { opacity: 1; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--orange); }
-.step.on .time { color: var(--ink); }
-.tl-detail, .detail [data-detail] { display: grid; grid-template-columns: 150px 1fr; gap: 6px 22px; }
-.tl-detail, .detail { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--frame); min-height: 110px; }
-.tl-detail h5, .detail h5 { margin: 0 0 6px; font: 600 19px/1.25 var(--head); color: var(--ink); }
-.tl-detail p, .detail p { margin: 0 0 8px; font-size: 15.5px; }
-
-svg { display: block; width: 100%; height: auto; overflow: visible; color: var(--body); }
-svg text { font-family: var(--mono); }
-svg .life { stroke: var(--rule); stroke-dasharray: 2 4; }
-svg .box { fill: var(--bg); stroke: var(--rule); }
-svg .box-on { fill: var(--bg); stroke: var(--orange); stroke-width: 1.5; }
-svg .t { font: 400 11px var(--mono); fill: currentColor; }
-svg .t-head { font: 500 11.5px var(--mono); letter-spacing: 0.08em; fill: var(--ink); }
-svg .t-small { font: 500 9.5px var(--mono); letter-spacing: 0.1em; fill: var(--grey); }
-svg .x { font: 600 14px var(--mono); fill: currentColor; }
-svg .c-ink { color: var(--ink); } svg .c-body { color: var(--body); } svg .c-grey { color: var(--grey); } svg .c-dim { color: var(--dim); }
-svg .c-orange { color: var(--orange); } svg .c-blue { color: var(--blue); } svg .c-green { color: var(--green); } svg .c-red { color: var(--red); }
-svg [class*="c-"] > line, svg [class*="c-"] > path, svg [class*="c-"] > polyline { stroke: currentColor; stroke-width: 1.6; fill: none; }
-svg [class*="c-"] > polygon, svg [class*="c-"] > circle { fill: currentColor; }
-.pick { cursor: pointer; outline: none; }
-.pick .hit { fill: transparent; }
-.pick:hover .hit { fill: color-mix(in srgb, var(--orange) 8%, transparent); }
-.pick.on .hit { fill: color-mix(in srgb, var(--orange) 14%, transparent); }
-.pick:focus-visible .hit { stroke: var(--orange); }
-.pick .num { font: 500 9.5px var(--mono); fill: var(--dim); }
-.pick.on .num { fill: var(--orange); }
-.readout { display: flex; flex-wrap: wrap; gap: 6px 20px; min-height: 20px; margin: 14px 0 6px; font: 500 10.5px/1.4 var(--mono); letter-spacing: 0.06em; color: var(--grey); font-variant-numeric: tabular-nums; }
-.readout b { color: var(--ink); font-weight: 500; }
-.readout span::before { content: "■ "; color: var(--c); }
-.plot { outline: none; }
-
-ol.refs { border-top: 1px solid var(--rule); }
-ol.refs > li { display: grid; grid-template-columns: 44px 84px 1fr; gap: 0 14px; align-items: baseline; padding: 13px 8px 13px 0; border-bottom: 1px solid var(--frame); transition: background 400ms; }
-ol.refs > li:last-child { border-bottom-color: var(--rule); }
-ol.refs > li:target { background: var(--hl); }
-ol.refs .id { font: 600 10.5px/1 var(--mono); color: var(--ink); padding-left: 8px; }
-ol.refs .title { color: var(--ink); }
-ol.refs .src { display: block; margin-top: 3px; font: 400 11px/1.5 var(--mono); color: var(--grey); }
-
-.foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; padding: 22px 0 40px; border-top: 1px solid var(--frame); font: 500 10px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
-
-@media (max-width: 980px) {
-  .page { grid-template-columns: minmax(0, 1fr); }
-  .rail { display: none; }
-  .knobs { grid-template-columns: repeat(2, 1fr); }
-  .knob:nth-child(3) { padding-left: 0; border-left: 0; }
-  .tl-detail, .detail [data-detail] { grid-template-columns: 1fr; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  * { transition: none !important; animation: none !important; }
-}
-@media print {
-  .appbar, .rail, .keys, .code-tab button { display: none !important; }
-  .page { grid-template-columns: 1fr; }
-}
-</style>
+<!--@DESIGN@-->
 </head>
 <body>
 
@@ -380,6 +163,17 @@ ol.refs .src { display: block; margin-top: 3px; font: 400 11px/1.5 var(--mono); 
 </section>
 <!-- proposal:end -->
 
+<section id="glossary" class="sec">
+<h2>Glossary</h2>
+<dl class="glossary">
+  <div id="term-{{slug}}">
+    <dt>{{term}}</dt>
+    <dd>One sentence a newcomer can follow.</dd>
+    <dd class="eg">Optional: one example sentence, or a short code block from the evidence.</dd>
+  </div>
+</dl>
+</section>
+
 <section id="references" class="sec">
 <h2>References</h2>
 <ol class="refs">
@@ -407,6 +201,12 @@ const svgEl = (tag, attrs = {}, text) => {
 };
 const pad2 = (n) => String(n).padStart(2, "0");
 const cite = (n) => `<a class="cite" href="#ref-${n}">R${n}</a>`;
+const refsOf = (s) => (s ?? "").split(",").map((r) => r.trim()).filter(Boolean);
+const nice = (v) => { const p = 10 ** Math.floor(Math.log10(v || 1)); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; };
+const fmt = (v) => (v == null ? "n/a" : Math.abs(v) >= 1000 ? v.toLocaleString("en-US") : String(+v.toFixed(2)));
+const fit = (s, px) => { const n = Math.max(4, Math.floor(px / 6.9)); return s.length > n ? `${s.slice(0, n - 1)}…` : s; };
+const TAG = { green: "g", orange: "o", red: "r", blue: "b", ink: "w", grey: "", dim: "" };
+const svgPoint = (svg, e) => new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
 $$("[data-theme-choice]").forEach((b) => b.addEventListener("click", () => {
   const choice = b.dataset.themeChoice;
   if (choice === "auto") document.documentElement.removeAttribute("data-theme");
@@ -455,19 +255,34 @@ $$("[data-dots]").forEach((box) => {
   box.innerHTML = lines.map((glyphs) => [0, 1, 2, 3, 4, 5, 6].map((r) => row(glyphs.map((g) => g[r]).join("."))).join("")).join(row("") + row(""));
 });
 const tip = $("#tip");
+const TIPPED = "a.cite, a.term";
+const tipHtml = (a) => {
+  const target = $(a.getAttribute("href"));
+  if (!target) return null;
+  if (a.matches("a.cite")) return `<span class="t">${a.textContent} · ${$(".tag", target)?.textContent ?? ""}</span>${$(".title", target)?.textContent ?? ""}`;
+  const def = $("dd:not(.eg)", target);
+  if (!def) return null;
+  let html = `<span class="t">Glossary · ${$("dt", target)?.textContent ?? a.textContent}</span>${def.innerHTML}`;
+  const eg = $("dd.eg", target);
+  const code = eg && $("pre code", eg);
+  if (code) html += `<span class="eg"><span class="src">${$(".code-tab span", eg)?.textContent ?? ""}</span><pre><code>${code.innerHTML}</code></pre></span>`;
+  else if (eg) html += `<span class="eg">${eg.innerHTML}</span>`;
+  return html;
+};
 const showTip = (a) => {
-  if (!a) return;
-  const li = $(a.getAttribute("href"));
-  if (!li) return;
-  tip.innerHTML = `<span class="t">${a.textContent} · ${$(".tag", li)?.textContent ?? ""}</span>${$(".title", li)?.textContent ?? ""}`;
+  const html = a && tipHtml(a);
+  if (!html) return;
+  tip.innerHTML = html;
+  tip.style.left = "0px";
   const r = a.getBoundingClientRect();
-  tip.style.left = `${Math.min(r.left + scrollX, scrollX + innerWidth - 360)}px`;
-  tip.style.top = `${r.bottom + scrollY + 8}px`;
+  const below = r.bottom + 8 + tip.offsetHeight < innerHeight || r.top < tip.offsetHeight + 8;
+  tip.style.left = `${Math.max(scrollX + 8, Math.min(r.left + scrollX, scrollX + innerWidth - tip.offsetWidth - 16))}px`;
+  tip.style.top = `${below ? r.bottom + scrollY + 8 : r.top + scrollY - tip.offsetHeight - 8}px`;
   tip.classList.add("show");
 };
-document.addEventListener("mouseover", (e) => showTip(e.target.closest?.("a.cite")));
-document.addEventListener("focusin", (e) => showTip(e.target.closest?.("a.cite")));
-document.addEventListener("mouseout", (e) => { if (e.target.closest?.("a.cite")) tip.classList.remove("show"); });
+document.addEventListener("mouseover", (e) => showTip(e.target.closest?.(TIPPED)));
+document.addEventListener("focusin", (e) => showTip(e.target.closest?.(TIPPED)));
+document.addEventListener("mouseout", (e) => { if (e.target.closest?.(TIPPED)) tip.classList.remove("show"); });
 document.addEventListener("focusout", () => tip.classList.remove("show"));
 $$(".code").forEach((block) => {
   const tab = $(".code-tab", block);
@@ -552,7 +367,6 @@ $$("figure[data-chart]").forEach((fig) => {
   const n = spec.labels.length;
   const W = 880, H = 300, L = 48, R = 16, T = 26, B = 30;
   const x = (i) => L + (n > 1 ? (i / (n - 1)) * (W - L - R) : 0);
-  const nice = (v) => { const p = 10 ** Math.floor(Math.log10(v || 1)); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; };
   if (spec.views.length > 1) {
     $(".fig-head", fig).insertAdjacentHTML("beforeend", `<div class="keys" role="group" aria-label="View">${spec.views.map((v, i) => `<button data-view="${i}"${i ? "" : ' class="on"'}>${v.name}</button>`).join("")}</div>`);
   }
@@ -603,7 +417,7 @@ $$("figure[data-chart]").forEach((fig) => {
     }));
   };
   svg.addEventListener("mousemove", (e) => {
-    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    const p = svgPoint(svg, e);
     const i = Math.round(((p.x - L) / (W - L - R)) * (n - 1));
     if (i >= 0 && i < n && i !== cursor) { cursor = i; draw(); }
   });
@@ -647,6 +461,277 @@ $$("figure[data-explore]").forEach((fig) => {
   $$("[data-set-variant]", fig).forEach((b) => b.addEventListener("click", () => setVariant(b.dataset.setVariant)));
   if (fig.dataset.variant) setVariant(fig.dataset.variant);
   if (ids.length) select(fig.dataset.default ?? ids[0]);
+});
+const SEQ = {
+  call: ["Call", "ink"], reply: ["Reply", "grey"], focus: ["Focus", "orange"], fail: ["Fails", "red"], added: ["Added", "green"],
+};
+$$("figure[data-sequence]").forEach((fig) => {
+  const lanes = (fig.dataset.lanes ?? "").split("|").map((s) => s.trim()).filter(Boolean);
+  const notes = (fig.dataset.laneNotes ?? "").split("|").map((s) => s.trim());
+  const all = $$(".sq-data > li", fig).map((li) => ({
+    from: lanes.indexOf(li.dataset.from), to: lanes.indexOf(li.dataset.to ?? li.dataset.from),
+    kind: SEQ[li.dataset.kind] ? li.dataset.kind : "call",
+    label: li.dataset.label ?? $("b", li)?.textContent ?? "",
+    only: li.dataset.only?.split(" "),
+    refs: refsOf(li.dataset.refs),
+    title: $("b", li)?.innerHTML ?? "",
+    body: $("span", li)?.innerHTML ?? "",
+  })).filter((m) => m.from >= 0 && m.to >= 0);
+  if (!lanes.length || !all.length) return;
+  $(".fig-head", fig).insertAdjacentHTML("beforeend", '<div class="keys"><button data-sq="prev" aria-label="Previous message">◀</button><button data-sq="next" aria-label="Next message">▶</button><button data-sq="play">Play</button></div>');
+  $(".fig-body", fig).innerHTML = '<div class="lanes"></div><div class="tl-detail" aria-live="polite"></div>';
+  const W = 880, G = 44, ROW = 44, boxH = notes.some(Boolean) ? 42 : 32, TOP = boxH + 52;
+  const span = (W - G) / lanes.length;
+  const lx = (i) => G + (i + 0.5) * span;
+  const boxW = Math.min(170, span - 16);
+  const play = $("[data-sq=play]", fig);
+  let msgs = [], rows = [], at = 0, timer = null;
+  const select = (i, focus) => {
+    at = (i + msgs.length) % msgs.length;
+    const m = msgs[at];
+    const [name, color] = SEQ[m.kind];
+    rows.forEach((g, j) => { g.classList.toggle("on", j === at); g.setAttribute("tabindex", j === at ? 0 : -1); });
+    if (focus) rows[at].focus();
+    const route = m.from === m.to ? lanes[m.from] : `${lanes[m.from]} → ${lanes[m.to]}`;
+    $(".tl-detail", fig).innerHTML = `<div class="when">${pad2(at + 1)}<small>${route}</small><span class="tag ${TAG[color]}">${name}</span></div><div><h5>${m.title}</h5><p>${m.body} ${m.refs.map(cite).join("")}</p></div>`;
+  };
+  const stop = () => { clearInterval(timer); timer = null; play.classList.remove("on"); play.textContent = "Play"; };
+  const draw = () => {
+    const v = fig.dataset.variant;
+    msgs = all.filter((m) => !m.only || !v || m.only.includes(v));
+    const H = TOP + (msgs.length - 1) * ROW + 30;
+    const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": $("h4", fig)?.textContent ?? "Sequence" });
+    lanes.forEach((name, i) => {
+      const x = lx(i);
+      svg.append(svgEl("rect", { class: "box", x: x - boxW / 2, y: 4, width: boxW, height: boxH, rx: 2 }));
+      svg.append(svgEl("text", { class: "t-head", x, y: notes[i] ? 22 : 24, "text-anchor": "middle" }, fit(name.toUpperCase(), boxW - 12)));
+      if (notes[i]) svg.append(svgEl("text", { class: "t-small", x, y: 37, "text-anchor": "middle" }, fit(notes[i].toUpperCase(), boxW - 12)));
+      svg.append(svgEl("line", { class: "life", x1: x, x2: x, y1: boxH + 4, y2: H - 4 }));
+    });
+    rows = msgs.map((m, i) => {
+      const y = TOP + i * ROW;
+      const g = svgEl("g", { class: `pick c-${SEQ[m.kind][1]}`, tabindex: -1, role: "button", "aria-label": `${pad2(i + 1)} ${m.label}` });
+      const dash = m.kind === "reply" || m.kind === "fail" ? { "stroke-dasharray": "5 4" } : {};
+      g.append(svgEl("rect", { class: "hit", x: 4, y: y - 26, width: W - 8, height: 38, rx: 2 }));
+      g.append(svgEl("text", { class: "num", x: 12, y: y + 4 }, pad2(i + 1)));
+      if (m.from === m.to) {
+        const x = lx(m.from);
+        g.append(svgEl("path", { d: `M${x + 4},${y - 9} H${x + 34} V${y + 6} H${x + 13}`, ...dash }));
+        g.append(svgEl("polygon", { points: `${x + 4},${y + 6} ${x + 13},${y + 1.5} ${x + 13},${y + 10.5}` }));
+        const right = W - 8 - (x + 42), left = x - 10 - G;
+        g.append(right >= left
+          ? svgEl("text", { class: "t", x: x + 42, y: y + 2 }, fit(m.label, right))
+          : svgEl("text", { class: "t", x: x - 10, y: y + 2, "text-anchor": "end" }, fit(m.label, left)));
+      } else {
+        const x1 = lx(m.from), x2 = lx(m.to), dir = Math.sign(x2 - x1);
+        const tip = x2 - dir * 3;
+        g.append(svgEl("line", { x1: x1 + dir * 4, x2: m.kind === "fail" ? x2 - dir * 26 : tip - dir * 8, y1: y, y2: y, ...dash }));
+        if (m.kind === "fail") g.append(svgEl("text", { class: "x", x: x2 - dir * 14, y: y + 5, "text-anchor": "middle" }, "✕"));
+        else g.append(svgEl("polygon", { points: `${tip},${y} ${tip - dir * 9},${y - 4.5} ${tip - dir * 9},${y + 4.5}` }));
+        g.append(svgEl("text", { class: "t", x: (x1 + x2) / 2, y: y - 9, "text-anchor": "middle" }, fit(m.label, Math.abs(x2 - x1) - 24)));
+      }
+      g.addEventListener("click", () => { stop(); select(i); });
+      svg.append(g);
+      return g;
+    });
+    svg.addEventListener("keydown", (e) => {
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (step) { e.preventDefault(); stop(); select(at + step, true); }
+    });
+    $(".lanes", fig).replaceChildren(svg);
+  };
+  const setVariant = (v) => {
+    fig.dataset.variant = v;
+    $$("[data-set-variant]", fig).forEach((b) => b.classList.toggle("on", b.dataset.setVariant === v));
+    draw();
+  };
+  $$("[data-set-variant]", fig).forEach((b) => b.addEventListener("click", () => { stop(); setVariant(b.dataset.setVariant); select(Math.min(at, msgs.length - 1)); }));
+  $("[data-sq=prev]", fig).addEventListener("click", () => { stop(); select(at - 1); });
+  $("[data-sq=next]", fig).addEventListener("click", () => { stop(); select(at + 1); });
+  play.addEventListener("click", () => {
+    if (timer) return stop();
+    if (reduced) return select(at + 1);
+    play.classList.add("on");
+    play.textContent = "Stop";
+    select(at === msgs.length - 1 ? 0 : at + 1);
+    timer = setInterval(() => (at === msgs.length - 1 ? stop() : select(at + 1)), 1600);
+  });
+  if (fig.dataset.variant) setVariant(fig.dataset.variant);
+  else draw();
+  select(fig.dataset.start ? Number(fig.dataset.start) - 1 : Math.max(0, msgs.findIndex((m) => m.kind === "focus" || m.kind === "fail")));
+});
+const MX = { yes: ["Yes", "green"], no: ["No", "dim"], part: ["Partial", "orange"], fail: ["Fails", "red"] };
+const dot = (v) => `<span class="v ${v}" style="--c: var(--${MX[v][1]})" aria-hidden="true"></span>`;
+$$("figure[data-matrix]").forEach((fig) => {
+  const table = $("table", fig);
+  if (!table) return;
+  table.classList.add("mx");
+  const labels = Object.fromEntries(Object.entries(MX).map(([k, [l]]) => [k, l]));
+  for (const pair of (fig.dataset.legend ?? "").split("|")) {
+    const [k, ...rest] = pair.split(":");
+    if (MX[k.trim()] && rest.length) labels[k.trim()] = rest.join(":").trim();
+  }
+  const heads = $$("thead th", table).map((th) => th.textContent.trim());
+  const grid = $$("tbody tr", table).map((tr) => [...tr.children]);
+  const cells = [];
+  grid.forEach((row, r) => row.forEach((cell, c) => {
+    const v = cell.dataset.v;
+    if (cell.tagName !== "TD" || !MX[v]) return;
+    const note = cell.innerHTML.trim();
+    cells.push({ cell, r, c, v, note, refs: refsOf(cell.dataset.refs), row: row[0].textContent.trim(), col: heads[c] ?? "" });
+    cell.innerHTML = `${dot(v)}<span class="sr-only">${labels[v]}${note ? `. ${note}` : ""}</span>`;
+    cell.tabIndex = -1;
+  }));
+  if (!cells.length) return;
+  const wrap = document.createElement("div");
+  wrap.className = "lanes";
+  table.before(wrap);
+  wrap.append(table);
+  const used = Object.keys(MX).filter((k) => cells.some((x) => x.v === k));
+  wrap.insertAdjacentHTML("beforebegin", `<div class="legend">${used.map((k) => `<span class="plain">${dot(k)} ${labels[k]}</span>`).join("")}</div>`);
+  wrap.insertAdjacentHTML("afterend", '<div class="tl-detail" aria-live="polite"></div>');
+  const detail = $(".tl-detail", fig);
+  let at = 0;
+  const select = (i, focus) => {
+    at = i;
+    const x = cells[at];
+    cells.forEach((y) => { y.cell.classList.toggle("on", y === x); y.cell.tabIndex = y === x ? 0 : -1; });
+    $$("tbody tr", table).forEach((tr, r) => {
+      tr.classList.toggle("row-on", r === x.r);
+      [...tr.children].forEach((td, c) => td.classList.toggle("col-on", c === x.c && r !== x.r));
+    });
+    $$("thead th", table).forEach((th, c) => th.classList.toggle("col-on", c === x.c));
+    if (focus) x.cell.focus();
+    detail.innerHTML = `<div class="when">${dot(x.v)}<small>${x.col}</small><span class="tag ${TAG[MX[x.v][1]]}">${labels[x.v]}</span></div><div><h5>${x.row}</h5><p>${x.note} ${x.refs.map(cite).join("")}</p></div>`;
+  };
+  cells.forEach((x, i) => {
+    x.cell.addEventListener("click", () => select(i));
+    x.cell.addEventListener("mouseenter", () => select(i));
+  });
+  table.addEventListener("keydown", (e) => {
+    const d = { ArrowRight: [0, 1], ArrowLeft: [0, -1], ArrowDown: [1, 0], ArrowUp: [-1, 0] }[e.key];
+    if (!d) return;
+    e.preventDefault();
+    let { r, c } = cells[at];
+    for (r += d[0], c += d[1]; r >= 0 && r < grid.length && c >= 0 && c < grid[r].length; r += d[0], c += d[1]) {
+      const j = cells.findIndex((y) => y.r === r && y.c === c);
+      if (j >= 0) return select(j, true);
+    }
+  });
+  const start = cells.findIndex((x) => x.cell.hasAttribute("data-default"));
+  select(start >= 0 ? start : 0);
+});
+$$("figure[data-bars]").forEach((fig) => {
+  const spec = JSON.parse($('script[type="application/json"]', fig).textContent);
+  if (spec.views.length > 1) {
+    $(".fig-head", fig).insertAdjacentHTML("beforeend", `<div class="keys" role="group" aria-label="View">${spec.views.map((v, i) => `<button data-view="${i}"${i ? "" : ' class="on"'}>${v.name}</button>`).join("")}</div>`);
+  }
+  const body = $(".fig-body", fig);
+  body.innerHTML = '<div class="tl-detail" aria-live="polite"></div>';
+  const svg = svgEl("svg", { class: "plot", tabindex: 0, role: "img", "aria-label": $("h4", fig)?.textContent ?? "Bar chart" });
+  body.prepend(svg);
+  const W = 880, LW = 210, R = 76, B = 26, ROW = 30;
+  let view = 0, cursor = spec.cursor ?? 0, T = 6;
+  const draw = () => {
+    const v = spec.views[view];
+    const bars = v.bars;
+    const unit = v.unit ?? spec.unit ?? "";
+    cursor = Math.max(0, Math.min(bars.length - 1, cursor));
+    T = v.threshold ? 22 : 6;
+    const H = T + bars.length * ROW + B;
+    const peak = v.max ?? Math.max(...bars.map((b) => b.value), v.threshold?.value ?? 0) * 1.08;
+    const step = nice(peak / 5);
+    const max = v.max ?? Math.ceil(peak / step) * step;
+    const x = (val) => LW + (Math.max(0, val) / max) * (W - LW - R);
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.replaceChildren();
+    for (let t = 0; t <= max + 1e-9; t += step) {
+      svg.append(svgEl("line", { x1: x(t), x2: x(t), y1: T, y2: H - B, stroke: t ? "var(--frame)" : "var(--rule)" }));
+      svg.append(svgEl("text", { x: x(t), y: H - 8, "text-anchor": "middle", "font-size": 9.5, fill: "var(--grey)" }, fmt(+t.toFixed(6))));
+    }
+    bars.forEach((b, i) => {
+      const y = T + i * ROW;
+      const on = i === cursor;
+      if (on) svg.append(svgEl("rect", { x: 0, y, width: W, height: ROW, fill: "var(--orange)", opacity: 0.08 }));
+      svg.append(svgEl("text", { x: LW - 12, y: y + ROW / 2 + 4, "text-anchor": "end", "font-size": 11, fill: on ? "var(--ink)" : "var(--body)" }, fit(b.label, LW - 24)));
+      svg.append(svgEl("rect", { x: LW, y: y + 7, width: Math.max(1, x(b.value) - LW), height: ROW - 14, fill: `var(--${b.color ?? "grey"})`, opacity: on ? 1 : 0.72 }));
+      svg.append(svgEl("text", { x: x(b.value) + 8, y: y + ROW / 2 + 4, "font-size": 10.5, fill: on ? "var(--ink)" : "var(--grey)" }, `${fmt(b.value)}${unit}`));
+    });
+    if (v.threshold) {
+      const tx = x(v.threshold.value);
+      svg.append(svgEl("line", { x1: tx, x2: tx, y1: T - 4, y2: H - B, stroke: "var(--red)", "stroke-dasharray": "6 4" }));
+      svg.append(svgEl("text", { x: tx, y: T - 8, "text-anchor": "middle", "font-size": 9, fill: "var(--red)", "letter-spacing": "0.08em" }, v.threshold.label.toUpperCase()));
+    }
+    const b = bars[cursor];
+    $(".tl-detail", fig).innerHTML = `<div class="when">${fmt(b.value)}${unit}<small>${v.name ?? ""}</small></div><div><h5>${b.label}</h5><p>${b.note ?? ""} ${(b.refs ?? []).map(cite).join("")}</p></div>`;
+  };
+  svg.addEventListener("mousemove", (e) => {
+    const i = Math.floor((svgPoint(svg, e).y - T) / ROW);
+    if (i >= 0 && i < spec.views[view].bars.length && i !== cursor) { cursor = i; draw(); }
+  });
+  svg.addEventListener("keydown", (e) => {
+    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+    if (step) { e.preventDefault(); cursor += step; draw(); }
+  });
+  $$("[data-view]", fig).forEach((b) => b.addEventListener("click", () => {
+    view = Number(b.dataset.view);
+    $$("[data-view]", fig).forEach((x) => x.classList.toggle("on", x === b));
+    draw();
+  }));
+  draw();
+});
+$$("figure[data-heatmap]").forEach((fig) => {
+  const spec = JSON.parse($('script[type="application/json"]', fig).textContent);
+  const cols = spec.columns, rows = spec.rows, unit = spec.unit ?? "";
+  const W = 880, LW = 140, R = 8, B = 24, CH = 24, T = spec.marks?.length ? 22 : 6;
+  const cw = (W - LW - R) / cols.length;
+  const H = T + rows.length * CH + B;
+  const max = spec.max ?? Math.max(1e-9, ...rows.flatMap((r) => r.values.filter((v) => v != null)));
+  const color = `var(--${spec.color ?? "orange"})`;
+  const body = $(".fig-body", fig);
+  body.innerHTML = `<div class="legend"><span class="plain">0</span><span class="scale plain" style="--c: ${color}"><i style="background: var(--dim); opacity: 0.35"></i>${[0.18, 0.38, 0.59, 0.79, 1].map((o) => `<i style="opacity: ${o}"></i>`).join("")}</span><span class="plain">${fmt(max)}${unit}</span></div><div class="readout" aria-live="polite"></div>`;
+  const svg = svgEl("svg", { class: "plot", viewBox: `0 0 ${W} ${H}`, tabindex: 0, role: "img", "aria-label": $("h4", fig)?.textContent ?? "Heatmap" });
+  body.append(svg);
+  rows.forEach((r, ri) => r.values.forEach((v, ci) => {
+    const a = { x: LW + ci * cw + 1, y: T + ri * CH + 1, width: Math.max(1, cw - 2), height: CH - 2, rx: 1 };
+    if (v == null) Object.assign(a, { fill: "none", stroke: "var(--frame)", "stroke-dasharray": "2 2" });
+    else if (v <= 0) Object.assign(a, { fill: "var(--dim)", "fill-opacity": 0.35 });
+    else Object.assign(a, { fill: color, "fill-opacity": 0.18 + 0.82 * Math.min(1, v / max) });
+    svg.append(svgEl("rect", a));
+  }));
+  const every = spec.tickEvery ?? Math.ceil(cols.length / 8);
+  for (let i = spec.tickOffset ?? 0; i < cols.length; i += every) svg.append(svgEl("text", { x: LW + (i + 0.5) * cw, y: H - 8, "text-anchor": "middle", "font-size": 9.5, fill: "var(--grey)" }, cols[i]));
+  for (const mark of spec.marks ?? []) {
+    svg.append(svgEl("line", { x1: LW + mark.at * cw, x2: LW + mark.at * cw, y1: T - 6, y2: H - B, stroke: "var(--rule)", "stroke-dasharray": "3 3" }));
+    svg.append(svgEl("text", { x: LW + mark.at * cw + 5, y: T - 10, "font-size": 9, fill: "var(--grey)", "letter-spacing": "0.08em" }, mark.label.toUpperCase()));
+  }
+  const labelEls = rows.map((r, ri) => {
+    const t = svgEl("text", { x: LW - 10, y: T + ri * CH + CH / 2 + 4, "text-anchor": "end", "font-size": 10.5 }, fit(r.label, LW - 20));
+    svg.append(t);
+    return t;
+  });
+  const ring = svgEl("rect", { width: cw + 2, height: CH + 2, fill: "none", stroke: "var(--ink)", "stroke-width": 2, rx: 2, "pointer-events": "none" });
+  svg.append(ring);
+  let [cr, cc] = spec.cursor ?? [0, 0];
+  const draw = () => {
+    cr = Math.max(0, Math.min(rows.length - 1, cr));
+    cc = Math.max(0, Math.min(cols.length - 1, cc));
+    ring.setAttribute("x", LW + cc * cw - 1);
+    ring.setAttribute("y", T + cr * CH - 1);
+    labelEls.forEach((t, i) => t.setAttribute("fill", i === cr ? "var(--orange)" : "var(--grey)"));
+    const v = rows[cr].values[cc];
+    $(".readout", fig).innerHTML = `<b>${rows[cr].label} · ${cols[cc]}</b><span style="--c: ${color}"><b>${v == null ? "no data" : fmt(v) + unit}</b></span>`;
+  };
+  svg.addEventListener("mousemove", (e) => {
+    const p = svgPoint(svg, e);
+    const c = Math.floor((p.x - LW) / cw), r = Math.floor((p.y - T) / CH);
+    if (r >= 0 && r < rows.length && c >= 0 && c < cols.length && (r !== cr || c !== cc)) { cr = r; cc = c; draw(); }
+  });
+  svg.addEventListener("keydown", (e) => {
+    const d = { ArrowRight: [0, 1], ArrowLeft: [0, -1], ArrowDown: [1, 0], ArrowUp: [-1, 0] }[e.key];
+    if (d) { e.preventDefault(); cr += d[0]; cc += d[1]; draw(); }
+  });
+  draw();
 });
 })();
 </script>
